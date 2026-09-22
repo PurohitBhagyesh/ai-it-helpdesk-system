@@ -1,6 +1,6 @@
 #  Enterprise AI-Driven IT Support & Helpdesk Platform
 
-A next-generation, high-performance IT Incident Management and Helpdesk Platform designed with **Apple Cupertino Dark Glass Aesthetics**, **Spring Boot 3 Enterprise Architecture**, **Real-Time Natural Language AI Triage**, **End-to-End Encrypted Support Chat**, and **Strict Admin-Governed Identity Provisioning**.
+A next-generation, high-performance IT Incident Management and Helpdesk Platform designed with **Apple Cupertino Dark Glass Aesthetics**, **Spring Boot 3 Enterprise Architecture**, **Real-Time Natural Language AI Triage**, **End-to-End Encrypted Support Chat**, **Strict Admin-Governed Identity Provisioning**, and **Multi-Step Enterprise Organization Onboarding & Email Verification**.
 
 ---
 
@@ -8,12 +8,15 @@ A next-generation, high-performance IT Incident Management and Helpdesk Platform
 
 Traditional IT helpdesk workflows suffer from fragmented ticket submission, delayed prioritization, informal communication, and security blindspots. This platform solves organizational IT friction through:
 
-1. **Automated AI Problem Triage:** Instant NLP categorization, priority scoring, and immediate resolution suggestions before ticket creation.
-2. **Strict Admin-Exclusive Account Provisioning:** Zero unvetted public registration. Only the IT Administrator can provision credentials with strictly two operational tiers: `EMPLOYEE` and `IT_TECHNICIAN` (`STAFF`).
-3. **IT Technician Acceptance & Re-routing Engine:** Technicians can inspect incoming triage items, accept ownership, or decline & re-route tickets back to the global queue with logged justification notes.
-4. **End-to-End Encrypted (E2EE) Support Chat:** Live bidirectional messaging between Employees and assigned IT Technicians with AES-256 cryptographic verification indicators.
-5. **Official Administrator Enquiry Mailbox:** A dedicated, auditable communication channel allowing both Employees and IT Technicians to send inquiries, feedback, and escalation reports directly to the Administrator.
-6. **Cupertino Dark Glass Experience:** Pure Vanilla CSS/JS design built on Apple design principles: blur backdrops, vibrant semantic accents, smooth fluid transitions, and responsive multi-device support.
+1. **Dual-Slider Access Gate:** Clean segmented slider providing dedicated paths for **Company Workforce** and **Enterprise Administrator**.
+2. **Enterprise Organization Registration & Verification:** Allows new corporate administrators to register their enterprise (Organization Name, Admin Name, Location/HQ, Contact Hotline, Details), receive an interactive 6-digit email verification code, and verify their workspace.
+3. **Initial Foundational Team Provisioning:** Post-verification onboarding wizard allowing the Admin to provision an initial **Employee ID** and **IT Technician ID** before launching the Executive Command Center.
+4. **Automated AI Problem Triage:** Instant NLP categorization, priority scoring, and immediate resolution suggestions before ticket creation.
+5. **Strict Admin-Exclusive Account Provisioning:** Zero unvetted public registration. Only the IT Administrator can provision credentials with strictly two operational tiers: `EMPLOYEE` and `IT_TECHNICIAN` (`STAFF`).
+6. **IT Technician Acceptance & Re-routing Engine:** Technicians can inspect incoming triage items, accept ownership, or decline & re-route tickets back to the global queue with logged justification notes.
+7. **End-to-End Encrypted (E2EE) Support Chat:** Live bidirectional messaging between Employees and assigned IT Technicians with AES-256 cryptographic verification indicators.
+8. **Official Administrator Enquiry Mailbox:** A dedicated, auditable communication channel allowing both Employees and IT Technicians to send inquiries, feedback, and escalation reports directly to the Administrator.
+9. **Cupertino Dark Glass Experience:** Pure Vanilla CSS/JS design built on Apple design principles: blur backdrops, vibrant semantic accents, smooth fluid transitions, and responsive multi-device support.
 
 ---
 
@@ -37,7 +40,8 @@ Traditional IT helpdesk workflows suffer from fragmented ticket submission, dela
 |  | - XSS Sanitizer     |  | - TicketController   |  | - TicketService       |  | - TicketRepository                  |  |
 |  | - SQLi Protection   |  | - AIController       |  | - AIService (NLP)     |  | - MessageRepository                 |  |
 |  | - OWASP Headers     |  | - EnquiryController  |  | - EnquiryService      |  | - EnquiryRepository                 |  |
-|  | - SHA-256 Crypto    |  | - UserController     |  | - UserService         |  | - H2 / MySQL In-Memory / Production |  |
+|  | - SHA-256 Crypto    |  | - EnterpriseContr... |  | - EnterpriseService   |  | - EnterpriseRepository              |  |
+|  | - Master Passkeys   |  | - UserController     |  | - UserService         |  | - H2 / MySQL In-Memory / Production |  |
 |  +---------------------+  +----------------------+  +-----------------------+  +-------------------------------------+  |
 +-------------------------------------------------------------------------------------------------------------------------+
 ```
@@ -50,6 +54,8 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
 
 * **Cupertino Glass Elements:** `backdrop-filter: blur(24px) saturate(180%)` with calibrated multi-layer translucent specular borders (`rgba(255, 255, 255, 0.08)`).
 * **Apple Typography:** Native Apple System Font Stack (`-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", Inter, sans-serif`).
+* **Interactive Segmented Slider:** Instant transition between Company Workforce sign-in and Enterprise Admin authentication / registration.
+* **Simulated macOS Mail Dispatch:** High-fidelity interactive email dispatch preview showcasing incoming 6-digit verification codes.
 * **Semantic Dark Palette:**
   * Background Canvas: `#000000` / `#0a0a0c`
   * Surface Glass: `rgba(28, 28, 30, 0.65)`
@@ -57,13 +63,14 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
   * Success Emerald: `#30d158` (Resolved State)
   * Warning Amber: `#ffd60a` (Triage / In Progress)
   * Critical Red: `#ff453a` (High Priority / Revocation)
-* **Responsive Multi-Device Layouts:** CSS Grid and Flexbox layouts automatically adjust from 320px mobile screens to ultra-wide 4K monitors.
 
 ---
 
 ## 👥 Role Matrix & Workflows
 
 ### 1. 🛡️ System Administrator
+* **Enterprise Registration & Verification:** Multi-step wizard to register enterprise details, complete 6-digit email verification, and onboard initial team members.
+* **Passkey Security:** Secure master passkey authentication into the Executive Command Center.
 * **Executive Telemetry:** Real-time KPI counters (Total Incidents, Triage Queue, Active Progress, SLA Resolution Rate) and category/priority breakdown graphs.
 * **Incident Oversight:** Full inspection access to all organization-wide tickets, assigned technicians, and status transitions.
 * **Corporate User Provisioning:** Exclusive authority to provision accounts with strictly two roles:
@@ -93,7 +100,7 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
 
 | Security Layer | Implementation Detail |
 | :--- | :--- |
-| **Authentication & Provisioning** | Admin-exclusive account creation. Public self-registration is completely disabled. |
+| **Authentication & Provisioning** | Admin-exclusive account creation + Verified Enterprise Registration. |
 | **Password Hashing** | SHA-256 cryptographic hashing with per-user salt strings. |
 | **Rate Limiting** | Token-bucket IP rate limiter preventing brute force login attacks and API floods. |
 | **Input Sanitization** | Automatic HTML escaping, XSS filtering, and SQL injection prevention across all inputs. |
@@ -104,14 +111,19 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
 
 ## 📡 REST API Reference
 
-### 1. Authentication & User Management (Admin Only)
-* `POST /api/auth/login` - Authenticate user credentials and return corporate session token.
+### 1. Enterprise Onboarding & Verification
+* `POST /api/enterprise/register` - Register enterprise profile & trigger 6-digit verification code.
+* `POST /api/enterprise/verify` - Verify corporate code and activate enterprise workspace.
+* `POST /api/enterprise/provision-initial-team` - Provision foundational Employee ID and IT Technician ID.
+
+### 2. Authentication & User Management (Admin Only)
+* `POST /api/auth/login` - Authenticate user credentials / passkey and return corporate session token.
 * `GET /api/users` - Retrieve complete corporate user directory.
 * `POST /api/users` - Provision new employee or IT technician account.
 * `PUT /api/users/{id}/password` - Reset user password.
 * `DELETE /api/users/{id}` - Revoke user account access.
 
-### 2. AI Incident & Ticket Operations
+### 3. AI Incident & Ticket Operations
 * `POST /api/tickets/analyze` - NLP rule engine analysis for category, priority, and troubleshooting suggestions.
 * `GET /api/tickets` - List all tickets (supports `?employeeId=` filter).
 * `GET /api/tickets/{id}` - Get complete ticket details with message history.
@@ -121,12 +133,12 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
 * `POST /api/tickets/{id}/resolve` - Resolve ticket with closing resolution notes.
 * `POST /api/tickets/{id}/messages` - Send real-time encrypted support message.
 
-### 3. Administrator Enquiry Mailbox
+### 4. Administrator Enquiry Mailbox
 * `POST /api/enquiries` - Submit inquiry/escalation to Administrator.
 * `GET /api/enquiries` - Administrator inbox feed.
 * `PUT /api/enquiries/{id}/status` - Update enquiry status (`RESOLVED`).
 
-### 4. Admin Analytics
+### 5. Admin Analytics
 * `GET /api/admin/stats` - Summary counters, category distribution, and priority metrics.
 
 ---
@@ -175,9 +187,9 @@ ai-it-helpdesk-system/
 ├── backend/
 │   ├── src/main/java/com/helpdesk/
 │   │   ├── config/              # Security filter, Rate limiter, DataInitializer
-│   │   ├── controller/          # REST API endpoints (Auth, Tickets, Enquiries, Users, Admin)
+│   │   ├── controller/          # REST API endpoints (Auth, Tickets, Enquiries, Enterprise, Users, Admin)
 │   │   ├── dto/                 # Request & Response Data Transfer Objects
-│   │   ├── model/               # JPA Entities (User, Ticket, Message, Enquiry, Role)
+│   │   ├── model/               # JPA Entities (User, Ticket, Message, Enquiry, Enterprise, Role)
 │   │   ├── repository/          # Spring Data JPA Repositories
 │   │   └── service/             # Business Logic & NLP Engine
 │   └── pom.xml                  # Maven dependencies & build configuration
@@ -191,7 +203,7 @@ ai-it-helpdesk-system/
 │   │   ├── staff.js             # IT Technician triage & acceptance controller
 │   │   ├── admin.js             # Admin executive telemetry, user directory & mailbox
 │   │   └── ticket-details.js    # Encrypted chat & ticket lifecycle inspector
-│   ├── index.html               # Corporate SSO Sign-in Portal
+│   ├── index.html               # Corporate Access Portal (Workforce / Admin Slider & Onboarding)
 │   ├── employee-dashboard.html  # Employee Incident Center
 │   ├── staff-dashboard.html     # IT Technician Triage Desk
 │   ├── admin-dashboard.html     # Administrator Command Console & Mailbox

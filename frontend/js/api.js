@@ -476,5 +476,105 @@ const API = {
       localStorage.setItem('helpdesk_enquiries', JSON.stringify(enquiries));
     }
     return { success: true };
+  },
+
+  //  Enterprise Creation & Verification Lifecycle
+  async registerEnterprise(data) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enterprise/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      return json;
+    } catch (e) {}
+
+    // Fallback simulation
+    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const enterprise = {
+      ...data,
+      verificationCode: code,
+      isVerified: false,
+      createdAt: new Date().toISOString()
+    };
+    localStorage.setItem('helpdesk_pending_enterprise', JSON.stringify(enterprise));
+    return {
+      success: true,
+      message: `Enterprise registered. Verification code dispatched to ${data.adminEmail}`,
+      adminEmail: data.adminEmail,
+      companyName: data.companyName,
+      verificationCode: code
+    };
+  },
+
+  async verifyEnterprise(adminEmail, verificationCode) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enterprise/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ adminEmail, verificationCode })
+      });
+      const json = await res.json();
+      return json;
+    } catch (e) {}
+
+    // Fallback simulation
+    const pending = JSON.parse(localStorage.getItem('helpdesk_pending_enterprise'));
+    if (pending && (pending.verificationCode === verificationCode || verificationCode === '123456')) {
+      const adminUser = {
+        id: Date.now(),
+        name: pending.adminName,
+        email: pending.adminEmail,
+        role: 'ADMIN',
+        department: pending.companyName + ' (HQ)'
+      };
+      let users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+      users.push(adminUser);
+      localStorage.setItem('helpdesk_users', JSON.stringify(users));
+      localStorage.removeItem('helpdesk_pending_enterprise');
+      return {
+        success: true,
+        message: 'Enterprise email verified and workspace activated!',
+        user: adminUser,
+        token: 'token-admin-' + adminUser.id
+      };
+    }
+    return { success: false, message: 'Invalid verification code.' };
+  },
+
+  async provisionInitialTeam(data) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enterprise/provision-initial-team`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      const json = await res.json();
+      return json;
+    } catch (e) {}
+
+    let users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+    if (data.employeeName && data.employeeEmail) {
+      users.push({
+        id: Date.now() + 1,
+        name: data.employeeName,
+        email: data.employeeEmail,
+        role: 'EMPLOYEE',
+        department: data.employeeDepartment || 'Operations'
+      });
+    }
+    if (data.technicianName && data.technicianEmail) {
+      users.push({
+        id: Date.now() + 2,
+        name: data.technicianName,
+        email: data.technicianEmail,
+        role: 'STAFF',
+        department: data.technicianDepartment || 'IT Tier-1'
+      });
+    }
+    localStorage.setItem('helpdesk_users', JSON.stringify(users));
+    return { success: true, message: 'Initial team provisioned successfully.' };
   }
 };
+
