@@ -60,6 +60,17 @@ public class TicketController {
         return ResponseEntity.ok(updated);
     }
 
+    // 5b. Assign ticket to technician
+    @PostMapping("/{id}/assign")
+    public ResponseEntity<TicketResponseDTO> assignTicket(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> payload) {
+        Long staffId = payload.get("staffId") != null ? Long.valueOf(payload.get("staffId").toString()) :
+                       (payload.get("technicianId") != null ? Long.valueOf(payload.get("technicianId").toString()) : null);
+        TicketResponseDTO updated = ticketService.updateStatus(id, com.helpdesk.model.Status.IN_PROGRESS, staffId);
+        return ResponseEntity.ok(updated);
+    }
+
     // 6. Post a message to ticket conversation
     @PostMapping("/{id}/messages")
     public ResponseEntity<TicketResponseDTO.MessageDTO> addMessage(@PathVariable Long id, @RequestBody MessageRequest request) {

@@ -399,7 +399,15 @@
 
     const authAlert = document.getElementById('auth-alert');
 
+    function hideAlert() {
+      if (authAlert) {
+        authAlert.style.display = 'none';
+        authAlert.textContent = '';
+      }
+    }
+
     function showAlert(msg, isSuccess = false) {
+      if (!authAlert) return;
       authAlert.style.display = 'block';
       authAlert.textContent = msg;
       authAlert.style.background = isSuccess ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)';
