@@ -23,7 +23,6 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-.mvn/wrapper/maven-wrapper.jar
 
 # Gradle
 .gradle
@@ -50,7 +49,15 @@ buildNumber.properties
 ehthumbs.db
 Thumbs.db
 
-# Environment & local config
+# Sensitive Secrets & Environment Configs
 .env
-.env.local
-*.local
+.env.*
+!.env.example
+*.key
+*.pem
+*.jks
+*.p12
+*.crt
+credentials.json
+secrets.properties
+private_keys/

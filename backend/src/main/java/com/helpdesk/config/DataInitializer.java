@@ -3,6 +3,7 @@ package com.helpdesk.config;
 import com.helpdesk.model.*;
 import com.helpdesk.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,18 @@ public class DataInitializer implements CommandLineRunner {
     private final TicketRepository ticketRepository;
     private final TicketMessageRepository messageRepository;
     private final ResolutionRepository resolutionRepository;
+
+    @Value("${app.security.admin.name:System Administrator}")
+    private String adminName;
+
+    @Value("${app.security.admin.email:admin@helpdesk.com}")
+    private String adminEmail;
+
+    @Value("${app.security.admin.password:admin123}")
+    private String adminPassword;
+
+    @Value("${app.security.admin.department:IT Operations}")
+    private String adminDept;
 
     @Autowired
     public DataInitializer(UserRepository userRepository, TicketRepository ticketRepository,
@@ -31,16 +44,18 @@ public class DataInitializer implements CommandLineRunner {
             return; // Data already exists
         }
 
-        System.out.println("🌱 Initializing Sample Helpdesk Data...");
+        System.out.println("🌱 Initializing Configured Helpdesk Accounts & Sample Data...");
 
-        // 1. Create Default Users
-        User admin = userRepository.save(new User("System Administrator", "admin@helpdesk.com", "admin123", Role.ADMIN, "IT Operations"));
+        // 1. Create Initial Administrator from Configured Properties / Environment Variables
+        User admin = userRepository.save(new User(adminName, adminEmail, adminPassword, Role.ADMIN, adminDept));
+
+        // 2. Create Default Test Accounts
         User staffAlex = userRepository.save(new User("Alex Support", "alex.staff@helpdesk.com", "staff123", Role.IT_STAFF, "IT Support Team"));
         User staffSarah = userRepository.save(new User("Sarah Engineer", "sarah.staff@helpdesk.com", "staff123", Role.IT_STAFF, "Network Operations"));
         User empJohn = userRepository.save(new User("John Doe", "john.doe@company.com", "user123", Role.EMPLOYEE, "Finance"));
         User empEmily = userRepository.save(new User("Emily Davis", "emily.davis@company.com", "user123", Role.EMPLOYEE, "Marketing"));
 
-        // 2. Create Sample Tickets
+        // 3. Create Sample Initial Tickets
         Ticket t1 = new Ticket();
         t1.setTitle("Wi-Fi disconnects frequently in Conference Room B");
         t1.setDescription("My laptop keeps dropping the office Wi-Fi network connection whenever I move to meeting room 2B.");
@@ -80,6 +95,6 @@ public class DataInitializer implements CommandLineRunner {
         Resolution res = new Resolution(t3, staffSarah, "User identity verified and account password reset link sent via corporate SMS.");
         resolutionRepository.save(res);
 
-        System.out.println("✅ Sample Helpdesk Data Initialized Successfully!");
+        System.out.println("✅ Helpdesk Data Initialized (Admin: " + adminEmail + ")");
     }
 }
