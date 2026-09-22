@@ -14,6 +14,9 @@
       <span>Helpdesk AI</span>
     </a>
     <div class="nav-actions">
+      <button onclick="openContactAdminModal()" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+        ✉️ Contact Admin
+      </button>
       <div class="user-profile-capsule">
         <div class="user-avatar-circle" id="navbar-user-avatar">E</div>
         <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">Employee</span>
@@ -29,8 +32,11 @@
     <!-- Header with Dynamic Greeting -->
     <div style="margin-bottom: 2rem;">
       <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;">Service & Incident Workspace</h2>
-      <p>Report technical incidents to receive real-time AI diagnostic guidance and track support tickets.</p>
+      <p>Report technical incidents to receive real-time AI diagnostic guidance and track support tickets with your assigned IT Technician.</p>
     </div>
+
+    <!-- Toast Notification Banner -->
+    <div id="employee-alert" style="display: none; padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1.75rem;"></div>
 
     <!-- Apple KPI Stats Grid -->
     <div class="stats-grid">
@@ -71,7 +77,7 @@
       <div class="glass-card" style="padding: clamp(1.5rem, 4vw, 2.25rem);">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
           <div>
-            <h3 style="font-size: 1.25rem;">Report a Problem</h3>
+            <h3 style="font-size: 1.25rem;">Report an Incident</h3>
             <p style="font-size: 0.85rem; color: var(--text-secondary);">Describe the issue for instant diagnostic analysis</p>
           </div>
           <span class="ai-engine-pill">AI Assisted</span>
@@ -127,7 +133,7 @@
       <div style="padding: 1.25rem 1.75rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--apple-glass-border); flex-wrap: wrap; gap: 0.75rem;">
         <div>
           <h3 style="font-size: 1.15rem;">My Incident History</h3>
-          <p style="font-size: 0.85rem;">Track recent support tickets and staff responses</p>
+          <p style="font-size: 0.85rem;">Track recent support tickets and designated IT Technician</p>
         </div>
       </div>
 
@@ -135,12 +141,13 @@
         <table class="apple-table">
           <thead>
             <tr>
-              <th>Ticket</th>
-              <th>Subject</th>
-              <th>Category</th>
+              <th>Ticket ID</th>
+              <th>Incident Summary</th>
+              <th>AI Category</th>
               <th>Priority</th>
               <th>Status</th>
-              <th>Date</th>
+              <th>Assigned IT Technician</th>
+              <th>Submitted</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -153,6 +160,38 @@
       <div id="empty-state" style="display: none; text-align: center; padding: 3rem; color: var(--text-secondary);">
         No support tickets found. Use the studio above to report an issue.
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- Cupertino Modal: Contact Admin Enquiry Form -->
+  <!-- ========================================================================= -->
+  <div class="apple-modal-overlay" id="contact-admin-modal">
+    <div class="apple-modal">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem;">Contact IT Administrator</h3>
+          <span style="font-size: 0.825rem; color: var(--text-muted);">Send official inquiry directly to the Admin mailbox</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeContactAdminModal()">&times;</button>
+      </div>
+
+      <form id="contact-admin-form">
+        <div class="form-group">
+          <label for="enquiry-subject">Subject</label>
+          <input type="text" id="enquiry-subject" class="form-control" placeholder="e.g. Requesting elevated access / Account question" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enquiry-message">Message Details</label>
+          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Type your detailed message to the System Administrator..." required></textarea>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeContactAdminModal()">Cancel</button>
+          <button type="submit" id="enquiry-submit-btn" class="btn btn-primary btn-sm">Dispatch to Admin</button>
+        </div>
+      </form>
     </div>
   </div>
 

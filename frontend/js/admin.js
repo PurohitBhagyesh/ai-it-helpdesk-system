@@ -1,6 +1,6 @@
 /**
  *  Enterprise Admin Dashboard Controller
- * Handles Incident Telemetry and Corporate User Provisioning & Credential Assignment
+ * Handles Incident Telemetry, Corporate User Provisioning, and Official Administrator Enquiry Mailbox
  */
 
 let currentView = 'analytics';
@@ -9,19 +9,30 @@ function switchAdminView(view) {
   currentView = view;
   const btnAnalytics = document.getElementById('view-analytics-btn');
   const btnUsers = document.getElementById('view-users-btn');
+  const btnEnquiries = document.getElementById('view-enquiries-btn');
   const secAnalytics = document.getElementById('section-analytics');
   const secUsers = document.getElementById('section-users');
+  const secEnquiries = document.getElementById('section-enquiries');
+
+  // Reset active classes
+  btnAnalytics.classList.remove('active');
+  btnUsers.classList.remove('active');
+  btnEnquiries.classList.remove('active');
+
+  secAnalytics.style.display = 'none';
+  secUsers.style.display = 'none';
+  secEnquiries.style.display = 'none';
 
   if (view === 'users') {
-    btnAnalytics.classList.remove('active');
     btnUsers.classList.add('active');
-    secAnalytics.style.display = 'none';
     secUsers.style.display = 'block';
     if (window.loadUsersData) window.loadUsersData();
+  } else if (view === 'enquiries') {
+    btnEnquiries.classList.add('active');
+    secEnquiries.style.display = 'block';
+    if (window.loadEnquiriesData) window.loadEnquiriesData();
   } else {
-    btnUsers.classList.remove('active');
     btnAnalytics.classList.add('active');
-    secUsers.style.display = 'none';
     secAnalytics.style.display = 'block';
     if (window.loadAdminAnalytics) window.loadAdminAnalytics();
   }
@@ -62,6 +73,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const allTicketsTbody = document.getElementById('all-tickets-tbody');
   const userDirectoryTbody = document.getElementById('user-directory-tbody');
   const userCountBadge = document.getElementById('user-count-badge');
+  const enquiriesTbody = document.getElementById('enquiries-tbody');
+  const enquiryCountBadge = document.getElementById('enquiry-count-badge');
+  const enquiryNavBadge = document.getElementById('enquiry-nav-badge');
   const adminAlert = document.getElementById('admin-alert');
 
   function showAdminAlert(msg, isSuccess = true) {
@@ -163,6 +177,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         </td>
       </tr>
     `).join('');
+
+    // Update enquiry badge count in nav
+    await refreshEnquiryBadge();
   }
 
   // 2. Load User Directory & Provisioning
@@ -223,7 +240,97 @@ document.addEventListener('DOMContentLoaded', async () => {
     }).join('');
   }
 
-  // 3. User Provisioning Form Handler
+  // 3. Load Administrator Enquiry Mailbox Data
+  async function loadEnquiriesData() {
+    const enquiries = await API.getAdminEnquiries();
+    enquiryCountBadge.textContent = `${enquiries.length} Enquiries`;
+
+    const pendingCount = enquiries.filter(e => e.status === 'PENDING').length;
+    if (pendingCount > 0) {
+      enquiryNavBadge.style.display = 'inline-block';
+      enquiryNavBadge.textContent = pendingCount;
+    } else {
+      enquiryNavBadge.style.display = 'none';
+    }
+
+    if (enquiries.length === 0) {
+      enquiriesTbody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 3rem 1rem;">
+            📬 No incoming enquiries. The administrator inbox is completely clear.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const roleBadges = {
+      STAFF: '<span class="badge" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35);">IT TECHNICIAN</span>',
+      EMPLOYEE: '<span class="badge badge-resolved">EMPLOYEE</span>'
+    };
+
+    enquiriesTbody.innerHTML = enquiries.map(e => {
+      const isPending = e.status === 'PENDING';
+      const statusBadge = isPending
+        ? '<span class="badge badge-inprogress">PENDING REVIEW</span>'
+        : '<span class="badge badge-resolved">RESOLVED</span>';
+
+      const roleBadge = roleBadges[e.senderRole] || `<span class="badge">${e.senderRole}</span>`;
+      const dateStr = e.createdAt ? new Date(e.createdAt).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' }) : 'Recently';
+
+      return `
+        <tr>
+          <td><strong>#${e.id}</strong></td>
+          <td>
+            <div style="font-weight: 600; color: #fff;">${escapeHtml(e.senderName)}</div>
+            <div style="font-size: 0.75rem; color: #60a5fa; font-family: monospace;">${escapeHtml(e.senderEmail)}</div>
+          </td>
+          <td>${roleBadge}</td>
+          <td><strong style="color: #fff;">${escapeHtml(e.subject)}</strong></td>
+          <td style="max-width: 320px; font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+            ${escapeHtml(e.message)}
+          </td>
+          <td style="font-size: 0.8rem; color: var(--text-muted); white-space: nowrap;">${dateStr}</td>
+          <td>${statusBadge}</td>
+          <td style="text-align: right; white-space: nowrap;">
+            ${isPending ? `
+              <button class="btn btn-primary btn-sm" onclick="handleResolveEnquiry(${e.id})">
+                ✓ Resolve
+              </button>
+            ` : `
+              <span style="color: #30d158; font-size: 0.825rem; font-weight: 600;">✓ Completed</span>
+            `}
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  async function refreshEnquiryBadge() {
+    try {
+      const enquiries = await API.getAdminEnquiries();
+      const pendingCount = enquiries.filter(e => e.status === 'PENDING').length;
+      if (pendingCount > 0) {
+        enquiryNavBadge.style.display = 'inline-block';
+        enquiryNavBadge.textContent = pendingCount;
+      } else {
+        enquiryNavBadge.style.display = 'none';
+      }
+    } catch (e) {}
+  }
+
+  // 4. Resolve Enquiry Handler
+  window.handleResolveEnquiry = async function(enquiryId) {
+    const res = await API.updateEnquiryStatus(enquiryId, 'RESOLVED');
+    if (res && res.success !== false) {
+      showAdminAlert(`Enquiry #${enquiryId} marked as Resolved.`, true);
+      await loadEnquiriesData();
+    } else {
+      showAdminAlert('Failed to update enquiry status.', false);
+    }
+  };
+
+  // 5. User Provisioning Form Handler
   const provisionForm = document.getElementById('provision-user-form');
   provisionForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -250,7 +357,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 4. Password Reset Form Handler
+  // 6. Password Reset Form Handler
   const resetForm = document.getElementById('reset-password-form');
   resetForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -273,7 +380,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  // 5. Account Revocation / Deletion
+  // 7. Account Revocation / Deletion
   window.handleDeleteUser = async function(userId, userName) {
     if (!confirm(`Are you sure you want to revoke enterprise access for ${userName}? This will disable their login credentials.`)) {
       return;
@@ -288,6 +395,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -295,7 +403,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.loadAdminAnalytics = loadAdminAnalytics;
   window.loadUsersData = loadUsersData;
+  window.loadEnquiriesData = loadEnquiriesData;
 
   await loadAdminAnalytics();
 });
+
 

@@ -1,6 +1,13 @@
-/**
- * Employee Dashboard Controller
- */
+// Modal Controls for Contacting Admin
+function openContactAdminModal() {
+  const modal = document.getElementById('contact-admin-modal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeContactAdminModal() {
+  const modal = document.getElementById('contact-admin-modal');
+  if (modal) modal.classList.remove('active');
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   const user = Auth.requireAuth(['EMPLOYEE', 'ADMIN']);
@@ -11,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const submitTicketForm = document.getElementById('create-ticket-form');
   const ticketsTableBody = document.getElementById('my-tickets-tbody');
   const emptyState = document.getElementById('empty-state');
+  const employeeAlert = document.getElementById('employee-alert');
 
   // AI Diagnostic Preview Elements
   const aiCategoryEl = document.getElementById('ai-category');
@@ -23,6 +31,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   const progressCountEl = document.getElementById('stat-progress');
   const resolvedCountEl = document.getElementById('stat-resolved');
 
+  function showEmployeeAlert(msg, isSuccess = true) {
+    if (!employeeAlert) return;
+    employeeAlert.style.display = 'block';
+    employeeAlert.textContent = msg;
+    employeeAlert.style.background = isSuccess ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)';
+    employeeAlert.style.border = isSuccess ? '1px solid rgba(48, 209, 88, 0.35)' : '1px solid rgba(255, 69, 58, 0.35)';
+    employeeAlert.style.color = isSuccess ? '#30d158' : '#ff453a';
+
+    setTimeout(() => {
+      employeeAlert.style.display = 'none';
+    }, 4500);
+  }
+
   // Real-time AI preview as employee types description
   let typingTimer;
   problemDescInput.addEventListener('input', () => {
@@ -30,9 +51,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     const text = problemDescInput.value.trim();
 
     if (text.length < 5) {
-      aiCategoryEl.textContent = 'Analyzing...';
+      aiCategoryEl.textContent = 'Ready';
       aiPriorityEl.textContent = 'Auto';
-      aiSolutionEl.textContent = 'Type a brief description of your technical issue to see instant AI troubleshooting advice.';
+      aiSolutionEl.textContent = 'Type a description of your issue on the left to see live AI problem categorization and immediate troubleshooting instructions.';
       return;
     }
 
@@ -43,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       aiSolutionEl.textContent = analysis.suggestedSolution;
 
       // Update badge styling
-      aiPriorityEl.className = 'ai-tag ' + (analysis.priority === 'HIGH' ? 'priority-high' : analysis.priority === 'MEDIUM' ? 'priority-medium' : 'priority-low');
+      aiPriorityEl.className = 'ai-chip ' + (analysis.priority === 'HIGH' ? 'priority-high' : analysis.priority === 'MEDIUM' ? 'priority-medium' : 'priority-low');
     }, 250);
   });
 
@@ -88,12 +109,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             ${ticket.status.replace('_', ' ')}
           </span>
         </td>
-        <td style="color: var(--text-muted); font-size: 0.85rem;">
+        <td>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <div class="user-avatar-circle" style="width: 26px; height: 26px; font-size: 0.75rem; background: ${ticket.assignedTo ? 'var(--apple-blue)' : 'rgba(255,255,255,0.1)'};">
+              ${ticket.assignedTo ? ticket.assignedName.charAt(0).toUpperCase() : '—'}
+            </div>
+            <span style="font-size: 0.85rem; color: ${ticket.assignedTo ? '#fff' : 'var(--text-muted)'};">
+              ${escapeHtml(ticket.assignedName || 'Awaiting IT Technician')}
+            </span>
+          </div>
+        </td>
+        <td style="color: var(--text-muted); font-size: 0.825rem;">
           ${new Date(ticket.createdAt).toLocaleDateString()}
         </td>
         <td>
           <a href="ticket-details.html?id=${ticket.id}" class="btn btn-outline btn-sm">
-            View Details
+            View & Chat 🔒
           </a>
         </td>
       </tr>
@@ -123,17 +154,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     submitBtn.disabled = false;
-    submitBtn.textContent = 'Submit Ticket';
+    submitBtn.textContent = 'Submit Support Ticket';
 
     // Clear Form & Reset AI box
     submitTicketForm.reset();
     aiCategoryEl.textContent = 'Ready';
-    aiPriorityEl.textContent = 'Auto';
-    aiSolutionEl.textContent = 'Type a brief description of your technical issue to see instant AI troubleshooting advice.';
+    aiPriorityEl.textContent = 'Auto Priority';
+    aiSolutionEl.textContent = 'Type a description of your issue on the left to see live AI problem categorization and immediate troubleshooting instructions.';
 
-    alert(`Ticket #${newTicket.id} created successfully! Our IT team has been notified.`);
+    showEmployeeAlert(`Incident #${newTicket.id} created successfully! IT Technicians have been notified.`);
     await loadMyTickets();
   });
+
+  // Handle Contact Admin Form Submission
+  const contactAdminForm = document.getElementById('contact-admin-form');
+  if (contactAdminForm) {
+    contactAdminForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const subject = document.getElementById('enquiry-subject').value.trim();
+      const message = document.getElementById('enquiry-message').value.trim();
+      const btn = document.getElementById('enquiry-submit-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Dispatching...';
+
+      const res = await API.sendAdminEnquiry({
+        senderId: user.id,
+        senderName: user.name,
+        senderEmail: user.email,
+        senderRole: 'EMPLOYEE',
+        subject,
+        message
+      });
+
+      btn.disabled = false;
+      btn.textContent = 'Dispatch to Admin';
+
+      closeContactAdminModal();
+      contactAdminForm.reset();
+      showEmployeeAlert('Your enquiry has been dispatched directly to the Administrator mailbox.', true);
+    });
+  }
 
   function escapeHtml(text) {
     const div = document.createElement('div');

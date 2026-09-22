@@ -41,12 +41,15 @@
       </div>
 
       <!-- Cupertino View Switcher -->
-      <div class="segmented-control" style="margin: 0; min-width: 320px;">
+      <div class="segmented-control" style="margin: 0; min-width: 480px;">
         <button type="button" class="segment-btn active" id="view-analytics-btn" onclick="switchAdminView('analytics')">
           📊 Incident Telemetry
         </button>
         <button type="button" class="segment-btn" id="view-users-btn" onclick="switchAdminView('users')">
           👥 User Provisioning
+        </button>
+        <button type="button" class="segment-btn" id="view-enquiries-btn" onclick="switchAdminView('enquiries')">
+          📬 Admin Mailbox <span id="enquiry-nav-badge" style="display: none; background: var(--apple-danger); color: #fff; padding: 0.1rem 0.4rem; border-radius: var(--radius-full); font-size: 0.7rem; margin-left: 0.35rem;">0</span>
         </button>
       </div>
     </div>
@@ -164,7 +167,7 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- VIEW 2: User Provisioning & Directory (Admin Only Authority) -->
+    <!-- VIEW 2: User Provisioning & Directory (2 Roles Only: Employee & IT Tech) -->
     <!-- ========================================================================= -->
     <div id="section-users" style="display: none;">
       
@@ -183,7 +186,7 @@
 
           <form id="provision-user-form">
             <div class="form-group">
-              <label for="prov-name">Employee / Staff Full Name</label>
+              <label for="prov-name">Employee / Technician Full Name</label>
               <input type="text" id="prov-name" class="form-control" placeholder="e.g. Craig Federighi" required>
             </div>
 
@@ -201,9 +204,8 @@
               <div class="form-group">
                 <label for="prov-role">Access Permission Tier</label>
                 <select id="prov-role" class="form-control" required>
-                  <option value="EMPLOYEE">👤 Employee</option>
-                  <option value="STAFF">🛠️ IT Support Staff</option>
-                  <option value="ADMIN">👑 System Administrator</option>
+                  <option value="EMPLOYEE">👤 EMPLOYEE (Ticket Submitter)</option>
+                  <option value="STAFF">🛠️ IT TECHNICIAN (Support Engineer)</option>
                 </select>
               </div>
 
@@ -233,8 +235,8 @@
             <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--apple-glass-border);">
               <span style="font-size: 1.1rem; color: var(--apple-blue);">🔑</span>
               <div>
-                <strong style="color: #fff;">Single Source of Authority</strong>
-                <p style="font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">Self-registration is restricted. Only IT Administrators have privileges to issue new corporate accounts.</p>
+                <strong style="color: #fff;">Two Provisionable Roles</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">Administrators provision either <strong>EMPLOYEE</strong> or <strong>IT TECHNICIAN</strong> accounts with designated credentials.</p>
               </div>
             </div>
 
@@ -281,6 +283,43 @@
               </tr>
             </thead>
             <tbody id="user-directory-tbody">
+              <!-- Populated by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: Admin Enquiry Mailbox (Direct Contact Admin Inbox) -->
+    <!-- ========================================================================= -->
+    <div id="section-enquiries" style="display: none;">
+      
+      <div class="table-card">
+        <div class="table-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Official Administrator Enquiry Mailbox</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Direct inquiries, escalation notices, and messages sent by Employees and IT Technicians</span>
+          </div>
+          <div class="badge badge-open" id="enquiry-count-badge">0 Enquiries</div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Sender Identity</th>
+                <th>Sender Role</th>
+                <th>Subject</th>
+                <th>Message Content</th>
+                <th>Submitted</th>
+                <th>Status</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="enquiries-tbody">
               <!-- Populated by admin.js -->
             </tbody>
           </table>

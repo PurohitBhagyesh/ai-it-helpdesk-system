@@ -149,4 +149,28 @@ public class TicketService {
 
         return new TicketResponseDTO(saved);
     }
+
+    @Transactional
+    public TicketResponseDTO rejectTicket(Long ticketId, Long staffId, String reason) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new IllegalArgumentException("Ticket not found with ID: " + ticketId));
+        User staff = staffId != null ? userRepository.findById(staffId).orElse(null) : null;
+        String staffName = staff != null ? staff.getName() : "IT Technician";
+
+        // Re-routing ticket back to open triage pool
+        ticket.setAssignedTo(null);
+        ticket.setStatus(Status.OPEN);
+
+        String sanitizedReason = reason != null && !reason.trim().isEmpty()
+                ? inputSanitizer.sanitizeText(reason.trim())
+                : "Re-routed back to Triage queue for alternative IT Technician assignment.";
+
+        // Record system activity entry in ticket messages
+        TicketMessage systemMsg = new TicketMessage(ticket, staff != null ? staff : ticket.getEmployee(),
+                "⚠️ [IT Technician Action]: " + staffName + " declined / re-routed this incident. Note: " + sanitizedReason);
+        messageRepository.save(systemMsg);
+
+        Ticket saved = ticketRepository.save(ticket);
+        return new TicketResponseDTO(saved);
+    }
 }

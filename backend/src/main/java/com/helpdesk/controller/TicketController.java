@@ -73,4 +73,15 @@ public class TicketController {
         TicketResponseDTO resolved = ticketService.resolveTicket(id, request);
         return ResponseEntity.ok(resolved);
     }
+
+    // 8. Reject / Re-route ticket back to triage queue
+    @PostMapping("/{id}/reject")
+    public ResponseEntity<TicketResponseDTO> rejectTicket(
+            @PathVariable Long id,
+            @RequestBody Map<String, Object> payload) {
+        Long staffId = payload.get("staffId") != null ? Long.valueOf(payload.get("staffId").toString()) : null;
+        String reason = payload.getOrDefault("reason", "").toString();
+        TicketResponseDTO result = ticketService.rejectTicket(id, staffId, reason);
+        return ResponseEntity.ok(result);
+    }
 }

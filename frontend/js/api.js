@@ -386,5 +386,95 @@ const API = {
     users = users.filter(u => u.id !== Number(userId));
     localStorage.setItem('helpdesk_users', JSON.stringify(users));
     return { success: true, message: 'User removed successfully.' };
+  },
+
+  //  IT Technician Ticket Rejection / Re-routing
+  async rejectTicket(ticketId, staffId, reason) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/tickets/${ticketId}/reject`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ staffId, reason })
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {}
+
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    const ticket = tickets.find(t => t.id === Number(ticketId));
+    if (ticket) {
+      ticket.assignedTo = null;
+      ticket.assignedName = 'Unassigned';
+      ticket.status = 'OPEN';
+      if (!ticket.messages) ticket.messages = [];
+      ticket.messages.push({
+        id: ticket.messages.length + 1,
+        senderId: staffId,
+        senderName: 'IT Technician',
+        message: `⚠️ [IT Technician Action]: Ticket declined and returned to triage pool. Reason: ${reason || 'Capacity re-route'}`,
+        createdAt: new Date().toISOString()
+      });
+      localStorage.setItem('helpdesk_tickets', JSON.stringify(tickets));
+      return ticket;
+    }
+    return null;
+  },
+
+  //  Official Admin Enquiry & Escalation Mailbox
+  async sendAdminEnquiry(enquiryData) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enquiries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(enquiryData)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return { success: true, message: 'Your enquiry has been dispatched directly to the IT Administrator.', enquiry: data };
+      }
+    } catch (e) {}
+
+    const enquiries = JSON.parse(localStorage.getItem('helpdesk_enquiries')) || [];
+    const newEnquiry = {
+      id: Date.now(),
+      senderId: enquiryData.senderId || 0,
+      senderName: enquiryData.senderName || 'Anonymous',
+      senderEmail: enquiryData.senderEmail || 'user@helpdesk.corp',
+      senderRole: enquiryData.senderRole || 'EMPLOYEE',
+      subject: enquiryData.subject,
+      message: enquiryData.message,
+      status: 'PENDING',
+      createdAt: new Date().toISOString()
+    };
+    enquiries.unshift(newEnquiry);
+    localStorage.setItem('helpdesk_enquiries', JSON.stringify(enquiries));
+    return { success: true, message: 'Enquiry sent to Administrator.', enquiry: newEnquiry };
+  },
+
+  async getAdminEnquiries() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enquiries`);
+      if (res.ok) return await res.json();
+    } catch (e) {}
+
+    return JSON.parse(localStorage.getItem('helpdesk_enquiries')) || [];
+  },
+
+  async updateEnquiryStatus(enquiryId, status) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/enquiries/${enquiryId}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status })
+      });
+      if (res.ok) return await res.json();
+    } catch (e) {}
+
+    const enquiries = JSON.parse(localStorage.getItem('helpdesk_enquiries')) || [];
+    const item = enquiries.find(e => e.id === Number(enquiryId));
+    if (item) {
+      item.status = status;
+      localStorage.setItem('helpdesk_enquiries', JSON.stringify(enquiries));
+    }
+    return { success: true };
   }
 };
