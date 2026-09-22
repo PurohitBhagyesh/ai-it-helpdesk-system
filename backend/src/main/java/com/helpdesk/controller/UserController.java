@@ -1,9 +1,6 @@
 package com.helpdesk.controller;
 
-import com.helpdesk.dto.LoginResponse;
-import com.helpdesk.dto.RegisterRequest;
-import com.helpdesk.dto.ResetPasswordRequest;
-import com.helpdesk.dto.UserDTO;
+import com.helpdesk.dto.*;
 import com.helpdesk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
