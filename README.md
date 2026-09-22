@@ -4,14 +4,15 @@
 
 [![Spring Boot 3](https://img.shields.io/badge/Spring_Boot-3.2.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Java 17](https://img.shields.io/badge/Java-17_LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Tunnel_&_Pages-F38020?style=for-the-badge&logo=cloudflare&logoColor=white)](https://www.cloudflare.com/)
 [![Apple Cupertino UI](https://img.shields.io/badge/Design-Apple_Cupertino_Glass-000000?style=for-the-badge&logo=apple&logoColor=white)](https://developer.apple.com/design/)
 [![GitHub Pages](https://img.shields.io/badge/Live_Demo-GitHub_Pages-222222?style=for-the-badge&logo=githubpages&logoColor=white)](https://purohitbhagyesh.github.io/ai-it-helpdesk-system/)
 [![Docker Ready](https://img.shields.io/badge/Docker-Multi--Stage_Build-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
-**A next-generation, high-performance IT Incident Management and Helpdesk Platform designed with Apple Cupertino Dark Glass Aesthetics, Spring Boot 3 Enterprise Architecture, Real-Time Natural Language AI Triage, End-to-End Encrypted Support Chat, and Multi-Tenant Enterprise Onboarding.**
+**A next-generation, high-performance IT Incident Management and Helpdesk Platform designed with Apple Cupertino Dark Glass Aesthetics, Spring Boot 3 Enterprise Architecture, Real-Time Natural Language AI Triage, End-to-End Encrypted Support Chat, Multi-Tenant Enterprise Onboarding, and Cloudflare Edge Integration.**
 
-[🌐 Explore Live Demo](https://purohitbhagyesh.github.io/ai-it-helpdesk-system/) • [📑 Architecture Specs](ARCHITECTURE.md) • [🚀 Cloud Deployment Guide](DEPLOYMENT.md) • [🔒 Security Policy](SECURITY.md)
+[🌐 Explore Live Demo](https://purohitbhagyesh.github.io/ai-it-helpdesk-system/) • [📑 Architecture Specs](ARCHITECTURE.md) • [🚀 Cloud Deployment Guide](DEPLOYMENT.md) • [🔒 Security Policy](SECURITY.md) • [📜 Changelog](CHANGES.md)
 
 </div>
 
@@ -22,12 +23,14 @@
 | Platform | Deployment Type | Live URL / Deploy Link | Status |
 | :--- | :--- | :--- | :--- |
 | **GitHub Pages** | Frontend Web App (Edge CDN) | 👉 **[https://purohitbhagyesh.github.io/ai-it-helpdesk-system/](https://purohitbhagyesh.github.io/ai-it-helpdesk-system/)** | 🟢 Live |
+| **Cloudflare Pages** | Ultra-Fast Global Edge CDN | [Deploy to Cloudflare Pages](DEPLOYMENT.md#-option-3-deploy-frontend-to-cloudflare-pages) | ⚡ Ready |
+| **Cloudflare Tunnel** | Zero-Cost Secure HTTPS Backend | `~/.local/bin/cloudflared tunnel --url http://localhost:8080` | 🚇 Enabled |
 | **Vercel** | High-Speed Frontend CDN | [Deploy to Vercel Guide](DEPLOYMENT.md#-option-3-deploy-frontend-to-vercel-vercelcom) | ⚡ Ready |
 | **Render** | Docker Full-Stack / Backend API | [Deploy to Render Guide](DEPLOYMENT.md#-option-1-deploy-backend-to-render-rendercom) | ⚡ Ready (`render.yaml`) |
 | **Railway** | Spring Boot + MySQL Database | [Deploy to Railway Guide](DEPLOYMENT.md#-option-2-deploy-backend-to-railway-railwayapp) | ⚡ Ready (`railway.json`) |
 | **Localhost** | Docker Compose (Full Stack) | `http://localhost:3000` & `http://localhost:8080` | 🐳 Ready (`docker-compose.yml`) |
 
-> **💡 Quick Cloud Tip:** When running the frontend on **GitHub Pages** or **Vercel**, you can dynamically connect it to your live **Render** or **Railway** backend by clicking the **`🌐 Backend API Endpoint`** link at the bottom of the login card!
+> **💡 Quick Cloud Tip:** When running the frontend on **GitHub Pages**, **Cloudflare Pages**, or **Vercel**, you can dynamically connect it to your live **Cloudflare Tunnel**, **Render**, or **Railway** backend by clicking the **`🌐 Backend API Endpoint`** link at the bottom of the login card!
 
 ---
 
@@ -194,6 +197,15 @@ python3 -m http.server 3000
 ```bash
 docker compose up --build -d
 ```
+
+### 4. Free Public HTTPS Backend via Cloudflare Tunnel
+Expose your local Spring Boot backend (`http://localhost:8080`) to a secure global HTTPS URL with zero router configuration:
+```bash
+# Start Cloudflare Tunnel on macOS / Linux
+~/.local/bin/cloudflared tunnel --url http://localhost:8080
+```
+* **Output:** Generates a secure URL (e.g. `https://your-tunnel.trycloudflare.com`).
+* Enter this URL in your frontend's **`🌐 Backend API Endpoint`** dialog to connect your live GitHub Pages / Cloudflare Pages site to your local backend instantly!
 
 ---
 
