@@ -110,6 +110,12 @@ All major features, security enhancements, architecture implementations, UI over
 * Enhanced [`frontend/js/api.js`](frontend/js/api.js) fallback simulation across multi-cloud and GitHub Pages environments.
 * Installed standalone Apple Silicon [`cloudflared`](~/.local/bin/cloudflared) CLI for zero-cost secure HTTPS backend tunneling.
 
+### Commit 21: `fbdd5b7` — Enterprise & Workforce Login Resolution & End-to-End Test Suite
+* Fixed missing `hideAlert` function in [`frontend/index.html`](frontend/index.html) which previously halted authentication form submission and tab switches.
+* Added `POST /api/tickets/{id}/assign` endpoint to [`TicketController.java`](backend/src/main/java/com/helpdesk/controller/TicketController.java).
+* Built and executed full 10-step end-to-end headless test suite (`scratch/test_flows.js`) verifying health, logins, enterprise onboarding, team provisioning, and ticket lifecycle (100% pass rate).
+* Pushed latest build to `origin main` and synchronized live `gh-pages` deployment.
+
 ---
 
 ## 🌐 Live Production Links
