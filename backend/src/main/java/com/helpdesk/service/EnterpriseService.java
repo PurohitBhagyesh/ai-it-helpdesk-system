@@ -53,7 +53,17 @@ public class EnterpriseService {
         }
 
         String email = inputSanitizer.sanitizeText(request.getAdminEmail().toLowerCase().trim());
-        if (userRepository.existsByEmail(email)) {
+
+        // If there is an unverified enterprise registration for this email, allow re-registration by cleaning up previous unverified entry
+        Optional<Enterprise> existingEnterprise = enterpriseRepository.findByAdminEmail(email);
+        if (existingEnterprise.isPresent()) {
+            if (!existingEnterprise.get().isVerified()) {
+                enterpriseRepository.delete(existingEnterprise.get());
+                userRepository.findByEmail(email).ifPresent(userRepository::delete);
+            } else {
+                return new EnterpriseResponse(false, "An active, verified enterprise workspace already exists for " + email + ". Please log in directly.");
+            }
+        } else if (userRepository.existsByEmail(email)) {
             return new EnterpriseResponse(false, "An account with email " + email + " already exists in the system.");
         }
 
@@ -65,9 +75,6 @@ public class EnterpriseService {
 
         // Generate 6-digit verification code
         String verificationCode = String.format("%06d", new Random().nextInt(900000) + 100000);
-
-        // Delete any existing unverified enterprise with same email
-        enterpriseRepository.findByAdminEmail(email).ifPresent(enterpriseRepository::delete);
 
         Enterprise enterprise = new Enterprise(companyName, companyDetails, companyLocation, companyPhone, adminName, email, verificationCode);
         enterpriseRepository.save(enterprise);
