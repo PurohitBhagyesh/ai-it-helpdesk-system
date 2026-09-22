@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enterprise Portal | AI IT Support & Helpdesk</title>
+  <title>Enterprise Sign In | AI IT Support & Helpdesk</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,7 +14,11 @@
     <!-- Left Hero Branding Panel (Apple Style) -->
     <div class="auth-hero-panel">
       <div class="brand">
-        <div class="brand-icon"></div>
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
         <span>Helpdesk AI Enterprise</span>
       </div>
 
@@ -28,18 +32,18 @@
         </h1>
         <p style="font-size: 1.05rem; max-width: 480px; line-height: 1.6; margin-bottom: 2rem;">
           Instant real-time problem triage, automated diagnostic solutions, and end-to-end incident lifecycle management
-          powered by AI.
+          powered by natural language AI.
         </p>
 
         <div style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.875rem;">
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="color: var(--apple-green);">✔</span> Zero Wait Triage
+            <span style="color: var(--apple-green);">✔</span> Zero-Wait AI Triage
           </div>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="color: var(--apple-green);">✔</span> Auto-Diagnostic Engine
+            <span style="color: var(--apple-green);">✔</span> Admin Provisioned Access
           </div>
           <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span style="color: var(--apple-green);">✔</span> Enterprise RBAC
+            <span style="color: var(--apple-green);">✔</span> Enterprise Security
           </div>
         </div>
       </div>
@@ -54,19 +58,9 @@
       <div class="glass-card" style="width: 100%; max-width: 440px; padding: clamp(1.75rem, 5vw, 2.5rem);">
 
         <div style="text-align: center; margin-bottom: 1.5rem;">
+          <div class="ai-tag" style="margin-bottom: 0.75rem; display: inline-flex;">Corporate Workspace</div>
           <h2 style="font-size: 1.65rem; margin-bottom: 0.35rem;" id="auth-heading">Sign In to Helpdesk</h2>
-          <p style="font-size: 0.875rem;" id="auth-subheading">Enter your corporate credentials to access your portal
-          </p>
-        </div>
-
-        <!-- Apple Segmented Control (Sign In / Register) -->
-        <div class="segmented-control">
-          <button type="button" class="segment-btn active" id="tab-login" onclick="switchAuthTab('login')">
-            Sign In
-          </button>
-          <button type="button" class="segment-btn" id="tab-register" onclick="switchAuthTab('register')">
-            Create Account
-          </button>
+          <p style="font-size: 0.875rem;" id="auth-subheading">Enter your corporate credentials assigned by your IT Administrator</p>
         </div>
 
         <!-- Notification Banner -->
@@ -78,16 +72,16 @@
         <form id="login-form">
           <div class="form-group">
             <label for="login-email">Corporate Email Address</label>
-            <input type="email" id="login-email" class="form-control" placeholder="name@company.com" required
+            <input type="email" id="login-email" class="form-control" placeholder="name@company.corp" required
               autocomplete="email">
           </div>
 
           <div class="form-group">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
-              <label for="login-password" style="margin-bottom: 0;">Password</label>
+              <label for="login-password" style="margin-bottom: 0;">Assigned Password</label>
               <a href="#"
-                onclick="alert('Please contact your IT System Administrator to reset your corporate password.'); return false;"
-                style="font-size: 0.75rem; color: var(--text-link);">Forgot?</a>
+                onclick="alert('Access accounts and credentials are exclusively issued and managed by your Systems Administrator. Please contact your IT department for assistance.'); return false;"
+                style="font-size: 0.75rem; color: var(--text-link);">Forgot Password?</a>
             </div>
             <input type="password" id="login-password" class="form-control" placeholder="••••••••" required
               autocomplete="current-password">
@@ -98,42 +92,12 @@
           </button>
         </form>
 
-        <!-- Create Account Form (Initially Hidden) -->
-        <form id="register-form" style="display: none;">
-          <div class="form-group">
-            <label for="reg-name">Full Name</label>
-            <input type="text" id="reg-name" class="form-control" placeholder="e.g. John Doe" required>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-email">Work Email</label>
-            <input type="email" id="reg-email" class="form-control" placeholder="name@company.com" required>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-password">Password (Minimum 6 characters)</label>
-            <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required minlength="6">
-          </div>
-
-          <div class="form-group">
-            <label for="reg-department">Department / Team</label>
-            <input type="text" id="reg-department" class="form-control"
-              placeholder="e.g. Engineering, Finance, Marketing" required>
-          </div>
-
-          <div class="form-group">
-            <label for="reg-role">Account Role</label>
-            <select id="reg-role" class="form-control" required>
-              <option value="EMPLOYEE">👤 Employee (Submit & Track Tickets)</option>
-              <option value="IT_STAFF">🛠️ IT Support Staff (Triage & Resolve)</option>
-              <option value="ADMIN">👑 Administrator (Full System Analytics)</option>
-            </select>
-          </div>
-
-          <button type="submit" id="register-btn" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
-            Complete Registration
-          </button>
-        </form>
+        <!-- Enterprise Notice Footnote -->
+        <div style="margin-top: 1.75rem; padding-top: 1.25rem; border-top: 1px solid var(--apple-glass-border); text-align: center;">
+          <p style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.5;">
+            🔒 <strong>Single Sign-On Security:</strong> Public registration is disabled. All user emails and passwords are systematically provisioned by the IT System Administrator.
+          </p>
+        </div>
 
       </div>
     </div>
@@ -144,31 +108,7 @@
   <script src="js/auth.js"></script>
   <script>
     const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-    const tabLogin = document.getElementById('tab-login');
-    const tabRegister = document.getElementById('tab-register');
     const authAlert = document.getElementById('auth-alert');
-    const authHeading = document.getElementById('auth-heading');
-    const authSubheading = document.getElementById('auth-subheading');
-
-    function switchAuthTab(mode) {
-      hideAlert();
-      if (mode === 'register') {
-        tabLogin.classList.remove('active');
-        tabRegister.classList.add('active');
-        loginForm.style.display = 'none';
-        registerForm.style.display = 'block';
-        authHeading.textContent = 'Create New Account';
-        authSubheading.textContent = 'Register your profile to access IT support services';
-      } else {
-        tabRegister.classList.remove('active');
-        tabLogin.classList.add('active');
-        registerForm.style.display = 'none';
-        loginForm.style.display = 'block';
-        authHeading.textContent = 'Sign In to Helpdesk';
-        authSubheading.textContent = 'Enter your corporate credentials to access your portal';
-      }
-    }
 
     function showAlert(msg, isSuccess = false) {
       authAlert.style.display = 'block';
@@ -201,39 +141,9 @@
         Auth.setUser(res.user);
         Auth.redirectByRole(res.user.role);
       } else {
-        showAlert(res.message || 'Invalid email or password. Please try again.');
-      }
-    });
-
-    // Real Registration Handler
-    registerForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      hideAlert();
-      const name = document.getElementById('reg-name').value.trim();
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-password').value;
-      const department = document.getElementById('reg-department').value.trim();
-      const role = document.getElementById('reg-role').value;
-      const btn = document.getElementById('register-btn');
-
-      btn.disabled = true;
-      btn.textContent = 'Creating Account...';
-
-      const res = await API.register(name, email, password, role, department);
-      btn.disabled = false;
-      btn.textContent = 'Complete Registration';
-
-      if (res && res.success && res.user) {
-        showAlert('Account created successfully! Redirecting...', true);
-        Auth.setUser(res.user);
-        setTimeout(() => {
-          Auth.redirectByRole(res.user.role);
-        }, 600);
-      } else {
-        showAlert(res.message || 'Registration failed. Please check your details.');
+        showAlert(res.message || 'Invalid email or password. Please verify credentials with your IT Administrator.');
       }
     });
   </script>
 </body>
-
 </html>

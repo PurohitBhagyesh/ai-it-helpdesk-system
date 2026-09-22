@@ -3,6 +3,7 @@ package com.helpdesk.service;
 import com.helpdesk.dto.LoginRequest;
 import com.helpdesk.dto.LoginResponse;
 import com.helpdesk.dto.RegisterRequest;
+import com.helpdesk.dto.UserDTO;
 import com.helpdesk.model.Role;
 import com.helpdesk.model.User;
 import com.helpdesk.repository.UserRepository;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -33,7 +36,7 @@ public class UserService {
             return new LoginResponse(false, "Email and password are required.", null, null);
         }
 
-        String sanitizedEmail = inputSanitizer.sanitizeText(request.getEmail());
+        String sanitizedEmail = inputSanitizer.sanitizeText(request.getEmail().toLowerCase().trim());
 
         Optional<User> userOpt = userRepository.findByEmail(sanitizedEmail);
         if (userOpt.isPresent()) {
@@ -46,21 +49,33 @@ public class UserService {
         return new LoginResponse(false, "Invalid email or password", null, null);
     }
 
+    @Transactional(readOnly = true)
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(UserDTO::new)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public LoginResponse register(RegisterRequest request) {
+        return provisionUser(request);
+    }
+
+    @Transactional
+    public LoginResponse provisionUser(RegisterRequest request) {
         if (request.getName() == null || request.getName().trim().isEmpty()) {
             return new LoginResponse(false, "Full name is required.", null, null);
         }
         if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-            return new LoginResponse(false, "Email address is required.", null, null);
+            return new LoginResponse(false, "Corporate email address is required.", null, null);
         }
         if (request.getPassword() == null || request.getPassword().length() < 6) {
-            return new LoginResponse(false, "Password must be at least 6 characters.", null, null);
+            return new LoginResponse(false, "Assigned password must be at least 6 characters.", null, null);
         }
 
         String sanitizedEmail = inputSanitizer.sanitizeText(request.getEmail().toLowerCase().trim());
         if (userRepository.existsByEmail(sanitizedEmail)) {
-            return new LoginResponse(false, "An account with this email already exists.", null, null);
+            return new LoginResponse(false, "An account with email " + sanitizedEmail + " already exists.", null, null);
         }
 
         String sanitizedName = inputSanitizer.sanitizeText(request.getName().trim());
@@ -72,7 +87,32 @@ public class UserService {
         User newUser = new User(sanitizedName, sanitizedEmail, encodedPassword, role, sanitizedDept);
         User saved = userRepository.save(newUser);
 
-        return new LoginResponse(true, "Account created successfully", saved, "jwt-token-" + saved.getId());
+        return new LoginResponse(true, "Corporate user account provisioned successfully", saved, "jwt-token-" + saved.getId());
+    }
+
+    @Transactional
+    public boolean resetPassword(Long userId, String newPassword) {
+        if (newPassword == null || newPassword.trim().length() < 6) {
+            return false;
+        }
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            User user = userOpt.get();
+            user.setPassword(passwordEncoder.encode(newPassword.trim()));
+            userRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
+    @Transactional
+    public boolean deleteUser(Long userId) {
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isPresent()) {
+            userRepository.deleteById(userId);
+            return true;
+        }
+        return false;
     }
 
     public Optional<User> findById(Long id) {

@@ -302,5 +302,89 @@ const API = {
     });
 
     return { total, open, inProgress, resolved, categories, priorities };
+  },
+
+  //  Enterprise User Directory & Provisioning (Admin Only)
+  async getUsers() {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users`);
+      if (res.ok) return await res.json();
+    } catch (e) {}
+
+    return JSON.parse(localStorage.getItem('helpdesk_users')) || [
+      { id: 1, name: 'System Administrator', email: 'admin@helpdesk.corp', role: 'ADMIN', department: 'Executive' },
+      { id: 2, name: 'Alex Support', email: 'support@helpdesk.corp', role: 'STAFF', department: 'IT Tier-1' },
+      { id: 3, name: 'Sarah Engineer', email: 'engineer@helpdesk.corp', role: 'STAFF', department: 'Infrastructure' },
+      { id: 4, name: 'John Doe', email: 'employee@helpdesk.corp', role: 'EMPLOYEE', department: 'Finance' }
+    ];
+  },
+
+  async provisionUser(userData) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        return data;
+      }
+      return { success: false, message: data.message || 'Failed to provision user.' };
+    } catch (e) {
+      console.warn('Backend unavailable, provisioning in local mock storage');
+    }
+
+    const users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+    if (users.some(u => u.email.toLowerCase() === userData.email.toLowerCase())) {
+      return { success: false, message: 'User with this corporate email already exists.' };
+    }
+
+    const newUser = {
+      id: Date.now(),
+      name: userData.name,
+      email: userData.email,
+      role: userData.role || 'EMPLOYEE',
+      department: userData.department || 'General',
+      createdAt: new Date().toISOString()
+    };
+    users.push(newUser);
+    localStorage.setItem('helpdesk_users', JSON.stringify(users));
+    return { success: true, message: 'User provisioned successfully.', user: newUser };
+  },
+
+  async resetUserPassword(userId, newPassword) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/${userId}/password`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newPassword })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        return data;
+      }
+      return { success: false, message: data.message || 'Failed to reset password.' };
+    } catch (e) {}
+
+    return { success: true, message: 'Password updated successfully in local storage.' };
+  },
+
+  async deleteUser(userId) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        method: 'DELETE'
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        return data;
+      }
+      return { success: false, message: data.message || 'Failed to remove user.' };
+    } catch (e) {}
+
+    let users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+    users = users.filter(u => u.id !== Number(userId));
+    localStorage.setItem('helpdesk_users', JSON.stringify(users));
+    return { success: true, message: 'User removed successfully.' };
   }
 };

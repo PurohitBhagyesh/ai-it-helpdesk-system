@@ -680,6 +680,100 @@ textarea.form-control {
   padding: clamp(1.5rem, 5vw, 3.5rem);
 }
 
+.btn-danger {
+  background: linear-gradient(180deg, #ff453a 0%, #d63026 100%);
+  color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 15px var(--apple-danger-glow);
+}
+
+.btn-danger:hover {
+  background: linear-gradient(180deg, #ff5b52 0%, #e03b31 100%);
+  box-shadow: 0 6px 20px var(--apple-danger-glow);
+}
+
+/* ==========================================================
+    Apple Glass Modal & Dialogs
+   ========================================================== */
+.apple-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.5rem;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.apple-modal-overlay.active {
+  display: flex;
+  opacity: 1;
+}
+
+.apple-modal {
+  background: rgba(18, 24, 38, 0.92);
+  border: 1px solid var(--apple-glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(0, 113, 227, 0.15);
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem;
+  transform: scale(0.95);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.apple-modal-overlay.active .apple-modal {
+  transform: scale(1);
+}
+
+.apple-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.apple-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--apple-glass-border);
+  color: var(--text-secondary);
+  border-radius: var(--radius-full);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.apple-modal-close:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+/* User Directory Avatar & Badges */
+.user-dir-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 /* Responsive Media Queries */
 @media (max-width: 1024px) {
   .auth-split-wrapper {
