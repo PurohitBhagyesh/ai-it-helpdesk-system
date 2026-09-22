@@ -3,7 +3,25 @@
  * Enterprise-grade client communicating with Spring Boot (http://localhost:8080/api)
  */
 
-const API_BASE_URL = 'http://localhost:8080/api';
+function getApiBaseUrl() {
+  if (typeof window !== 'undefined' && window.HELP_DESK_API_URL) {
+    return window.HELP_DESK_API_URL.replace(/\/$/, '');
+  }
+  try {
+    const saved = localStorage.getItem('HELP_DESK_API_URL');
+    if (saved) return saved.replace(/\/$/, '');
+  } catch (e) {}
+
+  if (typeof window !== 'undefined' && window.location) {
+    const hostname = window.location.hostname;
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '') {
+      return 'http://localhost:8080/api';
+    }
+  }
+  return '/api';
+}
+
+const API_BASE_URL = getApiBaseUrl();
 
 // Rule-Based AI Classification Engine (PRD Spec)
 function analyzeProblemWithAI(text) {
@@ -606,6 +624,19 @@ const API = {
     }
     localStorage.setItem('helpdesk_users', JSON.stringify(users));
     return { success: true, message: 'Initial team provisioned successfully.' };
+  },
+
+  getBaseUrl() {
+    return API_BASE_URL;
+  },
+
+  setApiBaseUrl(url) {
+    if (url) {
+      localStorage.setItem('HELP_DESK_API_URL', url);
+    } else {
+      localStorage.removeItem('HELP_DESK_API_URL');
+    }
+    window.location.reload();
   }
 };
 

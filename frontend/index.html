@@ -339,9 +339,54 @@
 
         </div>
 
+        <!-- Multi-Cloud API Endpoint Configuration Link -->
+        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.85rem;">
+          <a href="javascript:void(0)" onclick="openEndpointConfigModal()" style="font-size: 0.75rem; color: var(--text-tertiary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span>🌐 Backend API Endpoint:</span>
+            <span id="current-endpoint-label" style="color: var(--apple-blue); font-family: monospace; font-weight: 500;">auto</span>
+          </a>
+        </div>
+
       </div>
     </div>
 
+  </div>
+
+  <!-- API Endpoint Config Modal -->
+  <div class="apple-modal-overlay" id="endpoint-config-modal">
+    <div class="apple-modal" style="max-width: 480px;">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.15rem;">🌐 Cloud Backend API Connection</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Configure live Render, Railway, or Localhost backend</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeEndpointConfigModal()">&times;</button>
+      </div>
+
+      <div style="padding: 1rem 0;">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">
+          If this frontend is hosted on <strong>Vercel</strong> or <strong>Netlify</strong>, enter your live Spring Boot backend URL from <strong>Render</strong> or <strong>Railway</strong>.
+        </p>
+
+        <div class="form-group">
+          <label for="custom-api-endpoint">Spring Boot API Base URL</label>
+          <input type="url" id="custom-api-endpoint" class="form-control" placeholder="https://helpdesk-backend-xxxx.onrender.com/api" style="font-family: monospace; font-size: 0.85rem;">
+          <span style="font-size: 0.75rem; color: var(--text-tertiary); display: block; margin-top: 0.35rem;">
+            Default local: <code>http://localhost:8080/api</code>
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setEndpointPreset('http://localhost:8080/api')">💻 Localhost (8080)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setEndpointPreset('/api')">⚡ Relative (/api)</button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeEndpointConfigModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="saveCustomEndpoint()">Save & Connect</button>
+      </div>
+    </div>
   </div>
 
   <script src="js/api.js"></script>
@@ -362,9 +407,34 @@
       authAlert.style.color = isSuccess ? '#30d158' : '#ff453a';
     }
 
-    function hideAlert() {
-      authAlert.style.display = 'none';
+    // Endpoint Config Helpers
+    function updateEndpointLabel() {
+      const label = document.getElementById('current-endpoint-label');
+      const input = document.getElementById('custom-api-endpoint');
+      const current = API.getBaseUrl();
+      if (label) label.textContent = current;
+      if (input) input.value = localStorage.getItem('HELP_DESK_API_URL') || current;
     }
+
+    function openEndpointConfigModal() {
+      updateEndpointLabel();
+      document.getElementById('endpoint-config-modal').classList.add('active');
+    }
+
+    function closeEndpointConfigModal() {
+      document.getElementById('endpoint-config-modal').classList.remove('active');
+    }
+
+    function setEndpointPreset(url) {
+      document.getElementById('custom-api-endpoint').value = url;
+    }
+
+    function saveCustomEndpoint() {
+      const url = document.getElementById('custom-api-endpoint').value.trim();
+      API.setApiBaseUrl(url);
+    }
+
+    document.addEventListener('DOMContentLoaded', updateEndpointLabel);
 
     // 1. Main Slider Switching: Workforce vs Admin
     function switchMainPortal(portal) {
