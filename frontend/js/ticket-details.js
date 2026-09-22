@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const ticketPriorityEl = document.getElementById('ticket-priority');
   const ticketStatusEl = document.getElementById('ticket-status');
   const ticketEmployeeEl = document.getElementById('ticket-employee');
+  const ticketContactEl = document.getElementById('ticket-contact');
   const ticketAssigneeEl = document.getElementById('ticket-assignee');
   const ticketDateEl = document.getElementById('ticket-date');
   const ticketSolutionEl = document.getElementById('ticket-solution');
@@ -83,6 +84,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     ticketStatusEl.className = 'badge badge-' + ticket.status.toLowerCase().replace('_', '');
 
     ticketEmployeeEl.textContent = ticket.employeeName || `Employee #${ticket.employeeId}`;
+    if (ticketContactEl) {
+      ticketContactEl.textContent = ticket.contactInfo || 'Not specified';
+    }
     ticketAssigneeEl.textContent = ticket.assignedName || 'Unassigned (In Triage Queue)';
     ticketDateEl.textContent = new Date(ticket.createdAt).toLocaleString();
     ticketSolutionEl.textContent = ticket.suggestedSolution || 'No automated solution available.';
@@ -206,6 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         senderName: user.name,
         senderEmail: user.email,
         senderRole: user.role,
+        employeeIdCode: user.employeeIdCode || '',
         subject: `[Incident #${ticketId}] ${subject}`,
         message
       });
@@ -215,7 +220,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       closeContactAdminModal();
       contactAdminForm.reset();
-      showTicketAlert('Enquiry regarding this incident has been dispatched to the Administrator mailbox.', true);
+      showTicketAlert('Message sent to Admin. Please wait for an administrator response.', true);
     });
   }
 

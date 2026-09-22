@@ -27,6 +27,27 @@ public class User {
     @Column(length = 100)
     private String department;
 
+    @Column(length = 150)
+    private String companyName;
+
+    @Column(length = 50)
+    private String employeeIdCode;
+
+    @Column(length = 50)
+    private String joinDate;
+
+    @Column(length = 100)
+    private String designation;
+
+    @Column(length = 100)
+    private String experience;
+
+    @Column(length = 150)
+    private String specialization;
+
+    @Column(length = 50)
+    private String phone;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -60,6 +81,27 @@ public class User {
 
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
+
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+
+    public String getEmployeeIdCode() { return employeeIdCode; }
+    public void setEmployeeIdCode(String employeeIdCode) { this.employeeIdCode = employeeIdCode; }
+
+    public String getJoinDate() { return joinDate; }
+    public void setJoinDate(String joinDate) { this.joinDate = joinDate; }
+
+    public String getDesignation() { return designation; }
+    public void setDesignation(String designation) { this.designation = designation; }
+
+    public String getExperience() { return experience; }
+    public void setExperience(String experience) { this.experience = experience; }
+
+    public String getSpecialization() { return specialization; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

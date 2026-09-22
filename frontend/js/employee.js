@@ -1,5 +1,10 @@
 // Modal Controls for Contacting Admin
 function openContactAdminModal() {
+  const user = Auth.getUser();
+  if (user) {
+    document.getElementById('enquiry-sender-name').value = `${user.name} (${user.email})`;
+    document.getElementById('enquiry-employee-id').value = user.employeeIdCode || ('EMP-' + user.id);
+  }
   const modal = document.getElementById('contact-admin-modal');
   if (modal) modal.classList.add('active');
 }
@@ -7,17 +12,36 @@ function openContactAdminModal() {
 function closeContactAdminModal() {
   const modal = document.getElementById('contact-admin-modal');
   if (modal) modal.classList.remove('active');
+  const feedback = document.getElementById('enquiry-feedback');
+  if (feedback) feedback.style.display = 'none';
+}
+
+function toggleEditEmployeeId() {
+  const input = document.getElementById('enquiry-employee-id');
+  input.focus();
+  input.select();
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
   const user = Auth.requireAuth(['EMPLOYEE', 'ADMIN']);
   if (!user) return;
 
+  const companyName = user.companyName || 'Acme Global Technologies';
+  const companyNav = document.getElementById('nav-company-name');
+  const companyTag = document.getElementById('employee-company-tag');
+  const welcomeTitle = document.getElementById('employee-welcome-title');
+  const userCodeBadge = document.getElementById('navbar-user-code');
+
+  if (companyNav) companyNav.textContent = `${companyName} Helpdesk`;
+  if (companyTag) companyTag.textContent = `Organization: ${companyName}`;
+  if (welcomeTitle) welcomeTitle.textContent = `Welcome to ${companyName} Helpdesk`;
+  if (userCodeBadge) userCodeBadge.textContent = `(${user.employeeIdCode || 'EMP-' + user.id})`;
+
   const problemTitleInput = document.getElementById('problem-title');
   const problemDescInput = document.getElementById('problem-desc');
+  const problemContactInput = document.getElementById('problem-contact');
   const submitTicketForm = document.getElementById('create-ticket-form');
   const ticketsTableBody = document.getElementById('my-tickets-tbody');
-  const emptyState = document.getElementById('empty-state');
   const employeeAlert = document.getElementById('employee-alert');
 
   // AI Diagnostic Preview Elements
@@ -84,12 +108,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     resolvedCountEl.textContent = resolved;
 
     if (tickets.length === 0) {
-      ticketsTableBody.innerHTML = '';
-      emptyState.style.display = 'block';
+      ticketsTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 3rem 1rem;">
+            No tickets submitted yet. Use the form above to report your first incident.
+          </td>
+        </tr>
+      `;
       return;
     }
 
-    emptyState.style.display = 'none';
     ticketsTableBody.innerHTML = tickets.map(ticket => `
       <tr>
         <td><strong>#${ticket.id}</strong></td>
@@ -120,11 +148,11 @@ document.addEventListener('DOMContentLoaded', async () => {
           </div>
         </td>
         <td style="color: var(--text-muted); font-size: 0.825rem;">
-          ${new Date(ticket.createdAt).toLocaleDateString()}
+          ${ticket.createdAt ? new Date(ticket.createdAt).toLocaleDateString() : 'Today'}
         </td>
-        <td>
+        <td style="text-align: right;">
           <a href="ticket-details.html?id=${ticket.id}" class="btn btn-outline btn-sm">
-            View & Chat 🔒
+            Inspect 🔒
           </a>
         </td>
       </tr>
@@ -136,6 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.preventDefault();
     const title = problemTitleInput.value.trim();
     const description = problemDescInput.value.trim();
+    const contactInfo = problemContactInput ? problemContactInput.value.trim() : '';
 
     if (!title || !description) {
       alert('Please provide both a problem title and detailed description.');
@@ -149,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const newTicket = await API.createTicket({
       title,
       description,
+      contactInfo,
       employeeId: user.id,
       employeeName: user.name
     });
@@ -159,44 +189,57 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Clear Form & Reset AI box
     submitTicketForm.reset();
     aiCategoryEl.textContent = 'Ready';
-    aiPriorityEl.textContent = 'Auto Priority';
+    aiPriorityEl.textContent = 'Auto';
+    aiPriorityEl.className = 'ai-chip priority-low';
     aiSolutionEl.textContent = 'Type a description of your issue on the left to see live AI problem categorization and immediate troubleshooting instructions.';
 
-    showEmployeeAlert(`Incident #${newTicket.id} created successfully! IT Technicians have been notified.`);
+    showEmployeeAlert(`Incident Ticket #${newTicket.id} submitted successfully! Awaiting IT Technician triage.`, true);
     await loadMyTickets();
   });
 
-  // Handle Contact Admin Form Submission
+  // Handle Contact Admin Enquiry Form Submission
   const contactAdminForm = document.getElementById('contact-admin-form');
   if (contactAdminForm) {
     contactAdminForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const subject = document.getElementById('enquiry-subject').value.trim();
       const message = document.getElementById('enquiry-message').value.trim();
-      const btn = document.getElementById('enquiry-submit-btn');
+      const employeeIdCode = document.getElementById('enquiry-employee-id').value.trim();
+      const submitBtn = document.getElementById('enquiry-submit-btn');
+      const feedback = document.getElementById('enquiry-feedback');
 
-      btn.disabled = true;
-      btn.textContent = 'Dispatching...';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
 
       const res = await API.sendAdminEnquiry({
         senderId: user.id,
         senderName: user.name,
         senderEmail: user.email,
         senderRole: 'EMPLOYEE',
+        employeeIdCode: employeeIdCode,
         subject,
         message
       });
 
-      btn.disabled = false;
-      btn.textContent = 'Dispatch to Admin';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send to Admin Mailbox';
 
-      closeContactAdminModal();
-      contactAdminForm.reset();
-      showEmployeeAlert('Your enquiry has been dispatched directly to the Administrator mailbox.', true);
+      feedback.style.display = 'block';
+      feedback.style.background = 'rgba(48, 209, 88, 0.15)';
+      feedback.style.border = '1px solid rgba(48, 209, 88, 0.35)';
+      feedback.style.color = '#30d158';
+      feedback.innerHTML = '✅ <strong>Message sent to Admin.</strong> Please wait for an administrator response.';
+
+      setTimeout(() => {
+        contactAdminForm.reset();
+        closeContactAdminModal();
+        showEmployeeAlert('Your enquiry was successfully delivered to the IT Administrator mailbox.', true);
+      }, 1800);
     });
   }
 
   function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;

@@ -13,6 +13,7 @@ public class TicketResponseDTO {
     private Priority priority;
     private Status status;
     private String suggestedSolution;
+    private String contactInfo;
     private Long employeeId;
     private String employeeName;
     private Long assignedTo;
@@ -56,6 +57,7 @@ public class TicketResponseDTO {
         this.priority = ticket.getPriority();
         this.status = ticket.getStatus();
         this.suggestedSolution = ticket.getSuggestedSolution();
+        this.contactInfo = ticket.getContactInfo();
         
         if (ticket.getEmployee() != null) {
             this.employeeId = ticket.getEmployee().getId();
@@ -90,6 +92,7 @@ public class TicketResponseDTO {
     public Priority getPriority() { return priority; }
     public Status getStatus() { return status; }
     public String getSuggestedSolution() { return suggestedSolution; }
+    public String getContactInfo() { return contactInfo; }
     public Long getEmployeeId() { return employeeId; }
     public String getEmployeeName() { return employeeName; }
     public Long getAssignedTo() { return assignedTo; }

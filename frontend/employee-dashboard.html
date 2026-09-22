@@ -11,7 +11,7 @@
   <nav class="navbar">
     <a href="employee-dashboard.html" class="brand">
       <div class="brand-icon"></div>
-      <span>Helpdesk AI</span>
+      <span id="nav-company-name">Helpdesk AI</span>
     </a>
     <div class="nav-actions">
       <button onclick="openContactAdminModal()" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.4rem;">
@@ -20,7 +20,7 @@
       <div class="user-profile-capsule">
         <div class="user-avatar-circle" id="navbar-user-avatar">E</div>
         <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">Employee</span>
-        <span style="color: var(--text-secondary); font-size: 0.75rem;">(Employee)</span>
+        <span style="color: var(--text-secondary); font-size: 0.75rem;" id="navbar-user-code">(EMP)</span>
       </div>
       <button onclick="Auth.logout()" class="btn btn-secondary btn-sm">
         Sign Out
@@ -29,9 +29,10 @@
   </nav>
 
   <div class="container">
-    <!-- Header with Dynamic Greeting -->
+    <!-- Header with Dynamic Greeting & Company Name -->
     <div style="margin-bottom: 2rem;">
-      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;">Service & Incident Workspace</h2>
+      <div class="ai-tag" style="margin-bottom: 0.5rem; display: inline-flex;" id="employee-company-tag">Corporate Workspace</div>
+      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;" id="employee-welcome-title">Welcome to Helpdesk</h2>
       <p>Report technical incidents to receive real-time AI diagnostic guidance and track support tickets with your assigned IT Technician.</p>
     </div>
 
@@ -78,7 +79,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
           <div>
             <h3 style="font-size: 1.25rem;">Report an Incident</h3>
-            <p style="font-size: 0.85rem; color: var(--text-secondary);">Describe the issue for instant diagnostic analysis</p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Describe the issue for instant diagnostic analysis and immediate triage</p>
           </div>
           <span class="ai-engine-pill">AI Assisted</span>
         </div>
@@ -91,7 +92,12 @@
 
           <div class="form-group">
             <label for="problem-desc">Detailed Problem Description</label>
-            <textarea id="problem-desc" class="form-control" placeholder="Describe symptoms, affected apps, error codes, or troubleshooting attempted..." required maxlength="2000"></textarea>
+            <textarea id="problem-desc" class="form-control" placeholder="Describe symptoms, affected apps, error codes, or troubleshooting attempted..." required maxlength="2000" rows="4"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="problem-contact">Contact Phone / Desk Location (Optional)</label>
+            <input type="text" id="problem-contact" class="form-control" placeholder="e.g. +1 555-0144 / 3rd Floor Desk 304">
           </div>
 
           <button type="submit" id="submit-btn" class="btn btn-primary btn-block" style="margin-top: 0.75rem;">
@@ -120,7 +126,7 @@
         </div>
 
         <div style="margin-bottom: 0.5rem; font-size: 0.775rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
-          Automated First-Level Advice:
+          Automated Troubleshooting Guidance:
         </div>
         <div class="ai-solution-terminal" id="ai-solution">
           Type a description of your issue on the left to see live AI problem categorization and immediate troubleshooting instructions.
@@ -141,24 +147,20 @@
         <table class="apple-table">
           <thead>
             <tr>
-              <th>Ticket ID</th>
+              <th>ID</th>
               <th>Incident Summary</th>
-              <th>AI Category</th>
+              <th>Category</th>
               <th>Priority</th>
               <th>Status</th>
               <th>Assigned IT Technician</th>
               <th>Submitted</th>
-              <th>Action</th>
+              <th style="text-align: right;">Action</th>
             </tr>
           </thead>
           <tbody id="my-tickets-tbody">
             <!-- Populated by employee.js -->
           </tbody>
         </table>
-      </div>
-
-      <div id="empty-state" style="display: none; text-align: center; padding: 3rem; color: var(--text-secondary);">
-        No support tickets found. Use the studio above to report an issue.
       </div>
     </div>
   </div>
@@ -170,26 +172,43 @@
     <div class="apple-modal">
       <div class="apple-modal-header">
         <div>
-          <h3 style="font-size: 1.25rem;">Contact IT Administrator</h3>
-          <span style="font-size: 0.825rem; color: var(--text-muted);">Send official inquiry directly to the Admin mailbox</span>
+          <h3 style="font-size: 1.25rem;">Contact Administrator</h3>
+          <span style="font-size: 0.825rem; color: var(--text-muted);" id="contact-admin-target">Direct communication channel to the IT Administrator mailbox</span>
         </div>
         <button class="apple-modal-close" onclick="closeContactAdminModal()">&times;</button>
       </div>
 
       <form id="contact-admin-form">
         <div class="form-group">
-          <label for="enquiry-subject">Subject</label>
-          <input type="text" id="enquiry-subject" class="form-control" placeholder="e.g. Requesting elevated access / Account question" required>
+          <label>Sender Full Name</label>
+          <input type="text" id="enquiry-sender-name" class="form-control" readonly style="opacity: 0.85;">
         </div>
 
         <div class="form-group">
-          <label for="enquiry-message">Message Details</label>
-          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Type your detailed message to the System Administrator..." required></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label style="margin-bottom: 0;">Employee ID Code</label>
+            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEditEmployeeId()" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; min-height: auto;">
+              + Edit / Add Employee ID
+            </button>
+          </div>
+          <input type="text" id="enquiry-employee-id" class="form-control" placeholder="e.g. EMP-1050" required>
         </div>
 
-        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+        <div class="form-group">
+          <label for="enquiry-subject">Enquiry Subject / Reason</label>
+          <input type="text" id="enquiry-subject" class="form-control" placeholder="e.g. Hardware upgrade request / Access escalation" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enquiry-message">Describe Your Issue / Message</label>
+          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Provide complete details to help the Administrator evaluate your request..." required></textarea>
+        </div>
+
+        <div id="enquiry-feedback" style="display: none; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem;">
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeContactAdminModal()">Cancel</button>
-          <button type="submit" id="enquiry-submit-btn" class="btn btn-primary btn-sm">Dispatch to Admin</button>
+          <button type="submit" id="enquiry-submit-btn" class="btn btn-primary btn-sm">Send to Admin Mailbox</button>
         </div>
       </form>
     </div>

@@ -9,6 +9,7 @@ public class TicketRequest {
     private Category category;
     private Priority priority;
     private String suggestedSolution;
+    private String contactInfo;
     private Long employeeId;
 
     public TicketRequest() {}
@@ -27,6 +28,9 @@ public class TicketRequest {
 
     public String getSuggestedSolution() { return suggestedSolution; }
     public void setSuggestedSolution(String suggestedSolution) { this.suggestedSolution = suggestedSolution; }
+
+    public String getContactInfo() { return contactInfo; }
+    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
 
     public Long getEmployeeId() { return employeeId; }
     public void setEmployeeId(Long employeeId) { this.employeeId = employeeId; }

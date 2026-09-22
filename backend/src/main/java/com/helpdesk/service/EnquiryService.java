@@ -40,6 +40,7 @@ public class EnquiryService {
         String sanitizedSender = inputSanitizer.sanitizeText(request.getSenderName() != null ? request.getSenderName() : "Anonymous User");
         String sanitizedEmail = inputSanitizer.sanitizeText(request.getSenderEmail() != null ? request.getSenderEmail() : "unknown@helpdesk.corp");
         String sanitizedRole = inputSanitizer.sanitizeText(request.getSenderRole() != null ? request.getSenderRole() : "EMPLOYEE");
+        String sanitizedCode = request.getEmployeeIdCode() != null ? inputSanitizer.sanitizeText(request.getEmployeeIdCode().trim()) : "";
         String sanitizedSubject = inputSanitizer.sanitizeText(request.getSubject());
         String sanitizedMessage = inputSanitizer.sanitizeText(request.getMessage());
 
@@ -51,9 +52,10 @@ public class EnquiryService {
                 sanitizedSubject,
                 sanitizedMessage
         );
+        enquiry.setEmployeeIdCode(sanitizedCode);
 
         // Simulation of corporate email notification to the Admin mailbox
-        System.out.println("📧 [ADMIN MAIL DISPATCH]: New enquiry received from " + sanitizedSender + " (" + sanitizedEmail + ") - Subject: " + sanitizedSubject);
+        System.out.println("📧 [ADMIN MAIL DISPATCH]: New enquiry received from " + sanitizedSender + " (" + sanitizedEmail + ", ID: " + sanitizedCode + ") - Subject: " + sanitizedSubject);
 
         return enquiryRepository.save(enquiry);
     }

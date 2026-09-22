@@ -70,29 +70,33 @@ The frontend is built entirely using standard HTML5, modern Vanilla CSS, and ES6
 
 ### 1. 🛡️ System Administrator
 * **Enterprise Registration & Verification:** Multi-step wizard to register enterprise details, complete 6-digit email verification, and onboard initial team members.
+* **Company Branding & Governance:** Configurable corporate identity dynamically displayed across all Employee and Technician dashboards (`Welcome to <Company Name> Helpdesk`).
 * **Passkey Security:** Secure master passkey authentication into the Executive Command Center.
 * **Executive Telemetry:** Real-time KPI counters (Total Incidents, Triage Queue, Active Progress, SLA Resolution Rate) and category/priority breakdown graphs.
-* **Incident Oversight:** Full inspection access to all organization-wide tickets, assigned technicians, and status transitions.
-* **Corporate User Provisioning:** Exclusive authority to provision accounts with strictly two roles:
-  * `👤 EMPLOYEE` (Incident submitter)
-  * `🛠️ IT_TECHNICIAN` (`STAFF` Support Engineer)
-* **Credential Management:** Instant secure password assignment/reset and account revocation.
-* **Official Admin Enquiry Mailbox:** Reviews, tracks, and resolves all incoming inquiries sent by employees and technicians.
+* **Incident Oversight:** Full inspection access to all organization-wide tickets, assigned technicians, contact phone/desk locations, and status transitions.
+* **Corporate User Provisioning & Management:** Exclusive authority to provision accounts with strictly two operational roles:
+  * `👤 EMPLOYEE`: Requires Full Name, Corporate Email, Secure Password, Employee ID Code (e.g. `EMP-1050`), Join Date, Department/Field, Designation/Title, and Phone Number.
+  * `🛠️ IT_TECHNICIAN` (`STAFF` Support Engineer): Requires Full Name, Corporate Email, Secure Password, Technician ID Code (e.g. `TECH-2050`), Join Date, Department/Field, Years of Experience, Technical Specialization/Certifications, and Phone Number.
+* **Interactive Directory & Profile Editor:** Touching/clicking any user in the directory table opens a full interactive Profile Modal where the Administrator can view all attributes, edit profile information live, or delete accounts permanently.
+* **Official Admin Enquiry Mailbox:** Reviews, tracks, and resolves all incoming inquiries dispatched by employees and technicians with sender ID codes and direct contact information.
 
 ### 2. 👤 Employee (Ticket Submitter)
+* **Company-Branded Portal:** Dynamic `Welcome to <Company Name> Helpdesk` welcome banner tailored to the user's registered organization.
 * **AI Problem Diagnostic Studio:** Real-time problem analysis giving instant troubleshooting suggestions, auto-categorization (`NETWORK`, `HARDWARE`, `SOFTWARE`, `ACCESS`), and priority scoring before ticket submission.
+* **Comprehensive Ticket Submission:** Includes Problem Summary, Description, Category, Priority, and mandatory **Contact Phone / Desk Location** for quick on-site IT resolution.
 * **Active Incident Tracking:** Live view of submitted tickets with current operational status (`OPEN`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`).
 * **Assigned IT Technician Details:** Clear visibility of the specific IT Engineer assigned to their ticket.
 * **End-to-End Encrypted Support Chat:** Direct, encrypted bidirectional communication with the assigned technician.
-* **Contact Administrator Channel:** Integrated official enquiry modal to dispatch urgent escalations or organizational queries directly to the Admin mailbox.
+* **Contact Administrator Channel:** Auto-fetches employee name, email, and ID code (with an interactive `+ Edit / Add Employee ID` option) and confirms submission with `"Message sent to Admin. Please wait for an administrator response."`
 
 ### 3. 🛠️ IT Technician (Support Engineer)
-* **Incident Triage Desk:** Real-time overview of unassigned and active support tickets.
+* **Company-Branded Console:** Dynamic `Welcome to <Company Name> Support Console` dashboard.
+* **Incident Triage Desk:** Real-time overview of unassigned and active support tickets with direct access to the reporter's contact phone and desk location.
 * **Ticket Acceptance Engine:** Accept open tickets to assign ownership and transition status to `IN_PROGRESS`.
 * **Ticket Rejection / Re-routing:** Decline a ticket and return it to the global triage queue with mandatory justification notes automatically logged into the incident audit timeline.
 * **Work Progress & Direct Chat:** Collaborate directly with the employee in real-time under E2EE encryption.
 * **Resolution Engine:** Document root cause and final resolution notes to officially close tickets (`RESOLVED`).
-* **Contact Administrator Channel:** Send infrastructure reports, resource requests, or administrative inquiries directly to the Admin mailbox.
+* **Contact Administrator Channel:** Integrated enquiry modal with auto-populated technician ID code and instant delivery confirmation.
 
 ---
 

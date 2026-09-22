@@ -5,19 +5,11 @@ public class EnquiryRequest {
     private String senderName;
     private String senderEmail;
     private String senderRole;
+    private String employeeIdCode;
     private String subject;
     private String message;
 
     public EnquiryRequest() {}
-
-    public EnquiryRequest(Long senderId, String senderName, String senderEmail, String senderRole, String subject, String message) {
-        this.senderId = senderId;
-        this.senderName = senderName;
-        this.senderEmail = senderEmail;
-        this.senderRole = senderRole;
-        this.subject = subject;
-        this.message = message;
-    }
 
     public Long getSenderId() { return senderId; }
     public void setSenderId(Long senderId) { this.senderId = senderId; }
@@ -30,6 +22,9 @@ public class EnquiryRequest {
 
     public String getSenderRole() { return senderRole; }
     public void setSenderRole(String senderRole) { this.senderRole = senderRole; }
+
+    public String getEmployeeIdCode() { return employeeIdCode; }
+    public void setEmployeeIdCode(String employeeIdCode) { this.employeeIdCode = employeeIdCode; }
 
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }

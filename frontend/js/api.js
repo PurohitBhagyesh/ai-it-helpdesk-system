@@ -346,11 +346,41 @@ const API = {
       email: userData.email,
       role: userData.role || 'EMPLOYEE',
       department: userData.department || 'General',
+      companyName: userData.companyName || 'Corporate',
+      employeeIdCode: userData.employeeIdCode || ('EMP-' + Math.floor(1000 + Math.random() * 9000)),
+      joinDate: userData.joinDate || new Date().toISOString().split('T')[0],
+      designation: userData.designation || (userData.role === 'STAFF' ? 'Support Engineer' : 'Employee'),
+      experience: userData.experience || '',
+      specialization: userData.specialization || '',
+      phone: userData.phone || '',
       createdAt: new Date().toISOString()
     };
     users.push(newUser);
     localStorage.setItem('helpdesk_users', JSON.stringify(users));
     return { success: true, message: 'User provisioned successfully.', user: newUser };
+  },
+
+  async updateUser(userId, userData) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        return { success: true, user: data };
+      }
+    } catch (e) {}
+
+    let users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+    const idx = users.findIndex(u => u.id === Number(userId));
+    if (idx !== -1) {
+      users[idx] = { ...users[idx], ...userData };
+      localStorage.setItem('helpdesk_users', JSON.stringify(users));
+      return { success: true, user: users[idx] };
+    }
+    return { success: false, message: 'User not found' };
   },
 
   async resetUserPassword(userId, newPassword) {
@@ -440,6 +470,7 @@ const API = {
       senderName: enquiryData.senderName || 'Anonymous',
       senderEmail: enquiryData.senderEmail || 'user@helpdesk.corp',
       senderRole: enquiryData.senderRole || 'EMPLOYEE',
+      employeeIdCode: enquiryData.employeeIdCode || '',
       subject: enquiryData.subject,
       message: enquiryData.message,
       status: 'PENDING',

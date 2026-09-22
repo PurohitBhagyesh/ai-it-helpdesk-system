@@ -8,6 +8,13 @@ public class RegisterRequest {
     private String password;
     private Role role;
     private String department;
+    private String companyName;
+    private String employeeIdCode;
+    private String joinDate;
+    private String designation;
+    private String experience;
+    private String specialization;
+    private String phone;
 
     public RegisterRequest() {}
 
@@ -33,4 +40,25 @@ public class RegisterRequest {
 
     public String getDepartment() { return department; }
     public void setDepartment(String department) { this.department = department; }
+
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+
+    public String getEmployeeIdCode() { return employeeIdCode; }
+    public void setEmployeeIdCode(String employeeIdCode) { this.employeeIdCode = employeeIdCode; }
+
+    public String getJoinDate() { return joinDate; }
+    public void setJoinDate(String joinDate) { this.joinDate = joinDate; }
+
+    public String getDesignation() { return designation; }
+    public void setDesignation(String designation) { this.designation = designation; }
+
+    public String getExperience() { return experience; }
+    public void setExperience(String experience) { this.experience = experience; }
+
+    public String getSpecialization() { return specialization; }
+    public void setSpecialization(String specialization) { this.specialization = specialization; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

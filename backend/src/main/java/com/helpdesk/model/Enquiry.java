@@ -23,6 +23,9 @@ public class Enquiry {
     @Column(nullable = false)
     private String senderRole;
 
+    @Column(length = 50)
+    private String employeeIdCode;
+
     @Column(nullable = false)
     private String subject;
 
@@ -66,6 +69,9 @@ public class Enquiry {
 
     public String getSenderRole() { return senderRole; }
     public void setSenderRole(String senderRole) { this.senderRole = senderRole; }
+
+    public String getEmployeeIdCode() { return employeeIdCode; }
+    public void setEmployeeIdCode(String employeeIdCode) { this.employeeIdCode = employeeIdCode; }
 
     public String getSubject() { return subject; }
     public void setSubject(String subject) { this.subject = subject; }

@@ -4,6 +4,13 @@
 
 // Modal Controls for Contacting Admin
 function openContactAdminModal() {
+  const user = Auth.getUser();
+  if (user) {
+    const senderInput = document.getElementById('enquiry-sender-name');
+    const techIdInput = document.getElementById('enquiry-tech-id');
+    if (senderInput) senderInput.value = `${user.name} (${user.email})`;
+    if (techIdInput) techIdInput.value = user.employeeIdCode || ('TECH-' + user.id);
+  }
   const modal = document.getElementById('contact-admin-modal');
   if (modal) modal.classList.add('active');
 }
@@ -11,6 +18,16 @@ function openContactAdminModal() {
 function closeContactAdminModal() {
   const modal = document.getElementById('contact-admin-modal');
   if (modal) modal.classList.remove('active');
+  const feedback = document.getElementById('enquiry-feedback');
+  if (feedback) feedback.style.display = 'none';
+}
+
+function toggleEditTechId() {
+  const input = document.getElementById('enquiry-tech-id');
+  if (input) {
+    input.focus();
+    input.select();
+  }
 }
 
 // Modal Controls for Declining / Re-routing
@@ -44,6 +61,17 @@ function handleRejectReasonChange() {
 document.addEventListener('DOMContentLoaded', async () => {
   const user = Auth.requireAuth(['STAFF', 'IT_STAFF', 'ADMIN']);
   if (!user) return;
+
+  const companyName = user.companyName || 'Acme Global Technologies';
+  const companyNav = document.getElementById('nav-company-name');
+  const companyTag = document.getElementById('staff-company-tag');
+  const welcomeTitle = document.getElementById('staff-welcome-title');
+  const userCodeBadge = document.getElementById('navbar-user-code');
+
+  if (companyNav) companyNav.textContent = `${companyName} Support`;
+  if (companyTag) companyTag.textContent = `Organization: ${companyName}`;
+  if (welcomeTitle) welcomeTitle.textContent = `Welcome to ${companyName} Support Console`;
+  if (userCodeBadge) userCodeBadge.textContent = `(${user.employeeIdCode || 'TECH-' + user.id})`;
 
   const unassignedTbody = document.getElementById('unassigned-tickets-tbody');
   const assignedTbody = document.getElementById('assigned-tickets-tbody');
@@ -162,59 +190,81 @@ document.addEventListener('DOMContentLoaded', async () => {
     rejectForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const ticketId = document.getElementById('reject-modal-ticket-id').value;
-      const select = document.getElementById('reject-modal-reason-select');
-      const customInput = document.getElementById('reject-modal-custom-reason');
-      const reason = select.value === 'custom' ? (customInput.value.trim() || 'Specialty re-routing') : select.value;
-      const btn = document.getElementById('reject-modal-submit-btn');
+      const reasonSelect = document.getElementById('reject-modal-reason-select').value;
+      const customReason = document.getElementById('reject-modal-custom-reason').value.trim();
+      const reason = reasonSelect === 'custom' ? customReason : reasonSelect;
 
-      btn.disabled = true;
-      btn.textContent = 'Re-routing...';
+      const submitBtn = document.getElementById('reject-modal-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Re-routing...';
 
-      await API.rejectTicket(ticketId, user.id, reason);
-      btn.disabled = false;
-      btn.textContent = 'Confirm Re-route';
+      const res = await API.rejectTicket(ticketId, user.id, reason);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Confirm Re-route';
 
-      closeRejectModal();
-      showStaffAlert(`Incident #${ticketId} declined and returned to triage pool for re-assignment.`, true);
-      await loadStaffTickets();
+      if (res) {
+        closeRejectModal();
+        showStaffAlert(`Ticket #${ticketId} declined and returned to open triage pool. Reason logged.`, true);
+        await loadStaffTickets();
+      } else {
+        showStaffAlert('Failed to decline ticket. Please retry.', false);
+      }
     });
   }
 
-  // Handle Contact Admin Form Submission
+  // Handle Contact Admin Enquiry Form Submission
   const contactAdminForm = document.getElementById('contact-admin-form');
   if (contactAdminForm) {
     contactAdminForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const subject = document.getElementById('enquiry-subject').value.trim();
       const message = document.getElementById('enquiry-message').value.trim();
-      const btn = document.getElementById('enquiry-submit-btn');
+      const techId = document.getElementById('enquiry-tech-id') ? document.getElementById('enquiry-tech-id').value.trim() : (user.employeeIdCode || 'TECH-' + user.id);
+      const submitBtn = document.getElementById('enquiry-submit-btn');
+      const feedback = document.getElementById('enquiry-feedback');
 
-      btn.disabled = true;
-      btn.textContent = 'Dispatching...';
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
 
       const res = await API.sendAdminEnquiry({
         senderId: user.id,
         senderName: user.name,
         senderEmail: user.email,
-        senderRole: 'IT_TECHNICIAN',
+        senderRole: 'STAFF',
+        employeeIdCode: techId,
         subject,
         message
       });
 
-      btn.disabled = false;
-      btn.textContent = 'Dispatch to Admin';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Dispatch to Admin';
 
-      closeContactAdminModal();
-      contactAdminForm.reset();
-      showStaffAlert('Your escalation enquiry has been dispatched directly to the Administrator.', true);
+      if (feedback) {
+        feedback.style.display = 'block';
+        feedback.style.background = 'rgba(48, 209, 88, 0.15)';
+        feedback.style.border = '1px solid rgba(48, 209, 88, 0.35)';
+        feedback.style.color = '#30d158';
+        feedback.innerHTML = '✅ <strong>Message sent to Admin.</strong> Please wait for an administrator response.';
+      }
+
+      setTimeout(() => {
+        contactAdminForm.reset();
+        closeContactAdminModal();
+        showStaffAlert('Your escalation enquiry has been delivered directly to the Administrator mailbox.', true);
+      }, 1800);
     });
   }
 
   function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
   }
+
+  window.openRejectModal = openRejectModal;
+  window.closeRejectModal = closeRejectModal;
+  window.handleRejectReasonChange = handleRejectReasonChange;
 
   await loadStaffTickets();
 });

@@ -38,6 +38,18 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> updateUser(
+            @PathVariable Long id,
+            @RequestBody com.helpdesk.dto.UserUpdateRequest request) {
+        try {
+            UserDTO updated = userService.updateUser(id, request);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @PutMapping("/{id}/password")
     public ResponseEntity<Map<String, Object>> resetPassword(
             @PathVariable Long id,

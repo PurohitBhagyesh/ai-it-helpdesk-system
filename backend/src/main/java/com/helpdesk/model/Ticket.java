@@ -34,6 +34,9 @@ public class Ticket {
     @Column(name = "suggested_solution", columnDefinition = "TEXT")
     private String suggestedSolution;
 
+    @Column(name = "contact_info", length = 150)
+    private String contactInfo;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id", nullable = false)
     private User employee;
@@ -80,6 +83,9 @@ public class Ticket {
 
     public String getSuggestedSolution() { return suggestedSolution; }
     public void setSuggestedSolution(String suggestedSolution) { this.suggestedSolution = suggestedSolution; }
+
+    public String getContactInfo() { return contactInfo; }
+    public void setContactInfo(String contactInfo) { this.contactInfo = contactInfo; }
 
     public User getEmployee() { return employee; }
     public void setEmployee(User employee) { this.employee = employee; }

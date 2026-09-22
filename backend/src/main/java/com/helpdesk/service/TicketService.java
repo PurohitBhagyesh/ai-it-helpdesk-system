@@ -84,6 +84,10 @@ public class TicketService {
             ticket.setSuggestedSolution(aiResult.getSuggestedSolution());
         }
 
+        if (request.getContactInfo() != null && !request.getContactInfo().trim().isEmpty()) {
+            ticket.setContactInfo(inputSanitizer.sanitizeText(request.getContactInfo().trim()));
+        }
+
         ticket.setStatus(Status.OPEN);
         Ticket saved = ticketRepository.save(ticket);
         return new TicketResponseDTO(saved);

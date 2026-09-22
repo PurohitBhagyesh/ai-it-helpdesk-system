@@ -15,7 +15,7 @@
           <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>
       </div>
-      <span>IT Technician Console</span>
+      <span id="nav-company-name">IT Technician Console</span>
     </a>
     <div class="nav-actions">
       <button onclick="openContactAdminModal()" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.4rem;">
@@ -24,7 +24,7 @@
       <div class="user-profile-capsule">
         <div class="user-avatar-circle" id="navbar-user-avatar" style="background: var(--apple-blue);">T</div>
         <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">IT Technician</span>
-        <span style="color: var(--apple-blue); font-size: 0.75rem;">(Technician)</span>
+        <span style="color: var(--apple-blue); font-size: 0.75rem;" id="navbar-user-code">(TECH)</span>
       </div>
       <button onclick="Auth.logout()" class="btn btn-secondary btn-sm">
         Sign Out
@@ -35,8 +35,8 @@
   <div class="container">
     <!-- Header -->
     <div style="margin-bottom: 2rem;">
-      <div class="ai-tag" style="margin-bottom: 0.6rem; display: inline-flex;">Tier-1 & Tier-2 Support Operations</div>
-      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;">Technical Incident Operations</h2>
+      <div class="ai-tag" style="margin-bottom: 0.6rem; display: inline-flex;" id="staff-company-tag">Tier-1 & Tier-2 Support Operations</div>
+      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;" id="staff-welcome-title">Welcome to Helpdesk Support Console</h2>
       <p>Claim incoming AI-analyzed tickets, conduct encrypted troubleshooting sessions, update work status, or re-route workloads.</p>
     </div>
 
@@ -136,23 +136,40 @@
       <div class="apple-modal-header">
         <div>
           <h3 style="font-size: 1.25rem;">Technician Escalation to Admin</h3>
-          <span style="font-size: 0.825rem; color: var(--text-muted);">Send enquiry directly to the Systems Administrator mailbox</span>
+          <span style="font-size: 0.825rem; color: var(--text-muted);" id="contact-admin-target">Send enquiry directly to the Systems Administrator mailbox</span>
         </div>
         <button class="apple-modal-close" onclick="closeContactAdminModal()">&times;</button>
       </div>
 
       <form id="contact-admin-form">
         <div class="form-group">
-          <label for="enquiry-subject">Subject</label>
+          <label>Technician Identity</label>
+          <input type="text" id="enquiry-sender-name" class="form-control" readonly style="opacity: 0.85;">
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label style="margin-bottom: 0;">Technician ID Code</label>
+            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEditTechId()" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; min-height: auto;">
+              + Edit / Add ID Code
+            </button>
+          </div>
+          <input type="text" id="enquiry-tech-id" class="form-control" placeholder="e.g. TECH-2040" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enquiry-subject">Subject / Purpose</label>
           <input type="text" id="enquiry-subject" class="form-control" placeholder="e.g. Infrastructure hardware request / Escalation" required>
         </div>
 
         <div class="form-group">
-          <label for="enquiry-message">Message Details</label>
-          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Type your detailed message to the System Administrator..." required></textarea>
+          <label for="enquiry-message">Describe Your Issue / Message</label>
+          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Provide complete technical details..." required></textarea>
         </div>
 
-        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+        <div id="enquiry-feedback" style="display: none; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem;">
           <button type="button" class="btn btn-secondary btn-sm" onclick="closeContactAdminModal()">Cancel</button>
           <button type="submit" id="enquiry-submit-btn" class="btn btn-primary btn-sm">Dispatch to Admin</button>
         </div>

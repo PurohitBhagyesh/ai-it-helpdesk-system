@@ -47,13 +47,50 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("🌱 Initializing Configured Helpdesk Accounts & Sample Data...");
 
         // 1. Create Initial Administrator from Configured Properties / Environment Variables
-        User admin = userRepository.save(new User(adminName, adminEmail, adminPassword, Role.ADMIN, adminDept));
+        User admin = new User(adminName, adminEmail, adminPassword, Role.ADMIN, adminDept);
+        admin.setCompanyName("Acme Global Technologies");
+        admin.setEmployeeIdCode("ADM-001");
+        admin.setJoinDate("2024-01-15");
+        admin.setDesignation("Chief Information Security Officer");
+        admin.setPhone("+1 (800) 555-0100");
+        admin = userRepository.save(admin);
 
         // 2. Create Default Test Accounts
-        User staffAlex = userRepository.save(new User("Alex Support", "alex.staff@helpdesk.com", "staff123", Role.IT_STAFF, "IT Support Team"));
-        User staffSarah = userRepository.save(new User("Sarah Engineer", "sarah.staff@helpdesk.com", "staff123", Role.IT_STAFF, "Network Operations"));
-        User empJohn = userRepository.save(new User("John Doe", "john.doe@company.com", "user123", Role.EMPLOYEE, "Finance"));
-        User empEmily = userRepository.save(new User("Emily Davis", "emily.davis@company.com", "user123", Role.EMPLOYEE, "Marketing"));
+        User staffAlex = new User("Alex Support", "alex.staff@helpdesk.com", "staff123", Role.IT_STAFF, "IT Support Team");
+        staffAlex.setCompanyName("Acme Global Technologies");
+        staffAlex.setEmployeeIdCode("TECH-201");
+        staffAlex.setJoinDate("2024-06-01");
+        staffAlex.setDesignation("Senior IT Support Engineer");
+        staffAlex.setExperience("5 Years - Hardware & Tier-1 Support");
+        staffAlex.setSpecialization("Workstation Diagnostics, macOS/Windows, Network Triage");
+        staffAlex.setPhone("+1 (800) 555-0201");
+        staffAlex = userRepository.save(staffAlex);
+
+        User staffSarah = new User("Sarah Engineer", "sarah.staff@helpdesk.com", "staff123", Role.IT_STAFF, "Network Operations");
+        staffSarah.setCompanyName("Acme Global Technologies");
+        staffSarah.setEmployeeIdCode("TECH-202");
+        staffSarah.setJoinDate("2023-11-15");
+        staffSarah.setDesignation("Lead Infrastructure Specialist");
+        staffSarah.setExperience("7 Years - Cloud & Cisco Network Eng");
+        staffSarah.setSpecialization("Cisco CCNA, VPN Gateways, Firewalls, AWS VPC");
+        staffSarah.setPhone("+1 (800) 555-0202");
+        staffSarah = userRepository.save(staffSarah);
+
+        User empJohn = new User("John Doe", "john.doe@company.com", "employee123", Role.EMPLOYEE, "Finance");
+        empJohn.setCompanyName("Acme Global Technologies");
+        empJohn.setEmployeeIdCode("EMP-101");
+        empJohn.setJoinDate("2025-02-10");
+        empJohn.setDesignation("Financial Analyst");
+        empJohn.setPhone("+1 (800) 555-0101");
+        empJohn = userRepository.save(empJohn);
+
+        User empEmily = new User("Emily Davis", "emily.davis@company.com", "employee123", Role.EMPLOYEE, "Marketing");
+        empEmily.setCompanyName("Acme Global Technologies");
+        empEmily.setEmployeeIdCode("EMP-102");
+        empEmily.setJoinDate("2025-04-20");
+        empEmily.setDesignation("Marketing Lead");
+        empEmily.setPhone("+1 (800) 555-0102");
+        empEmily = userRepository.save(empEmily);
 
         // 3. Create Sample Initial Tickets
         Ticket t1 = new Ticket();
