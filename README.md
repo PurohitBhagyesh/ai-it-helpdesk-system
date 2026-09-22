@@ -1,4 +1,4 @@
-#  Enterprise AI IT Support & Incident Management Platform
+# Enterprise AI IT Support & Incident Management Platform
 
 <div align="center">
 
