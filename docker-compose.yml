@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # 1. MySQL Production Database
+  mysql-db:
+    image: mysql:8.0
+    container_name: helpdesk-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: it_helpdesk_db
+      MYSQL_ROOT_PASSWORD: rootpassword123
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+      - ./database/seed_data.sql:/docker-entrypoint-initdb.d/02_seed_data.sql
+    networks:
+      - helpdesk-net
+
+  # 2. Java Spring Boot Backend & AI Engine
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: helpdesk-backend
+    restart: unless-stopped
+    depends_on:
+      - mysql-db
+    environment:
+      SERVER_PORT: 8080
+      DB_URL: jdbc:mysql://mysql-db:3306/it_helpdesk_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      DB_USERNAME: root
+      DB_PASSWORD: rootpassword123
+      ADMIN_EMAIL: admin@helpdesk.com
+      ADMIN_PASSWORD: admin123
+    ports:
+      - "8080:8080"
+    networks:
+      - helpdesk-net
+
+  # 3. Frontend Web Server (Nginx)
+  frontend:
+    image: nginx:alpine
+    container_name: helpdesk-frontend
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - helpdesk-net
+
+volumes:
+  mysql_data:
+
+networks:
+  helpdesk-net:
+    driver: bridge
