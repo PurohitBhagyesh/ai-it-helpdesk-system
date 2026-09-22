@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SuppressWarnings("null")
 public class EnquiryService {
 
     private final EnquiryRepository enquiryRepository;

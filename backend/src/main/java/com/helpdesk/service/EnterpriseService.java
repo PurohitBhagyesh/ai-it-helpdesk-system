@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @Service
+@SuppressWarnings("null")
 public class EnterpriseService {
 
     private final EnterpriseRepository enterpriseRepository;
