@@ -2,8 +2,10 @@ package com.helpdesk.controller;
 
 import com.helpdesk.dto.LoginRequest;
 import com.helpdesk.dto.LoginResponse;
+import com.helpdesk.dto.RegisterRequest;
 import com.helpdesk.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,15 @@ public class AuthController {
         if (response.isSuccess()) {
             return ResponseEntity.ok(response);
         }
-        return ResponseEntity.status(401).body(response);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> register(@RequestBody RegisterRequest request) {
+        LoginResponse response = userService.register(request);
+        if (response.isSuccess()) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

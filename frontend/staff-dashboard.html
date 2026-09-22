@@ -3,23 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>IT Staff Portal | AI IT Helpdesk</title>
+  <title>IT Staff Operations | AI Helpdesk</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Top Navigation -->
+  <!-- Apple Top Navigation -->
   <nav class="navbar">
     <a href="staff-dashboard.html" class="brand">
-      <div class="brand-icon">🛠️</div>
-      <span>Helpdesk AI Staff</span>
+      <div class="brand-icon" style="background: linear-gradient(135deg, #bf5af2, #5e5ce6);">🛠️</div>
+      <span>Helpdesk Operations</span>
     </a>
-    <div class="nav-links">
-      <div class="user-badge">
-        <div class="user-avatar" id="navbar-user-avatar" style="background: var(--info);">S</div>
-        <span id="navbar-user-name" style="font-weight: 600;">IT Engineer</span>
-        <span style="color: var(--text-muted); font-size: 0.75rem;">(IT Staff)</span>
+    <div class="nav-actions">
+      <div class="user-profile-capsule">
+        <div class="user-avatar-circle" id="navbar-user-avatar" style="background: var(--apple-purple);">S</div>
+        <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">IT Engineer</span>
+        <span style="color: var(--text-secondary); font-size: 0.75rem;">(Staff)</span>
       </div>
-      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+      <button onclick="Auth.logout()" class="btn btn-secondary btn-sm">
         Sign Out
       </button>
     </div>
@@ -27,79 +27,75 @@
 
   <div class="container">
     <!-- Header -->
-    <div style="margin-bottom: 1.75rem;">
-      <h2>IT Support Engineering Queue</h2>
-      <p>Manage incoming incident tickets, claim unassigned issues, and document final technical resolutions.</p>
+    <div style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;">IT Engineering Queue</h2>
+      <p>Claim incoming AI-triaged tickets, update resolution progress, and communicate with employees.</p>
     </div>
 
     <!-- Stats Grid -->
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
-          <h4>Unassigned In Queue</h4>
-          <div class="stat-value" style="color: #60a5fa;" id="staff-open-count">0</div>
+          <h4>Unassigned Queue</h4>
+          <div class="stat-value" style="color: #5ac8fa;" id="staff-open-count">0</div>
         </div>
-        <div class="stat-icon">📥</div>
+        <div class="stat-icon-wrapper" style="color: #5ac8fa;">📥</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
-          <h4>My Active Assigned</h4>
-          <div class="stat-value" style="color: #fbbf24;" id="staff-assigned-count">0</div>
+          <h4>My Active Tickets</h4>
+          <div class="stat-value" style="color: #ffd60a;" id="staff-assigned-count">0</div>
         </div>
-        <div class="stat-icon">🔧</div>
+        <div class="stat-icon-wrapper" style="color: #ffd60a;">🔧</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
-          <h4>Total Resolved</h4>
-          <div class="stat-value" style="color: #34d399;" id="staff-resolved-count">0</div>
+          <h4>Resolved Incidents</h4>
+          <div class="stat-value" style="color: #30d158;" id="staff-resolved-count">0</div>
         </div>
-        <div class="stat-icon">🎉</div>
+        <div class="stat-icon-wrapper" style="color: #30d158;">🎉</div>
       </div>
     </div>
 
-    <!-- Unassigned Tickets Queue -->
-    <div class="table-card" style="margin-bottom: 2rem;">
-      <div class="table-header">
-        <div>
-          <h3 style="font-size: 1.15rem;">Incoming Unassigned Tickets</h3>
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Tickets classified by AI waiting for staff assignment</span>
-        </div>
+    <!-- Incoming Queue Table -->
+    <div class="glass-card" style="margin-bottom: 2.25rem;">
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--apple-glass-border);">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Incoming Triage Queue</h3>
+        <p style="font-size: 0.85rem;">Tickets analyzed by AI awaiting engineer assignment</p>
       </div>
 
       <div class="table-responsive">
-        <table class="custom-table">
+        <table class="apple-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Title</th>
+              <th>Incident Summary</th>
               <th>AI Category</th>
               <th>Priority</th>
-              <th>Submitted By</th>
-              <th>Action</th>
+              <th>Reporter</th>
+              <th>Assignment</th>
             </tr>
           </thead>
           <tbody id="unassigned-tickets-tbody">
-            <!-- Dynamically populated via staff.js -->
+            <!-- Populated by staff.js -->
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- My Assigned Tickets Table -->
-    <div class="table-card">
-      <div class="table-header">
-        <div>
-          <h3 style="font-size: 1.15rem;">My Assigned Tickets</h3>
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Incidents you are currently resolving</span>
-        </div>
+    <!-- My Assigned Active Queue Table -->
+    <div class="glass-card">
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--apple-glass-border);">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.25rem;">My Active Assigned Incidents</h3>
+        <p style="font-size: 0.85rem;">Tickets currently assigned to you for resolution</p>
       </div>
 
       <div class="table-responsive">
-        <table class="custom-table">
+        <table class="apple-table">
           <thead>
             <tr>
               <th>ID</th>
-              <th>Title</th>
+              <th>Incident Summary</th>
               <th>Category</th>
               <th>Priority</th>
               <th>Status</th>
@@ -107,7 +103,7 @@
             </tr>
           </thead>
           <tbody id="assigned-tickets-tbody">
-            <!-- Dynamically populated via staff.js -->
+            <!-- Populated by staff.js -->
           </tbody>
         </table>
       </div>

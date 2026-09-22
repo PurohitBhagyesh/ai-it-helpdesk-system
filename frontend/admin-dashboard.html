@@ -3,21 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Dashboard | AI IT Helpdesk</title>
+  <title>System Intelligence & Analytics | IT Helpdesk</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Top Navigation -->
+  <!-- Cupertino Navigation -->
   <nav class="navbar">
     <a href="admin-dashboard.html" class="brand">
-      <div class="brand-icon">👑</div>
-      <span>Helpdesk AI Analytics</span>
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span>Enterprise Intelligence</span>
     </a>
     <div class="nav-links">
       <div class="user-badge">
-        <div class="user-avatar" id="navbar-user-avatar" style="background: var(--danger);">A</div>
-        <span id="navbar-user-name" style="font-weight: 600;">Administrator</span>
-        <span style="color: var(--text-muted); font-size: 0.75rem;">(Admin)</span>
+        <div class="user-avatar" id="navbar-user-avatar" style="background: linear-gradient(135deg, #ef4444, #f43f5e);">A</div>
+        <div style="display: flex; flex-direction: column;">
+          <span id="navbar-user-name" style="font-weight: 600; font-size: 0.9rem; line-height: 1.2;">Administrator</span>
+          <span style="color: var(--apple-danger); font-size: 0.72rem; font-weight: 500;">Admin Access</span>
+        </div>
       </div>
       <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
         Sign Out
@@ -26,48 +32,59 @@
   </nav>
 
   <div class="container">
-    <!-- Header -->
-    <div style="margin-bottom: 1.75rem;">
-      <h2>Administrator Analytics & Overview</h2>
-      <p>Monitor organizational IT support performance, AI classification metrics, and ticket resolution statistics.</p>
+    <!-- Apple Hero Header -->
+    <div style="margin-bottom: 2.25rem;">
+      <div class="ai-tag" style="margin-bottom: 0.6rem; display: inline-flex;">System-Wide Telemetry</div>
+      <h2 style="letter-spacing: -0.03em;">Executive Support Metrics</h2>
+      <p style="max-width: 650px;">Real-time natural language classification telemetry, team resolution throughput, and enterprise incident volume.</p>
     </div>
 
-    <!-- Stats KPI Grid -->
+    <!-- Apple Stats KPI Grid -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-info">
-          <h4>Total Incident Volume</h4>
+          <h4>Total Incidents</h4>
           <div class="stat-value" id="admin-total-tickets">0</div>
         </div>
-        <div class="stat-icon">📊</div>
+        <div class="stat-icon" style="color: var(--apple-blue);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-info">
-          <h4>Open / Pending</h4>
+          <h4>Open / Triage</h4>
           <div class="stat-value" style="color: #60a5fa;" id="admin-open-tickets">0</div>
         </div>
-        <div class="stat-icon">⏳</div>
+        <div class="stat-icon" style="color: #60a5fa;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-info">
-          <h4>In Progress</h4>
+          <h4>In Active Progress</h4>
           <div class="stat-value" style="color: #fbbf24;" id="admin-progress-tickets">0</div>
         </div>
-        <div class="stat-icon">⚡</div>
+        <div class="stat-icon" style="color: #fbbf24;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-info">
           <h4>Resolved Total</h4>
           <div class="stat-value" style="color: #34d399;" id="admin-resolved-tickets">0</div>
         </div>
-        <div class="stat-icon">✅</div>
+        <div class="stat-icon" style="color: #34d399;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
       </div>
       <div class="stat-card">
         <div class="stat-info">
-          <h4>Resolution Rate</h4>
+          <h4>SLA Resolution Rate</h4>
           <div class="stat-value" style="color: #a78bfa;" id="admin-resolution-rate">0%</div>
         </div>
-        <div class="stat-icon">🎯</div>
+        <div class="stat-icon" style="color: #a78bfa;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+        </div>
       </div>
     </div>
 
@@ -75,10 +92,13 @@
     <div class="grid-equal-2col">
       
       <!-- Category Breakdown Card -->
-      <div class="table-card" style="padding: 1.5rem;">
-        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Tickets by AI Category</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-          Distribution of reported issues across core IT domains
+      <div class="table-card" style="padding: 1.75rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+          <h3 style="font-size: 1.15rem;">Incidents by Category</h3>
+          <span class="ai-tag">NLP Classification</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          Automated routing breakdown based on natural language keyword and token density
         </p>
 
         <div id="category-bars">
@@ -87,10 +107,13 @@
       </div>
 
       <!-- Priority Breakdown Card -->
-      <div class="table-card" style="padding: 1.5rem;">
-        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Tickets by Priority Level</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
-          Severity levels determined by automated AI analysis
+      <div class="table-card" style="padding: 1.75rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+          <h3 style="font-size: 1.15rem;">Severity & Urgency Distribution</h3>
+          <span class="ai-tag">Urgency Matrix</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          AI-calculated impact levels driving engineering dispatch priority
         </p>
 
         <div id="priority-bars">
@@ -104,8 +127,8 @@
     <div class="table-card">
       <div class="table-header">
         <div>
-          <h3 style="font-size: 1.15rem;">All System Tickets</h3>
-          <span style="font-size: 0.85rem; color: var(--text-muted);">Real-time monitoring across all company departments</span>
+          <h3 style="font-size: 1.15rem;">Enterprise Incident Registry</h3>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Master record of all tickets across all global departments</span>
         </div>
       </div>
 
@@ -114,8 +137,8 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>Title</th>
-              <th>Category</th>
+              <th>Incident Summary</th>
+              <th>AI Category</th>
               <th>Priority</th>
               <th>Status</th>
               <th>Employee</th>

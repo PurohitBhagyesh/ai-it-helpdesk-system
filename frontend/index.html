@@ -1,92 +1,239 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login | AI IT Support & Helpdesk</title>
+  <title>Enterprise Portal | AI IT Support & Helpdesk</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-  <div class="auth-wrapper">
-    <div class="auth-card">
-      <div class="auth-header">
-        <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
-          <div class="brand-icon" style="width: 48px; height: 48px; font-size: 1.5rem;">🤖</div>
-        </div>
-        <h2>IT Helpdesk <span>AI Portal</span></h2>
-        <p>Sign in to submit or manage internal IT support tickets</p>
+  <div class="auth-split-wrapper">
+
+    <!-- Left Hero Branding Panel (Apple Style) -->
+    <div class="auth-hero-panel">
+      <div class="brand">
+        <div class="brand-icon"></div>
+        <span>Helpdesk AI Enterprise</span>
       </div>
 
-      <form id="login-form">
-        <div class="form-group">
-          <label for="login-email">Corporate Email Address</label>
-          <input type="email" id="login-email" class="form-control" placeholder="name@company.com" required value="john.doe@company.com">
+      <div>
+        <div
+          style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 113, 227, 0.15); border: 1px solid rgba(0, 113, 227, 0.3); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; color: #60a5fa; margin-bottom: 1.25rem;">
+          <span>⚡ Next-Generation IT Operations</span>
         </div>
+        <h1 style="margin-bottom: 1rem; line-height: 1.15;">
+          Intelligent IT Support,<br>Reimagined.
+        </h1>
+        <p style="font-size: 1.05rem; max-width: 480px; line-height: 1.6; margin-bottom: 2rem;">
+          Instant real-time problem triage, automated diagnostic solutions, and end-to-end incident lifecycle management
+          powered by AI.
+        </p>
 
-        <div class="form-group">
-          <label for="login-password">Password</label>
-          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="user123">
+        <div style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> Zero Wait Triage
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> Auto-Diagnostic Engine
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> Enterprise RBAC
+          </div>
         </div>
+      </div>
 
-        <button type="submit" id="login-btn" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
-          Sign In to Portal
-        </button>
-      </form>
-
-      <!-- 1-Click Quick Demo Login Switcher -->
-      <div class="demo-accounts">
-        <div class="demo-title">Quick Demo Logins (1-Click)</div>
-        <div class="demo-buttons">
-          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('john.doe@company.com', 'user123', 'EMPLOYEE')">
-            👤 Employee
-          </button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('alex.staff@helpdesk.com', 'staff123', 'IT_STAFF')">
-            🛠️ IT Staff
-          </button>
-          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('admin@helpdesk.com', 'admin123', 'ADMIN')">
-            👑 Admin
-          </button>
-        </div>
+      <div style="font-size: 0.8rem; color: var(--text-tertiary);">
+        &copy; 2026 AI IT Helpdesk System. Enterprise Academic Platform.
       </div>
     </div>
+
+    <!-- Right Authentication Form Panel -->
+    <div class="auth-form-panel">
+      <div class="glass-card" style="width: 100%; max-width: 440px; padding: clamp(1.75rem, 5vw, 2.5rem);">
+
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+          <h2 style="font-size: 1.65rem; margin-bottom: 0.35rem;" id="auth-heading">Sign In to Helpdesk</h2>
+          <p style="font-size: 0.875rem;" id="auth-subheading">Enter your corporate credentials to access your portal
+          </p>
+        </div>
+
+        <!-- Apple Segmented Control (Sign In / Register) -->
+        <div class="segmented-control">
+          <button type="button" class="segment-btn active" id="tab-login" onclick="switchAuthTab('login')">
+            Sign In
+          </button>
+          <button type="button" class="segment-btn" id="tab-register" onclick="switchAuthTab('register')">
+            Create Account
+          </button>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="auth-alert"
+          style="display: none; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        </div>
+
+        <!-- Sign In Form -->
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-email">Corporate Email Address</label>
+            <input type="email" id="login-email" class="form-control" placeholder="name@company.com" required
+              autocomplete="email">
+          </div>
+
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+              <label for="login-password" style="margin-bottom: 0;">Password</label>
+              <a href="#"
+                onclick="alert('Please contact your IT System Administrator to reset your corporate password.'); return false;"
+                style="font-size: 0.75rem; color: var(--text-link);">Forgot?</a>
+            </div>
+            <input type="password" id="login-password" class="form-control" placeholder="••••••••" required
+              autocomplete="current-password">
+          </div>
+
+          <button type="submit" id="login-btn" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+            Sign In to Portal
+          </button>
+        </form>
+
+        <!-- Create Account Form (Initially Hidden) -->
+        <form id="register-form" style="display: none;">
+          <div class="form-group">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-email">Work Email</label>
+            <input type="email" id="reg-email" class="form-control" placeholder="name@company.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-password">Password (Minimum 6 characters)</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="••••••••" required minlength="6">
+          </div>
+
+          <div class="form-group">
+            <label for="reg-department">Department / Team</label>
+            <input type="text" id="reg-department" class="form-control"
+              placeholder="e.g. Engineering, Finance, Marketing" required>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-role">Account Role</label>
+            <select id="reg-role" class="form-control" required>
+              <option value="EMPLOYEE">👤 Employee (Submit & Track Tickets)</option>
+              <option value="IT_STAFF">🛠️ IT Support Staff (Triage & Resolve)</option>
+              <option value="ADMIN">👑 Administrator (Full System Analytics)</option>
+            </select>
+          </div>
+
+          <button type="submit" id="register-btn" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+            Complete Registration
+          </button>
+        </form>
+
+      </div>
+    </div>
+
   </div>
 
   <script src="js/api.js"></script>
   <script src="js/auth.js"></script>
   <script>
     const loginForm = document.getElementById('login-form');
-    const emailInput = document.getElementById('login-email');
-    const passwordInput = document.getElementById('login-password');
-    const loginBtn = document.getElementById('login-btn');
+    const registerForm = document.getElementById('register-form');
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const authAlert = document.getElementById('auth-alert');
+    const authHeading = document.getElementById('auth-heading');
+    const authSubheading = document.getElementById('auth-subheading');
 
+    function switchAuthTab(mode) {
+      hideAlert();
+      if (mode === 'register') {
+        tabLogin.classList.remove('active');
+        tabRegister.classList.add('active');
+        loginForm.style.display = 'none';
+        registerForm.style.display = 'block';
+        authHeading.textContent = 'Create New Account';
+        authSubheading.textContent = 'Register your profile to access IT support services';
+      } else {
+        tabRegister.classList.remove('active');
+        tabLogin.classList.add('active');
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+        authHeading.textContent = 'Sign In to Helpdesk';
+        authSubheading.textContent = 'Enter your corporate credentials to access your portal';
+      }
+    }
+
+    function showAlert(msg, isSuccess = false) {
+      authAlert.style.display = 'block';
+      authAlert.textContent = msg;
+      authAlert.style.background = isSuccess ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)';
+      authAlert.style.border = isSuccess ? '1px solid rgba(48, 209, 88, 0.35)' : '1px solid rgba(255, 69, 58, 0.35)';
+      authAlert.style.color = isSuccess ? '#30d158' : '#ff453a';
+    }
+
+    function hideAlert() {
+      authAlert.style.display = 'none';
+    }
+
+    // Real Sign In Handler
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      loginBtn.disabled = true;
-      loginBtn.textContent = 'Authenticating...';
+      hideAlert();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const btn = document.getElementById('login-btn');
 
-      const res = await API.login(emailInput.value, passwordInput.value);
-      loginBtn.disabled = false;
-      loginBtn.textContent = 'Sign In to Portal';
+      btn.disabled = true;
+      btn.textContent = 'Authenticating...';
 
-      if (res && res.user) {
+      const res = await API.login(email, password);
+      btn.disabled = false;
+      btn.textContent = 'Sign In to Portal';
+
+      if (res && res.success && res.user) {
         Auth.setUser(res.user);
         Auth.redirectByRole(res.user.role);
       } else {
-        alert('Invalid email or password. Please try again.');
+        showAlert(res.message || 'Invalid email or password. Please try again.');
       }
     });
 
-    async function quickLogin(email, password, role) {
-      emailInput.value = email;
-      passwordInput.value = password;
-      const res = await API.login(email, password);
-      if (res && res.user) {
-        // Ensure role for mock convenience
-        res.user.role = role;
+    // Real Registration Handler
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const department = document.getElementById('reg-department').value.trim();
+      const role = document.getElementById('reg-role').value;
+      const btn = document.getElementById('register-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Creating Account...';
+
+      const res = await API.register(name, email, password, role, department);
+      btn.disabled = false;
+      btn.textContent = 'Complete Registration';
+
+      if (res && res.success && res.user) {
+        showAlert('Account created successfully! Redirecting...', true);
         Auth.setUser(res.user);
-        Auth.redirectByRole(role);
+        setTimeout(() => {
+          Auth.redirectByRole(res.user.role);
+        }, 600);
+      } else {
+        showAlert(res.message || 'Registration failed. Please check your details.');
       }
-    }
+    });
   </script>
 </body>
+
 </html>

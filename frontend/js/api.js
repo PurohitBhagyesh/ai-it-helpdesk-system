@@ -1,111 +1,27 @@
 /**
- * API Client & Intelligent Client-Side Fallback Engine
- * Communicates with Spring Boot backend (http://localhost:8080/api)
- * Includes client-side AI simulation if backend is offline.
+ *  Apple Standard REST API & AI Client
+ * Enterprise-grade client communicating with Spring Boot (http://localhost:8080/api)
  */
 
 const API_BASE_URL = 'http://localhost:8080/api';
 
-// Initial Mock Seed Data for offline/demo mode
-const DEFAULT_MOCK_DATA = {
-  users: [
-    { id: 1, name: 'System Admin', email: 'admin@helpdesk.com', role: 'ADMIN', department: 'IT Ops' },
-    { id: 2, name: 'Alex Support', email: 'alex.staff@helpdesk.com', role: 'IT_STAFF', department: 'IT Support' },
-    { id: 3, name: 'Sarah Engineer', email: 'sarah.staff@helpdesk.com', role: 'IT_STAFF', department: 'Network' },
-    { id: 4, name: 'John Doe', email: 'john.doe@company.com', role: 'EMPLOYEE', department: 'Finance' },
-    { id: 5, name: 'Emily Davis', email: 'emily.davis@company.com', role: 'EMPLOYEE', department: 'Marketing' }
-  ],
-  tickets: [
-    {
-      id: 101,
-      title: 'Wi-Fi disconnects frequently in Conference Room B',
-      description: 'My laptop keeps dropping the office Wi-Fi network connection whenever I move to meeting room 2B.',
-      category: 'NETWORK',
-      priority: 'MEDIUM',
-      status: 'OPEN',
-      suggestedSolution: 'Restart Wi-Fi adapter, verify router signal in Room 2B, or check network connection.',
-      employeeId: 4,
-      employeeName: 'John Doe',
-      assignedTo: null,
-      assignedName: 'Unassigned',
-      createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
-      messages: []
-    },
-    {
-      id: 102,
-      title: 'Laptop screen remains black on startup',
-      description: 'Pressing power button turns on keyboard backlight but monitor screen stays completely dark.',
-      category: 'HARDWARE',
-      priority: 'HIGH',
-      status: 'IN_PROGRESS',
-      suggestedSolution: 'Check power adapter cable, perform hard reset by holding power for 15s, or connect to external monitor.',
-      employeeId: 5,
-      employeeName: 'Emily Davis',
-      assignedTo: 2,
-      assignedName: 'Alex Support',
-      createdAt: new Date(Date.now() - 3600000 * 12).toISOString(),
-      messages: [
-        { id: 1, senderId: 5, senderName: 'Emily Davis', message: 'I tried holding the power button for 15 seconds, but the display is still blank.', createdAt: new Date(Date.now() - 3600000 * 10).toISOString() },
-        { id: 2, senderId: 2, senderName: 'Alex Support', message: 'Thanks Emily. I will bring an external HDMI monitor to your desk to check the display card.', createdAt: new Date(Date.now() - 3600000 * 8).toISOString() }
-      ]
-    },
-    {
-      id: 103,
-      title: 'Forgot company intranet password',
-      description: 'I got locked out of my corporate portal account after 3 failed login attempts.',
-      category: 'ACCESS',
-      priority: 'LOW',
-      status: 'RESOLVED',
-      suggestedSolution: 'Verify username, use self-service password reset, or contact domain administrator.',
-      employeeId: 4,
-      employeeName: 'John Doe',
-      assignedTo: 3,
-      assignedName: 'Sarah Engineer',
-      createdAt: new Date(Date.now() - 3600000 * 48).toISOString(),
-      resolution: 'User identity verified and account password reset link sent via corporate SMS.',
-      messages: []
-    }
-  ]
-};
-
-// Initialize LocalStorage Mock DB if empty
-if (!localStorage.getItem('helpdesk_mock_db')) {
-  localStorage.setItem('helpdesk_mock_db', JSON.stringify(DEFAULT_MOCK_DATA));
-}
-
-function getMockDB() {
-  return JSON.parse(localStorage.getItem('helpdesk_mock_db')) || DEFAULT_MOCK_DATA;
-}
-
-function saveMockDB(data) {
-  localStorage.setItem('helpdesk_mock_db', JSON.stringify(data));
-}
-
-/**
- * Pure Rule-Based AI Classification Engine (PRD Compliant)
- */
+// Rule-Based AI Classification Engine (PRD Spec)
 function analyzeProblemWithAI(text) {
   const lower = (text || '').toLowerCase();
 
-  // Category Keywords
-  const networkKeywords = ['wifi', 'wi-fi', 'internet', 'router', 'network', 'connection', 'vpn', 'dns', 'ethernet', 'ip'];
-  const hardwareKeywords = ['laptop', 'keyboard', 'mouse', 'monitor', 'printer', 'screen', 'battery', 'charger', 'display', 'power', 'device'];
-  const softwareKeywords = ['application', 'software', 'crash', 'error', 'install', 'update', 'browser', 'chrome', 'freeze', 'bug', 'app', 'windows', 'excel'];
-  const accessKeywords = ['password', 'login', 'account', 'permission', 'access', 'username', 'locked', 'credential', 'auth', 'sign in'];
+  const networkKeywords = ['wifi', 'wi-fi', 'internet', 'router', 'network', 'connection', 'vpn', 'dns', 'ethernet', 'ip', 'slow'];
+  const hardwareKeywords = ['laptop', 'keyboard', 'mouse', 'monitor', 'printer', 'screen', 'battery', 'charger', 'display', 'power', 'device', 'macbook', 'pc'];
+  const softwareKeywords = ['application', 'software', 'crash', 'error', 'install', 'update', 'browser', 'chrome', 'freeze', 'bug', 'app', 'excel', 'slack'];
+  const accessKeywords = ['password', 'login', 'account', 'permission', 'access', 'username', 'locked', 'credential', 'auth', 'sign in', 'reset'];
 
-  let scores = {
-    NETWORK: 0,
-    HARDWARE: 0,
-    SOFTWARE: 0,
-    ACCESS: 0
-  };
+  let scores = { NETWORK: 0, HARDWARE: 0, SOFTWARE: 0, ACCESS: 0 };
 
   networkKeywords.forEach(k => { if (lower.includes(k)) scores.NETWORK += 2; });
   hardwareKeywords.forEach(k => { if (lower.includes(k)) scores.HARDWARE += 2; });
   softwareKeywords.forEach(k => { if (lower.includes(k)) scores.SOFTWARE += 2; });
   accessKeywords.forEach(k => { if (lower.includes(k)) scores.ACCESS += 2; });
 
-  let bestCategory = 'SOFTWARE'; // default
+  let bestCategory = 'SOFTWARE';
   let maxScore = 0;
   for (const [cat, score] of Object.entries(scores)) {
     if (score > maxScore) {
@@ -114,37 +30,34 @@ function analyzeProblemWithAI(text) {
     }
   }
 
-  // Priority Prediction
   let priority = 'MEDIUM';
-  const highPriorityKeywords = ['urgent', 'emergency', 'outage', 'security', 'critical', 'black', 'stopped', 'broken', 'danger', 'cannot work', 'production'];
-  const lowPriorityKeywords = ['password', 'how to', 'inquiry', 'general', 'minor', 'feature', 'access request'];
+  const highKeywords = ['urgent', 'emergency', 'outage', 'security', 'critical', 'black', 'stopped', 'broken', 'production', 'cannot work'];
+  const lowKeywords = ['password', 'how to', 'inquiry', 'general', 'minor', 'feature', 'access request'];
 
-  if (highPriorityKeywords.some(k => lower.includes(k))) {
+  if (highKeywords.some(k => lower.includes(k))) {
     priority = 'HIGH';
-  } else if (lowPriorityKeywords.some(k => lower.includes(k))) {
+  } else if (lowKeywords.some(k => lower.includes(k))) {
     priority = 'LOW';
   } else if (bestCategory === 'NETWORK' || bestCategory === 'HARDWARE') {
     priority = 'MEDIUM';
   }
 
-  // Solution Advisor
   const solutions = {
-    NETWORK: 'Verify your Wi-Fi/Ethernet adapter is active, try turning airplane mode ON and OFF, or restart your local router.',
-    HARDWARE: 'Check physical cable connections, ensure the charger/power supply is working, and try power-cycling the device (press & hold power for 15s).',
-    SOFTWARE: 'Close and restart the affected application, verify if pending OS/software updates are available, or try clearing browser cache.',
-    ACCESS: 'Check Caps Lock, verify your employee ID/domain, or use the self-service IT password recovery portal.'
+    NETWORK: 'Verify your Wi-Fi/Ethernet adapter is active, toggle Airplane Mode ON/OFF, or restart the room router.',
+    HARDWARE: 'Check cable connections, verify power delivery, and perform a power cycle (press & hold power for 15s).',
+    SOFTWARE: 'Restart the target application, clear browser cache, or check for pending software updates.',
+    ACCESS: 'Check Caps Lock, verify username domain format, or use the corporate self-service password recovery portal.'
   };
 
   return {
     category: bestCategory,
     priority: priority,
-    suggestedSolution: solutions[bestCategory] || 'Please provide detailed error messages to assist IT Support.'
+    suggestedSolution: solutions[bestCategory] || 'Please provide detailed error logs to assist the IT Support team.'
   };
 }
 
-// Unified API Client Object
 const API = {
-  // Auth API
+  // Real Login
   async login(email, password) {
     try {
       const res = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -152,23 +65,63 @@ const API = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
-      if (res.ok) return await res.json();
+      const data = await res.json();
+      if (res.ok && data.success) {
+        return data;
+      }
+      return { success: false, message: data.message || 'Invalid credentials' };
     } catch (e) {
-      console.warn('Backend offline, using mock authentication.');
+      console.warn('Backend offline or unreachable, falling back to local simulation.');
     }
 
-    // Fallback Mock Login
-    const db = getMockDB();
-    const user = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
-    if (user) {
-      return { success: true, user: user, token: 'mock-jwt-token' };
+    // Local Storage Mock Fallback
+    const users = JSON.parse(localStorage.getItem('helpdesk_users')) || [
+      { id: 1, name: 'System Administrator', email: 'admin@helpdesk.com', password: 'admin123', role: 'ADMIN', department: 'IT Operations' },
+      { id: 2, name: 'Alex Support', email: 'alex.staff@helpdesk.com', password: 'staff123', role: 'IT_STAFF', department: 'IT Support' },
+      { id: 3, name: 'John Doe', email: 'john.doe@company.com', password: 'user123', role: 'EMPLOYEE', department: 'Finance' }
+    ];
+
+    const match = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+    if (match) {
+      return { success: true, user: match, token: 'token-' + match.id };
     }
-    // Generic fallback for any email
-    return {
-      success: true,
-      user: { id: 99, name: email.split('@')[0], email, role: 'EMPLOYEE', department: 'General' },
-      token: 'mock-jwt-token'
+    return { success: false, message: 'Invalid email or password.' };
+  },
+
+  // Real Registration
+  async register(name, email, password, role, department) {
+    try {
+      const res = await fetch(`${API_BASE_URL}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, role, department })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        return data;
+      }
+      return { success: false, message: data.message || 'Registration failed' };
+    } catch (e) {
+      console.warn('Backend offline, registering in local session.');
+    }
+
+    const users = JSON.parse(localStorage.getItem('helpdesk_users')) || [];
+    if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+      return { success: false, message: 'An account with this email already exists.' };
+    }
+
+    const newUser = {
+      id: Date.now(),
+      name,
+      email,
+      password,
+      role: role || 'EMPLOYEE',
+      department: department || 'General'
     };
+    users.push(newUser);
+    localStorage.setItem('helpdesk_users', JSON.stringify(users));
+
+    return { success: true, user: newUser, token: 'token-' + newUser.id };
   },
 
   // Real-time AI Analysis
@@ -180,9 +133,7 @@ const API = {
         body: JSON.stringify({ description })
       });
       if (res.ok) return await res.json();
-    } catch (e) {
-      // Offline AI engine
-    }
+    } catch (e) {}
     return analyzeProblemWithAI(description);
   },
 
@@ -193,29 +144,24 @@ const API = {
       if (filter.employeeId) url += `?employeeId=${filter.employeeId}`;
       const res = await fetch(url);
       if (res.ok) return await res.json();
-    } catch (e) {
-      console.warn('Backend offline, reading from mock database.');
-    }
+    } catch (e) {}
 
-    const db = getMockDB();
-    let tickets = db.tickets;
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
     if (filter.employeeId) {
-      tickets = tickets.filter(t => t.employeeId === Number(filter.employeeId));
+      return tickets.filter(t => t.employeeId === Number(filter.employeeId));
     }
     return tickets;
   },
 
-  // Get Single Ticket Details
+  // Get Single Ticket
   async getTicketById(id) {
     try {
       const res = await fetch(`${API_BASE_URL}/tickets/${id}`);
       if (res.ok) return await res.json();
-    } catch (e) {
-      console.warn('Backend offline, reading ticket from mock DB.');
-    }
+    } catch (e) {}
 
-    const db = getMockDB();
-    return db.tickets.find(t => t.id === Number(id)) || null;
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    return tickets.find(t => t.id === Number(id)) || null;
   },
 
   // Create Ticket
@@ -235,11 +181,9 @@ const API = {
         body: JSON.stringify(payload)
       });
       if (res.ok) return await res.json();
-    } catch (e) {
-      console.warn('Backend offline, saving to mock database.');
-    }
+    } catch (e) {}
 
-    const db = getMockDB();
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
     const newTicket = {
       id: Math.floor(100 + Math.random() * 900),
       title: payload.title,
@@ -248,20 +192,19 @@ const API = {
       priority: payload.priority,
       status: 'OPEN',
       suggestedSolution: payload.suggestedSolution,
-      employeeId: Number(payload.employeeId) || 4,
-      employeeName: payload.employeeName || 'John Doe',
+      employeeId: Number(payload.employeeId),
+      employeeName: payload.employeeName,
       assignedTo: null,
       assignedName: 'Unassigned',
       createdAt: new Date().toISOString(),
       messages: []
     };
-
-    db.tickets.unshift(newTicket);
-    saveMockDB(db);
+    tickets.unshift(newTicket);
+    localStorage.setItem('helpdesk_tickets', JSON.stringify(tickets));
     return newTicket;
   },
 
-  // Update Status / Assign Ticket
+  // Update Status
   async updateTicketStatus(ticketId, status, staffId = null, staffName = null) {
     try {
       const res = await fetch(`${API_BASE_URL}/tickets/${ticketId}/status`, {
@@ -272,21 +215,21 @@ const API = {
       if (res.ok) return await res.json();
     } catch (e) {}
 
-    const db = getMockDB();
-    const ticket = db.tickets.find(t => t.id === Number(ticketId));
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    const ticket = tickets.find(t => t.id === Number(ticketId));
     if (ticket) {
       ticket.status = status;
       if (staffId) {
         ticket.assignedTo = staffId;
-        ticket.assignedName = staffName || 'IT Support';
+        ticket.assignedName = staffName;
       }
-      saveMockDB(db);
+      localStorage.setItem('helpdesk_tickets', JSON.stringify(tickets));
       return ticket;
     }
     return null;
   },
 
-  // Add Message to Ticket
+  // Add Message
   async addMessage(ticketId, senderId, senderName, messageText) {
     try {
       const res = await fetch(`${API_BASE_URL}/tickets/${ticketId}/messages`, {
@@ -297,8 +240,8 @@ const API = {
       if (res.ok) return await res.json();
     } catch (e) {}
 
-    const db = getMockDB();
-    const ticket = db.tickets.find(t => t.id === Number(ticketId));
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    const ticket = tickets.find(t => t.id === Number(ticketId));
     if (ticket) {
       if (!ticket.messages) ticket.messages = [];
       const msg = {
@@ -309,13 +252,13 @@ const API = {
         createdAt: new Date().toISOString()
       };
       ticket.messages.push(msg);
-      saveMockDB(db);
+      localStorage.setItem('helpdesk_tickets', JSON.stringify(tickets));
       return msg;
     }
     return null;
   },
 
-  // Add Resolution & Mark Resolved
+  // Resolve Ticket
   async resolveTicket(ticketId, staffId, resolutionText) {
     try {
       const res = await fetch(`${API_BASE_URL}/tickets/${ticketId}/resolve`, {
@@ -326,45 +269,38 @@ const API = {
       if (res.ok) return await res.json();
     } catch (e) {}
 
-    const db = getMockDB();
-    const ticket = db.tickets.find(t => t.id === Number(ticketId));
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    const ticket = tickets.find(t => t.id === Number(ticketId));
     if (ticket) {
       ticket.status = 'RESOLVED';
       ticket.resolution = resolutionText;
-      saveMockDB(db);
+      localStorage.setItem('helpdesk_tickets', JSON.stringify(tickets));
       return ticket;
     }
     return null;
   },
 
-  // Get Admin Statistics
+  // Admin Stats
   async getAdminStats() {
     try {
       const res = await fetch(`${API_BASE_URL}/admin/stats`);
       if (res.ok) return await res.json();
     } catch (e) {}
 
-    const db = getMockDB();
-    const total = db.tickets.length;
-    const open = db.tickets.filter(t => t.status === 'OPEN').length;
-    const inProgress = db.tickets.filter(t => t.status === 'IN_PROGRESS').length;
-    const resolved = db.tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
+    const tickets = JSON.parse(localStorage.getItem('helpdesk_tickets')) || [];
+    const total = tickets.length;
+    const open = tickets.filter(t => t.status === 'OPEN').length;
+    const inProgress = tickets.filter(t => t.status === 'IN_PROGRESS').length;
+    const resolved = tickets.filter(t => t.status === 'RESOLVED' || t.status === 'CLOSED').length;
 
     const categories = { NETWORK: 0, HARDWARE: 0, SOFTWARE: 0, ACCESS: 0 };
     const priorities = { LOW: 0, MEDIUM: 0, HIGH: 0 };
 
-    db.tickets.forEach(t => {
+    tickets.forEach(t => {
       if (categories[t.category] !== undefined) categories[t.category]++;
       if (priorities[t.priority] !== undefined) priorities[t.priority]++;
     });
 
-    return {
-      total,
-      open,
-      inProgress,
-      resolved,
-      categories,
-      priorities
-    };
+    return { total, open, inProgress, resolved, categories, priorities };
   }
 };

@@ -3,148 +3,155 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Employee Portal | AI IT Helpdesk</title>
+  <title>Employee Workspace | AI IT Support</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <!-- Top Navigation -->
+  <!-- Apple Top Navigation -->
   <nav class="navbar">
     <a href="employee-dashboard.html" class="brand">
-      <div class="brand-icon">🤖</div>
+      <div class="brand-icon"></div>
       <span>Helpdesk AI</span>
     </a>
-    <div class="nav-links">
-      <div class="user-badge">
-        <div class="user-avatar" id="navbar-user-avatar">E</div>
-        <span id="navbar-user-name" style="font-weight: 600;">Employee</span>
-        <span style="color: var(--text-muted); font-size: 0.75rem;">(Employee)</span>
+    <div class="nav-actions">
+      <div class="user-profile-capsule">
+        <div class="user-avatar-circle" id="navbar-user-avatar">E</div>
+        <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">Employee</span>
+        <span style="color: var(--text-secondary); font-size: 0.75rem;">(Employee)</span>
       </div>
-      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+      <button onclick="Auth.logout()" class="btn btn-secondary btn-sm">
         Sign Out
       </button>
     </div>
   </nav>
 
   <div class="container">
-    <!-- Welcome Header -->
-    <div style="margin-bottom: 1.75rem;">
-      <h2>Employee IT Service Portal</h2>
-      <p>Submit a technical problem to get instant AI diagnostic recommendations and create an IT ticket.</p>
+    <!-- Header with Dynamic Greeting -->
+    <div style="margin-bottom: 2rem;">
+      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;">Service & Incident Workspace</h2>
+      <p>Report technical incidents to receive real-time AI diagnostic guidance and track support tickets.</p>
     </div>
 
-    <!-- Stats Grid -->
+    <!-- Apple KPI Stats Grid -->
     <div class="stats-grid">
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
-          <h4>My Total Tickets</h4>
+          <h4>Total Reported</h4>
           <div class="stat-value" id="stat-total">0</div>
         </div>
-        <div class="stat-icon">📋</div>
+        <div class="stat-icon-wrapper" style="color: var(--apple-blue);">📋</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
-          <h4>Open / Pending</h4>
-          <div class="stat-value" style="color: #60a5fa;" id="stat-open">0</div>
+          <h4>Awaiting Triage</h4>
+          <div class="stat-value" style="color: #5ac8fa;" id="stat-open">0</div>
         </div>
-        <div class="stat-icon" style="color: #60a5fa;">⏳</div>
+        <div class="stat-icon-wrapper" style="color: #5ac8fa;">⏳</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
           <h4>In Progress</h4>
-          <div class="stat-value" style="color: #fbbf24;" id="stat-progress">0</div>
+          <div class="stat-value" style="color: #ffd60a;" id="stat-progress">0</div>
         </div>
-        <div class="stat-icon" style="color: #fbbf24;">⚡</div>
+        <div class="stat-icon-wrapper" style="color: #ffd60a;">⚡</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-widget">
         <div class="stat-info">
           <h4>Resolved</h4>
-          <div class="stat-value" style="color: #34d399;" id="stat-resolved">0</div>
+          <div class="stat-value" style="color: #30d158;" id="stat-resolved">0</div>
         </div>
-        <div class="stat-icon" style="color: #34d399;">✅</div>
+        <div class="stat-icon-wrapper" style="color: #30d158;">✅</div>
       </div>
     </div>
 
-    <!-- Main Content Layout (Form + AI Preview) -->
+    <!-- Main Problem Reporting Studio Layout -->
     <div class="grid-2col">
       
-      <!-- Submit Problem Card -->
-      <div class="table-card" style="padding: 1.5rem;">
-        <h3 style="margin-bottom: 0.35rem; font-size: 1.2rem;">Report a Technical Problem</h3>
-        <p style="margin-bottom: 1.25rem; font-size: 0.875rem;">Our intelligent engine will analyze your problem description in real-time.</p>
+      <!-- Incident Submission Card -->
+      <div class="glass-card" style="padding: clamp(1.5rem, 4vw, 2.25rem);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+          <div>
+            <h3 style="font-size: 1.25rem;">Report a Problem</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">Describe the issue for instant diagnostic analysis</p>
+          </div>
+          <span class="ai-engine-pill">AI Assisted</span>
+        </div>
 
         <form id="create-ticket-form">
           <div class="form-group">
             <label for="problem-title">Issue Summary / Title</label>
-            <input type="text" id="problem-title" class="form-control" placeholder="e.g. Wi-Fi not connecting in 2nd floor conference room" required maxlength="150">
+            <input type="text" id="problem-title" class="form-control" placeholder="e.g. Wi-Fi dropping connection in Room 2B" required maxlength="150">
           </div>
 
           <div class="form-group">
             <label for="problem-desc">Detailed Problem Description</label>
-            <textarea id="problem-desc" class="form-control" placeholder="Describe what happened, any error messages, or what you were doing..." required maxlength="2000"></textarea>
+            <textarea id="problem-desc" class="form-control" placeholder="Describe symptoms, affected apps, error codes, or troubleshooting attempted..." required maxlength="2000"></textarea>
           </div>
 
-          <button type="submit" id="submit-btn" class="btn btn-primary" style="margin-top: 0.5rem; width: 100%;">
-            Submit Ticket
+          <button type="submit" id="submit-btn" class="btn btn-primary btn-block" style="margin-top: 0.75rem;">
+            Submit Support Ticket
           </button>
         </form>
       </div>
 
-      <!-- Live AI Diagnostic Advisor Card -->
-      <div class="ai-preview-card">
-        <div class="ai-header">
-          <div class="ai-badge-title">
-            <span>✨ AI Classification & Advice</span>
+      <!-- Live AI Diagnostic Advisor Studio -->
+      <div class="ai-studio-card">
+        <div class="ai-studio-header">
+          <div class="ai-engine-pill">
+            <span>✨ AI Real-Time Diagnostic</span>
           </div>
-          <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd;">Real-Time</span>
+          <span class="badge badge-open">Active</span>
         </div>
 
-        <div class="ai-tags">
-          <div class="ai-tag">
-            <span>Category:</span>
+        <div class="ai-chip-group">
+          <div class="ai-chip">
+            <span style="color: var(--text-secondary);">Category:</span>
             <strong id="ai-category" style="color: #fff;">Ready</strong>
           </div>
-          <div class="ai-tag priority-low" id="ai-priority">
+          <div class="ai-chip priority-low" id="ai-priority">
             Auto Priority
           </div>
         </div>
 
-        <div style="margin-bottom: 0.5rem; font-size: 0.775rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
-          Suggested Self-Troubleshooting Steps:
+        <div style="margin-bottom: 0.5rem; font-size: 0.775rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+          Automated First-Level Advice:
         </div>
-        <div class="ai-solution-box" id="ai-solution">
-          Type a brief description of your technical issue to see instant AI troubleshooting advice.
+        <div class="ai-solution-terminal" id="ai-solution">
+          Type a description of your issue on the left to see live AI problem categorization and immediate troubleshooting instructions.
         </div>
       </div>
     </div>
 
-    <!-- My Tickets Table (Responsive Scroll Container) -->
-    <div class="table-card">
-      <div class="table-header">
-        <h3 style="font-size: 1.15rem;">My Support Tickets</h3>
-        <span style="font-size: 0.85rem; color: var(--text-muted);">Track your recent incident submissions</span>
+    <!-- My Tickets Table -->
+    <div class="glass-card">
+      <div style="padding: 1.25rem 1.75rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--apple-glass-border); flex-wrap: wrap; gap: 0.75rem;">
+        <div>
+          <h3 style="font-size: 1.15rem;">My Incident History</h3>
+          <p style="font-size: 0.85rem;">Track recent support tickets and staff responses</p>
+        </div>
       </div>
 
       <div class="table-responsive">
-        <table class="custom-table">
+        <table class="apple-table">
           <thead>
             <tr>
-              <th>Ticket ID</th>
-              <th>Title</th>
+              <th>Ticket</th>
+              <th>Subject</th>
               <th>Category</th>
               <th>Priority</th>
               <th>Status</th>
-              <th>Created</th>
+              <th>Date</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="my-tickets-tbody">
-            <!-- Dynamically populated via employee.js -->
+            <!-- Populated by employee.js -->
           </tbody>
         </table>
       </div>
 
-      <div id="empty-state" style="display: none; text-align: center; padding: 2.5rem; color: var(--text-muted);">
-        You have not submitted any support tickets yet. Use the form above to submit your first issue.
+      <div id="empty-state" style="display: none; text-align: center; padding: 3rem; color: var(--text-secondary);">
+        No support tickets found. Use the studio above to report an issue.
       </div>
     </div>
   </div>
