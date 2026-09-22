@@ -4,6 +4,7 @@ import com.helpdesk.ai.AIService;
 import com.helpdesk.dto.*;
 import com.helpdesk.model.*;
 import com.helpdesk.repository.*;
+import com.helpdesk.security.InputSanitizer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,16 +22,18 @@ public class TicketService {
     private final TicketMessageRepository messageRepository;
     private final ResolutionRepository resolutionRepository;
     private final AIService aiService;
+    private final InputSanitizer inputSanitizer;
 
     @Autowired
     public TicketService(TicketRepository ticketRepository, UserRepository userRepository,
                          TicketMessageRepository messageRepository, ResolutionRepository resolutionRepository,
-                         AIService aiService) {
+                         AIService aiService, InputSanitizer inputSanitizer) {
         this.ticketRepository = ticketRepository;
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
         this.resolutionRepository = resolutionRepository;
         this.aiService = aiService;
+        this.inputSanitizer = inputSanitizer;
     }
 
     @Transactional(readOnly = true)
@@ -51,21 +54,31 @@ public class TicketService {
 
     @Transactional
     public TicketResponseDTO createTicket(TicketRequest request) {
+        if (request.getTitle() == null || request.getTitle().trim().isEmpty()) {
+            throw new IllegalArgumentException("Problem title cannot be empty.");
+        }
+        if (request.getDescription() == null || request.getDescription().trim().isEmpty()) {
+            throw new IllegalArgumentException("Problem description cannot be empty.");
+        }
+
         User employee = userRepository.findById(request.getEmployeeId())
                 .orElseThrow(() -> new IllegalArgumentException("Employee user not found with ID: " + request.getEmployeeId()));
 
+        String sanitizedTitle = inputSanitizer.sanitizeText(request.getTitle());
+        String sanitizedDesc = inputSanitizer.sanitizeText(request.getDescription());
+
         Ticket ticket = new Ticket();
-        ticket.setTitle(request.getTitle());
-        ticket.setDescription(request.getDescription());
+        ticket.setTitle(sanitizedTitle);
+        ticket.setDescription(sanitizedDesc);
         ticket.setEmployee(employee);
 
         // Run AI classification if not explicitly provided
         if (request.getCategory() != null && request.getPriority() != null) {
             ticket.setCategory(request.getCategory());
             ticket.setPriority(request.getPriority());
-            ticket.setSuggestedSolution(request.getSuggestedSolution());
+            ticket.setSuggestedSolution(inputSanitizer.sanitizeText(request.getSuggestedSolution()));
         } else {
-            AIAnalysisDTO aiResult = aiService.analyze(request.getDescription());
+            AIAnalysisDTO aiResult = aiService.analyze(sanitizedDesc);
             ticket.setCategory(aiResult.getCategory());
             ticket.setPriority(aiResult.getPriority());
             ticket.setSuggestedSolution(aiResult.getSuggestedSolution());
@@ -96,27 +109,37 @@ public class TicketService {
 
     @Transactional
     public TicketResponseDTO.MessageDTO addMessage(Long ticketId, MessageRequest request) {
+        if (request.getMessage() == null || request.getMessage().trim().isEmpty()) {
+            throw new IllegalArgumentException("Message text cannot be empty.");
+        }
+
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new IllegalArgumentException("Ticket not found with ID: " + ticketId));
         User sender = userRepository.findById(request.getSenderId())
                 .orElseThrow(() -> new IllegalArgumentException("Sender user not found with ID: " + request.getSenderId()));
 
-        TicketMessage message = new TicketMessage(ticket, sender, request.getMessage());
+        String sanitizedMsg = inputSanitizer.sanitizeText(request.getMessage());
+        TicketMessage message = new TicketMessage(ticket, sender, sanitizedMsg);
         TicketMessage saved = messageRepository.save(message);
         return new TicketResponseDTO.MessageDTO(saved);
     }
 
     @Transactional
     public TicketResponseDTO resolveTicket(Long ticketId, ResolutionRequest request) {
+        if (request.getResolution() == null || request.getResolution().trim().isEmpty()) {
+            throw new IllegalArgumentException("Resolution description cannot be empty.");
+        }
+
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new IllegalArgumentException("Ticket not found with ID: " + ticketId));
         User staff = userRepository.findById(request.getStaffId())
                 .orElseThrow(() -> new IllegalArgumentException("Staff user not found with ID: " + request.getStaffId()));
 
+        String sanitizedResolution = inputSanitizer.sanitizeText(request.getResolution());
         Resolution resolution = resolutionRepository.findByTicketId(ticketId).orElse(new Resolution());
         resolution.setTicket(ticket);
         resolution.setResolvedBy(staff);
-        resolution.setResolutionText(request.getResolution());
+        resolution.setResolutionText(sanitizedResolution);
         resolution.setResolvedAt(LocalDateTime.now());
         resolutionRepository.save(resolution);
 

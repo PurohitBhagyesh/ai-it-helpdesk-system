@@ -1,7 +1,50 @@
-# Security Policy & Credential Management Guide
+# Security Policy & Hardening Guide
 
 ## 🔒 Security Overview
-The **AI-Based IT Support & Helpdesk System** is designed with multi-layered security principles covering role-based access control (RBAC), environment-driven credential injection, input sanitization, and database isolation.
+The **AI-Based IT Support & Helpdesk System** is hardened with defense-in-depth security principles covering Rate Limiting, SQL Injection & XSS sanitization, OWASP HTTP response security headers, password hashing, role-based access control (RBAC), and multi-device adaptive layout design.
+
+---
+
+## 🛡️ Key Security Features Implemented
+
+### 1. ⏱️ Rate Limiting (DoS & Brute-Force Prevention)
+* **Component:** `RateLimitFilter.java`
+* **Mechanism:** Token bucket / sliding-window tracking per client IP address.
+* **Limits:** Configurable rate limit (default `120 requests/minute`) via `app.security.rate-limit.max-requests-per-minute`.
+* **Headers Emitted:**
+  * `X-RateLimit-Limit: 120`
+  * `X-RateLimit-Remaining: 119`
+* **Response on Violation:** Returns HTTP `429 Too Many Requests` with a `Retry-After: 60` header.
+
+### 2. 💉 SQL Injection & XSS Sanitization
+* **Component:** `InputSanitizer.java`
+* **Mechanisms:**
+  * **PreparedStatements:** All Spring Data JPA / Hibernate queries use parameterized PreparedStatements preventing SQL injection attacks.
+  * **Input Sanitization:** Strips dangerous script tags (`<script>`, `javascript:`, `onerror=`), control characters, and SQL meta-characters from problem titles, descriptions, messages, and resolution reports prior to persistence.
+  * **Frontend Escaping:** All dynamic text elements use `escapeHtml()` before rendering to the DOM.
+
+### 3. 🛡️ OWASP Recommended HTTP Security Headers
+* **Component:** `SecurityHeadersFilter.java`
+* **Applied to every response:**
+  * `X-Content-Type-Options: nosniff` (prevents MIME-type sniffing)
+  * `X-Frame-Options: SAMEORIGIN` (prevents Clickjacking attacks)
+  * `X-XSS-Protection: 1; mode=block` (browser-level XSS filter)
+  * `Referrer-Policy: strict-origin-when-cross-origin`
+  * `Content-Security-Policy: default-src 'self' ...`
+
+### 4. 🔑 Cryptographic Password Hashing
+* **Component:** `PasswordEncoder.java`
+* **Algorithm:** SHA-256 with static application salt.
+* Supports both secure hashed passwords and safe fallback verification for initial academic demo accounts.
+
+### 5. 🛡️ Secure Global Exception Handler
+* **Component:** `GlobalExceptionHandler.java`
+* Catches all unhandled server exceptions and returns standardized, sanitized JSON error responses without exposing server stack traces, database schemas, or filesystem paths.
+
+### 6. 📱 Universal Multi-Device Responsive UI
+* Fluid typography using CSS `clamp()` and auto-fit grid layouts.
+* Responsive table wrappers with smooth touch scrolling for mobile and tablet screens.
+* Minimum touch targets ($\ge 44\text{px}$) on all buttons, forms, and navigation links.
 
 ---
 
@@ -10,7 +53,7 @@ The **AI-Based IT Support & Helpdesk System** is designed with multi-layered sec
 > [!WARNING]
 > The following credentials are provided strictly for **local development, academic testing, and evaluator demonstration**. For production deployment, you MUST override these credentials using environment variables.
 
-| Role | Username / Email | Default Demo Password | Access Scope |
+| Role | Username / Email | Default Password | Access Scope |
 | :--- | :--- | :--- | :--- |
 | **👑 Admin** | `admin@helpdesk.com` | `admin123` | Full system analytics, all tickets, system oversight |
 | **🛠️ IT Staff** | `alex.staff@helpdesk.com` | `staff123` | Ticket queue claim, status management, resolutions |
@@ -20,53 +63,23 @@ The **AI-Based IT Support & Helpdesk System** is designed with multi-layered sec
 
 ---
 
-## 🛡️ Production Credential Configuration
+## ⚙️ Production Environment Variables (`.env`)
 
-To override the default admin account and database credentials without modifying source code:
+```bash
+# Server & Database
+SERVER_PORT=8080
+DB_URL=jdbc:mysql://your-prod-db-host:3306/it_helpdesk_db
+DB_USERNAME=prod_db_user
+DB_PASSWORD=SuperSecretStrongPassword123!
 
-1. Copy `.env.example` to `.env`:
-   ```bash
-   cp .env.example .env
-   ```
-2. Set secure production values:
-   ```bash
-   # Production Database
-   DB_URL=jdbc:mysql://your-prod-db-host:3306/it_helpdesk_db
-   DB_USERNAME=prod_db_user
-   DB_PASSWORD=SuperSecretStrongPassword123!
-
-   # Production Initial Administrator
-   ADMIN_NAME="Enterprise IT Admin"
-   ADMIN_EMAIL="security.admin@enterprise.org"
-   ADMIN_PASSWORD="StrongEnterprisePassword#2026"
-   ADMIN_DEPT="Information Security Operations"
-   ```
-3. Run the application passing the environment variables:
-   ```bash
-   ADMIN_EMAIL="myadmin@corp.com" ADMIN_PASSWORD="SafePassword#1" ./mvnw spring-boot:run
-   ```
-
----
-
-## 🛡️ Key Security Features Implemented
-
-### 1. Role-Based Access Control (RBAC)
-* Endpoints and UI views strictly check user roles: `EMPLOYEE`, `IT_STAFF`, and `ADMIN`.
-* Employees can only view and query their own submitted tickets (`/api/tickets?employeeId={id}`).
-* Staff and Admin users have permission to view unassigned queues, claim tickets, and submit resolution reports.
-
-### 2. Secret Protection & `.gitignore`
-* All `.env`, `*.key`, `*.pem`, `*.jks`, `credentials.json`, and database credential backups are strictly ignored by `.gitignore`.
-* No production secrets or API keys are committed to the public Git tree.
-
-### 3. XSS and SQL Injection Mitigation
-* **Backend:** Spring Data JPA / Hibernate utilizes parameterized PreparedStatements for all database queries, preventing SQL injection vulnerabilities.
-* **Frontend:** All dynamically rendered text elements (titles, descriptions, user names, chat messages) use HTML character escaping (`escapeHtml()`) before DOM insertion.
-
-### 4. CORS Configuration
-* Cross-Origin Resource Sharing is centrally managed in `CorsConfig.java` to restrict allowed origins and HTTP verbs.
+# Production Admin Override
+ADMIN_NAME="Enterprise IT Admin"
+ADMIN_EMAIL="security.admin@enterprise.org"
+ADMIN_PASSWORD="StrongEnterprisePassword#2026"
+ADMIN_DEPT="Information Security Operations"
+```
 
 ---
 
 ## 🚨 Reporting a Vulnerability
-If you discover a security vulnerability within this project, please open a private GitHub security advisory or contact the project maintainer directly at: `purohitunofficialbhagyesh@gmail.com`.
+If you discover a security vulnerability within this project, please contact: `purohitunofficialbhagyesh@gmail.com`.

@@ -27,7 +27,7 @@
 
   <div class="container">
     <!-- Header -->
-    <div style="margin-bottom: 2rem;">
+    <div style="margin-bottom: 1.75rem;">
       <h2>Administrator Analytics & Overview</h2>
       <p>Monitor organizational IT support performance, AI classification metrics, and ticket resolution statistics.</p>
     </div>
@@ -71,13 +71,13 @@
       </div>
     </div>
 
-    <!-- Analytics Breakdown Grid -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+    <!-- Analytics Breakdown Grid (Responsive 2-col) -->
+    <div class="grid-equal-2col">
       
       <!-- Category Breakdown Card -->
-      <div class="table-card" style="padding: 1.75rem;">
-        <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Tickets by AI Category</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      <div class="table-card" style="padding: 1.5rem;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Tickets by AI Category</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
           Distribution of reported issues across core IT domains
         </p>
 
@@ -87,9 +87,9 @@
       </div>
 
       <!-- Priority Breakdown Card -->
-      <div class="table-card" style="padding: 1.75rem;">
-        <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Tickets by Priority Level</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+      <div class="table-card" style="padding: 1.5rem;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.35rem;">Tickets by Priority Level</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
           Severity levels determined by automated AI analysis
         </p>
 
@@ -109,23 +109,25 @@
         </div>
       </div>
 
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Employee</th>
-            <th>Assignee</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="all-tickets-tbody">
-          <!-- Populated by admin.js -->
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Employee</th>
+              <th>Assignee</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="all-tickets-tbody">
+            <!-- Populated by admin.js -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

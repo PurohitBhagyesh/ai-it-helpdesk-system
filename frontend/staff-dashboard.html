@@ -27,7 +27,7 @@
 
   <div class="container">
     <!-- Header -->
-    <div style="margin-bottom: 2rem;">
+    <div style="margin-bottom: 1.75rem;">
       <h2>IT Support Engineering Queue</h2>
       <p>Manage incoming incident tickets, claim unassigned issues, and document final technical resolutions.</p>
     </div>
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Unassigned Tickets Queue -->
-    <div class="table-card" style="margin-bottom: 2.5rem;">
+    <div class="table-card" style="margin-bottom: 2rem;">
       <div class="table-header">
         <div>
           <h3 style="font-size: 1.15rem;">Incoming Unassigned Tickets</h3>
@@ -66,21 +66,23 @@
         </div>
       </div>
 
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>AI Category</th>
-            <th>Priority</th>
-            <th>Submitted By</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="unassigned-tickets-tbody">
-          <!-- Dynamically populated via staff.js -->
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>AI Category</th>
+              <th>Priority</th>
+              <th>Submitted By</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="unassigned-tickets-tbody">
+            <!-- Dynamically populated via staff.js -->
+          </tbody>
+        </table>
+      </div>
     </div>
 
     <!-- My Assigned Tickets Table -->
@@ -92,21 +94,23 @@
         </div>
       </div>
 
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="assigned-tickets-tbody">
-          <!-- Dynamically populated via staff.js -->
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="assigned-tickets-tbody">
+            <!-- Dynamically populated via staff.js -->
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 

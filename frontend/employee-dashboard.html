@@ -27,7 +27,7 @@
 
   <div class="container">
     <!-- Welcome Header -->
-    <div style="margin-bottom: 2rem;">
+    <div style="margin-bottom: 1.75rem;">
       <h2>Employee IT Service Portal</h2>
       <p>Submit a technical problem to get instant AI diagnostic recommendations and create an IT ticket.</p>
     </div>
@@ -65,25 +65,25 @@
     </div>
 
     <!-- Main Content Layout (Form + AI Preview) -->
-    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+    <div class="grid-2col">
       
       <!-- Submit Problem Card -->
-      <div class="table-card" style="padding: 1.75rem;">
-        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Report a Technical Problem</h3>
-        <p style="margin-bottom: 1.25rem; font-size: 0.9rem;">Our intelligent engine will analyze your problem description in real-time.</p>
+      <div class="table-card" style="padding: 1.5rem;">
+        <h3 style="margin-bottom: 0.35rem; font-size: 1.2rem;">Report a Technical Problem</h3>
+        <p style="margin-bottom: 1.25rem; font-size: 0.875rem;">Our intelligent engine will analyze your problem description in real-time.</p>
 
         <form id="create-ticket-form">
           <div class="form-group">
             <label for="problem-title">Issue Summary / Title</label>
-            <input type="text" id="problem-title" class="form-control" placeholder="e.g. Wi-Fi not connecting in 2nd floor conference room" required>
+            <input type="text" id="problem-title" class="form-control" placeholder="e.g. Wi-Fi not connecting in 2nd floor conference room" required maxlength="150">
           </div>
 
           <div class="form-group">
             <label for="problem-desc">Detailed Problem Description</label>
-            <textarea id="problem-desc" class="form-control" placeholder="Describe what happened, any error messages, or what you were doing..." required></textarea>
+            <textarea id="problem-desc" class="form-control" placeholder="Describe what happened, any error messages, or what you were doing..." required maxlength="2000"></textarea>
           </div>
 
-          <button type="submit" id="submit-btn" class="btn btn-primary" style="margin-top: 0.5rem;">
+          <button type="submit" id="submit-btn" class="btn btn-primary" style="margin-top: 0.5rem; width: 100%;">
             Submit Ticket
           </button>
         </form>
@@ -108,7 +108,7 @@
           </div>
         </div>
 
-        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+        <div style="margin-bottom: 0.5rem; font-size: 0.775rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
           Suggested Self-Troubleshooting Steps:
         </div>
         <div class="ai-solution-box" id="ai-solution">
@@ -117,29 +117,31 @@
       </div>
     </div>
 
-    <!-- My Tickets Table -->
+    <!-- My Tickets Table (Responsive Scroll Container) -->
     <div class="table-card">
       <div class="table-header">
         <h3 style="font-size: 1.15rem;">My Support Tickets</h3>
         <span style="font-size: 0.85rem; color: var(--text-muted);">Track your recent incident submissions</span>
       </div>
 
-      <table class="custom-table">
-        <thead>
-          <tr>
-            <th>Ticket ID</th>
-            <th>Title</th>
-            <th>Category</th>
-            <th>Priority</th>
-            <th>Status</th>
-            <th>Created</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="my-tickets-tbody">
-          <!-- Dynamically populated via employee.js -->
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="custom-table">
+          <thead>
+            <tr>
+              <th>Ticket ID</th>
+              <th>Title</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="my-tickets-tbody">
+            <!-- Dynamically populated via employee.js -->
+          </tbody>
+        </table>
+      </div>
 
       <div id="empty-state" style="display: none; text-align: center; padding: 2.5rem; color: var(--text-muted);">
         You have not submitted any support tickets yet. Use the form above to submit your first issue.
