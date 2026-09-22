@@ -104,6 +104,12 @@ All major features, security enhancements, architecture implementations, UI over
 * Enhanced [`frontend/css/style.css`](frontend/css/style.css) with Apple superellipse border radii, multi-point ambient liquid radiance, elevated table cards, and fluid responsive clamps.
 * Synchronized `gh-pages` branch for immediate live deployment.
 
+### Commit 20: `3b7d51a` — HealthController, Enterprise Re-Registration & Cloudflare Tunnel
+* Added [`HealthController.java`](backend/src/main/java/com/helpdesk/controller/HealthController.java) mapping `GET /api/health` with rate-limit bypass.
+* Streamlined [`EnterpriseService.java`](backend/src/main/java/com/helpdesk/service/EnterpriseService.java) to automatically clean up unverified enterprise records upon re-registration attempts.
+* Enhanced [`frontend/js/api.js`](frontend/js/api.js) fallback simulation across multi-cloud and GitHub Pages environments.
+* Installed standalone Apple Silicon [`cloudflared`](~/.local/bin/cloudflared) CLI for zero-cost secure HTTPS backend tunneling.
+
 ---
 
 ## 🌐 Live Production Links
