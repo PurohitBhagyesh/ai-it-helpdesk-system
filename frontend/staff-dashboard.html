@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Staff Portal | AI IT Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="staff-dashboard.html" class="brand">
+      <div class="brand-icon">🛠️</div>
+      <span>Helpdesk AI Staff</span>
+    </a>
+    <div class="nav-links">
+      <div class="user-badge">
+        <div class="user-avatar" id="navbar-user-avatar" style="background: var(--info);">S</div>
+        <span id="navbar-user-name" style="font-weight: 600;">IT Engineer</span>
+        <span style="color: var(--text-muted); font-size: 0.75rem;">(IT Staff)</span>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div style="margin-bottom: 2rem;">
+      <h2>IT Support Engineering Queue</h2>
+      <p>Manage incoming incident tickets, claim unassigned issues, and document final technical resolutions.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Unassigned In Queue</h4>
+          <div class="stat-value" style="color: #60a5fa;" id="staff-open-count">0</div>
+        </div>
+        <div class="stat-icon">📥</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>My Active Assigned</h4>
+          <div class="stat-value" style="color: #fbbf24;" id="staff-assigned-count">0</div>
+        </div>
+        <div class="stat-icon">🔧</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Resolved</h4>
+          <div class="stat-value" style="color: #34d399;" id="staff-resolved-count">0</div>
+        </div>
+        <div class="stat-icon">🎉</div>
+      </div>
+    </div>
+
+    <!-- Unassigned Tickets Queue -->
+    <div class="table-card" style="margin-bottom: 2.5rem;">
+      <div class="table-header">
+        <div>
+          <h3 style="font-size: 1.15rem;">Incoming Unassigned Tickets</h3>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Tickets classified by AI waiting for staff assignment</span>
+        </div>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>AI Category</th>
+            <th>Priority</th>
+            <th>Submitted By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="unassigned-tickets-tbody">
+          <!-- Dynamically populated via staff.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- My Assigned Tickets Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <h3 style="font-size: 1.15rem;">My Assigned Tickets</h3>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Incidents you are currently resolving</span>
+        </div>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="assigned-tickets-tbody">
+          <!-- Dynamically populated via staff.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/staff.js"></script>
+</body>
+</html>

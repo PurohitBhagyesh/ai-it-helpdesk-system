@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | AI IT Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="admin-dashboard.html" class="brand">
+      <div class="brand-icon">👑</div>
+      <span>Helpdesk AI Analytics</span>
+    </a>
+    <div class="nav-links">
+      <div class="user-badge">
+        <div class="user-avatar" id="navbar-user-avatar" style="background: var(--danger);">A</div>
+        <span id="navbar-user-name" style="font-weight: 600;">Administrator</span>
+        <span style="color: var(--text-muted); font-size: 0.75rem;">(Admin)</span>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div style="margin-bottom: 2rem;">
+      <h2>Administrator Analytics & Overview</h2>
+      <p>Monitor organizational IT support performance, AI classification metrics, and ticket resolution statistics.</p>
+    </div>
+
+    <!-- Stats KPI Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Total Incident Volume</h4>
+          <div class="stat-value" id="admin-total-tickets">0</div>
+        </div>
+        <div class="stat-icon">📊</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Open / Pending</h4>
+          <div class="stat-value" style="color: #60a5fa;" id="admin-open-tickets">0</div>
+        </div>
+        <div class="stat-icon">⏳</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>In Progress</h4>
+          <div class="stat-value" style="color: #fbbf24;" id="admin-progress-tickets">0</div>
+        </div>
+        <div class="stat-icon">⚡</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Resolved Total</h4>
+          <div class="stat-value" style="color: #34d399;" id="admin-resolved-tickets">0</div>
+        </div>
+        <div class="stat-icon">✅</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Resolution Rate</h4>
+          <div class="stat-value" style="color: #a78bfa;" id="admin-resolution-rate">0%</div>
+        </div>
+        <div class="stat-icon">🎯</div>
+      </div>
+    </div>
+
+    <!-- Analytics Breakdown Grid -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+      
+      <!-- Category Breakdown Card -->
+      <div class="table-card" style="padding: 1.75rem;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Tickets by AI Category</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          Distribution of reported issues across core IT domains
+        </p>
+
+        <div id="category-bars">
+          <!-- Populated by admin.js -->
+        </div>
+      </div>
+
+      <!-- Priority Breakdown Card -->
+      <div class="table-card" style="padding: 1.75rem;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 0.5rem;">Tickets by Priority Level</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+          Severity levels determined by automated AI analysis
+        </p>
+
+        <div id="priority-bars">
+          <!-- Populated by admin.js -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Master Tickets Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <h3 style="font-size: 1.15rem;">All System Tickets</h3>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">Real-time monitoring across all company departments</span>
+        </div>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Employee</th>
+            <th>Assignee</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="all-tickets-tbody">
+          <!-- Populated by admin.js -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

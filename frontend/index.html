@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | AI IT Support & Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="auth-wrapper">
+    <div class="auth-card">
+      <div class="auth-header">
+        <div style="display: flex; justify-content: center; margin-bottom: 1rem;">
+          <div class="brand-icon" style="width: 48px; height: 48px; font-size: 1.5rem;">🤖</div>
+        </div>
+        <h2>IT Helpdesk <span>AI Portal</span></h2>
+        <p>Sign in to submit or manage internal IT support tickets</p>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="login-email">Corporate Email Address</label>
+          <input type="email" id="login-email" class="form-control" placeholder="name@company.com" required value="john.doe@company.com">
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" class="form-control" placeholder="••••••••" required value="user123">
+        </div>
+
+        <button type="submit" id="login-btn" class="btn btn-primary btn-block" style="margin-top: 1.5rem;">
+          Sign In to Portal
+        </button>
+      </form>
+
+      <!-- 1-Click Quick Demo Login Switcher -->
+      <div class="demo-accounts">
+        <div class="demo-title">Quick Demo Logins (1-Click)</div>
+        <div class="demo-buttons">
+          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('john.doe@company.com', 'user123', 'EMPLOYEE')">
+            👤 Employee
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('alex.staff@helpdesk.com', 'staff123', 'IT_STAFF')">
+            🛠️ IT Staff
+          </button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="quickLogin('admin@helpdesk.com', 'admin123', 'ADMIN')">
+            👑 Admin
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('login-email');
+    const passwordInput = document.getElementById('login-password');
+    const loginBtn = document.getElementById('login-btn');
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Authenticating...';
+
+      const res = await API.login(emailInput.value, passwordInput.value);
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Sign In to Portal';
+
+      if (res && res.user) {
+        Auth.setUser(res.user);
+        Auth.redirectByRole(res.user.role);
+      } else {
+        alert('Invalid email or password. Please try again.');
+      }
+    });
+
+    async function quickLogin(email, password, role) {
+      emailInput.value = email;
+      passwordInput.value = password;
+      const res = await API.login(email, password);
+      if (res && res.user) {
+        // Ensure role for mock convenience
+        res.user.role = role;
+        Auth.setUser(res.user);
+        Auth.redirectByRole(role);
+      }
+    }
+  </script>
+</body>
+</html>

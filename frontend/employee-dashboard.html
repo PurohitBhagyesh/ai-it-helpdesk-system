@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Portal | AI IT Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Top Navigation -->
+  <nav class="navbar">
+    <a href="employee-dashboard.html" class="brand">
+      <div class="brand-icon">🤖</div>
+      <span>Helpdesk AI</span>
+    </a>
+    <div class="nav-links">
+      <div class="user-badge">
+        <div class="user-avatar" id="navbar-user-avatar">E</div>
+        <span id="navbar-user-name" style="font-weight: 600;">Employee</span>
+        <span style="color: var(--text-muted); font-size: 0.75rem;">(Employee)</span>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Welcome Header -->
+    <div style="margin-bottom: 2rem;">
+      <h2>Employee IT Service Portal</h2>
+      <p>Submit a technical problem to get instant AI diagnostic recommendations and create an IT ticket.</p>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>My Total Tickets</h4>
+          <div class="stat-value" id="stat-total">0</div>
+        </div>
+        <div class="stat-icon">📋</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Open / Pending</h4>
+          <div class="stat-value" style="color: #60a5fa;" id="stat-open">0</div>
+        </div>
+        <div class="stat-icon" style="color: #60a5fa;">⏳</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>In Progress</h4>
+          <div class="stat-value" style="color: #fbbf24;" id="stat-progress">0</div>
+        </div>
+        <div class="stat-icon" style="color: #fbbf24;">⚡</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <h4>Resolved</h4>
+          <div class="stat-value" style="color: #34d399;" id="stat-resolved">0</div>
+        </div>
+        <div class="stat-icon" style="color: #34d399;">✅</div>
+      </div>
+    </div>
+
+    <!-- Main Content Layout (Form + AI Preview) -->
+    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1.5rem; margin-bottom: 2.5rem;">
+      
+      <!-- Submit Problem Card -->
+      <div class="table-card" style="padding: 1.75rem;">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.25rem;">Report a Technical Problem</h3>
+        <p style="margin-bottom: 1.25rem; font-size: 0.9rem;">Our intelligent engine will analyze your problem description in real-time.</p>
+
+        <form id="create-ticket-form">
+          <div class="form-group">
+            <label for="problem-title">Issue Summary / Title</label>
+            <input type="text" id="problem-title" class="form-control" placeholder="e.g. Wi-Fi not connecting in 2nd floor conference room" required>
+          </div>
+
+          <div class="form-group">
+            <label for="problem-desc">Detailed Problem Description</label>
+            <textarea id="problem-desc" class="form-control" placeholder="Describe what happened, any error messages, or what you were doing..." required></textarea>
+          </div>
+
+          <button type="submit" id="submit-btn" class="btn btn-primary" style="margin-top: 0.5rem;">
+            Submit Ticket
+          </button>
+        </form>
+      </div>
+
+      <!-- Live AI Diagnostic Advisor Card -->
+      <div class="ai-preview-card">
+        <div class="ai-header">
+          <div class="ai-badge-title">
+            <span>✨ AI Classification & Advice</span>
+          </div>
+          <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #93c5fd;">Real-Time</span>
+        </div>
+
+        <div class="ai-tags">
+          <div class="ai-tag">
+            <span>Category:</span>
+            <strong id="ai-category" style="color: #fff;">Ready</strong>
+          </div>
+          <div class="ai-tag priority-low" id="ai-priority">
+            Auto Priority
+          </div>
+        </div>
+
+        <div style="margin-bottom: 0.5rem; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+          Suggested Self-Troubleshooting Steps:
+        </div>
+        <div class="ai-solution-box" id="ai-solution">
+          Type a brief description of your technical issue to see instant AI troubleshooting advice.
+        </div>
+      </div>
+    </div>
+
+    <!-- My Tickets Table -->
+    <div class="table-card">
+      <div class="table-header">
+        <h3 style="font-size: 1.15rem;">My Support Tickets</h3>
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Track your recent incident submissions</span>
+      </div>
+
+      <table class="custom-table">
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="my-tickets-tbody">
+          <!-- Dynamically populated via employee.js -->
+        </tbody>
+      </table>
+
+      <div id="empty-state" style="display: none; text-align: center; padding: 2.5rem; color: var(--text-muted);">
+        You have not submitted any support tickets yet. Use the form above to submit your first issue.
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/employee.js"></script>
+</body>
+</html>
