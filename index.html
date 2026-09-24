@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Access Portal | AI IT Support & Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <div class="auth-split-wrapper">
+
+    <!-- Left Hero Branding Panel (Apple Style) -->
+    <div class="auth-hero-panel">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span>Helpdesk AI Enterprise</span>
+      </div>
+
+      <div>
+        <div
+          style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(0, 113, 227, 0.15); border: 1px solid rgba(0, 113, 227, 0.3); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 700; color: #60a5fa; margin-bottom: 1.25rem;">
+          <span>⚡ Next-Generation IT Operations</span>
+        </div>
+        <h1 style="margin-bottom: 1rem; line-height: 1.15;">
+          Intelligent IT Support,<br>Reimagined.
+        </h1>
+        <p style="font-size: 1.05rem; max-width: 480px; line-height: 1.6; margin-bottom: 2rem;">
+          Instant real-time problem triage, automated diagnostic solutions, and end-to-end incident lifecycle management
+          powered by natural language AI.
+        </p>
+
+        <div style="display: flex; gap: 1.5rem; color: var(--text-secondary); font-size: 0.875rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> Zero-Wait AI Triage
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> Admin-Governed Access
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="color: var(--apple-green);">✔</span> E2EE Encrypted Chat
+          </div>
+        </div>
+      </div>
+
+      <div style="font-size: 0.8rem; color: var(--text-tertiary);">
+        &copy; 2026 AI IT Helpdesk System. Enterprise Academic Platform.
+      </div>
+    </div>
+
+    <!-- Right Authentication Form Panel -->
+    <div class="auth-form-panel">
+      <div class="glass-card" style="width: 100%; max-width: 490px; padding: clamp(1.75rem, 4vw, 2.5rem);">
+
+        <!--  Main Top Slider Switcher -->
+        <div class="segmented-slider">
+          <button type="button" class="slider-tab active" id="tab-workforce" onclick="switchMainPortal('workforce')">
+            🏢 Company Sign In
+          </button>
+          <button type="button" class="slider-tab" id="tab-admin" onclick="switchMainPortal('admin')">
+            🛡️ Enterprise Admin
+          </button>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="auth-alert"
+          style="display: none; padding: 0.75rem 1rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 1.25rem;">
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- MODE 1: Company Workforce Sign In (Employee & IT Technician) -->
+        <!-- ========================================================================= -->
+        <div id="panel-workforce">
+          <div style="text-align: center; margin-bottom: 1.25rem;">
+            <div class="ai-tag" style="margin-bottom: 0.5rem; display: inline-flex;">Workforce Single Sign-On</div>
+            <h2 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Company Sign In</h2>
+            <p style="font-size: 0.85rem;">Sign in with your corporate account issued by your IT Administrator</p>
+          </div>
+
+          <form id="workforce-login-form">
+            <div class="form-group">
+              <label for="wf-email">Corporate Email Address</label>
+              <input type="email" id="wf-email" class="form-control" placeholder="user@company.corp" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+                <label for="wf-password" style="margin-bottom: 0;">Assigned Password</label>
+                <a href="#" onclick="alert('Accounts and passwords are exclusively provisioned and managed by your Systems Administrator. Please reach out to your IT department.'); return false;" style="font-size: 0.75rem; color: var(--text-link);">Forgot Password?</a>
+              </div>
+              <input type="password" id="wf-password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" id="wf-login-btn" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+              Sign In to Company Portal
+            </button>
+          </form>
+
+          <!-- Fast Demo Quick-Fill Identity Chips -->
+          <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--apple-glass-border);">
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Fast Quick-Fill Demo Identities:</div>
+            <div class="demo-identity-chips">
+              <button type="button" class="demo-chip" onclick="quickFillWorkforce('john.doe@company.com', 'employee123')">
+                👤 John Doe (Employee)
+              </button>
+              <button type="button" class="demo-chip" onclick="quickFillWorkforce('alex.staff@helpdesk.com', 'staff123')">
+                🛠️ Alex Support (IT Technician)
+              </button>
+              <button type="button" class="demo-chip" onclick="quickFillWorkforce('emily.davis@company.com', 'employee123')">
+                👤 Emily Davis (Employee)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- MODE 2: Enterprise Administrator (Passkey Sign In + Create Enterprise Wizard) -->
+        <!-- ========================================================================= -->
+        <div id="panel-admin" style="display: none;">
+
+          <!-- Sub Switcher: Admin Sign In vs Create Enterprise -->
+          <div class="sub-switcher">
+            <button type="button" class="sub-switch-btn active" id="sub-btn-signin" onclick="switchAdminSubView('signin')">
+              🔑 Admin Sign In
+            </button>
+            <button type="button" class="sub-switch-btn" id="sub-btn-create" onclick="switchAdminSubView('create')">
+              ✨ Create Enterprise
+            </button>
+          </div>
+
+          <!-- SUB-VIEW A: Admin Sign In with Passkey / Password -->
+          <div id="admin-subview-signin">
+            <div style="text-align: center; margin-bottom: 1.25rem;">
+              <div class="ai-tag" style="margin-bottom: 0.5rem; display: inline-flex;">Executive Security Gate</div>
+              <h2 style="font-size: 1.5rem; margin-bottom: 0.25rem;">Administrator Console</h2>
+              <p style="font-size: 0.85rem;">Authenticate with your administrative email and master security passkey</p>
+            </div>
+
+            <form id="admin-login-form">
+              <div class="form-group">
+                <label for="adm-email">Administrator Email / Username</label>
+                <input type="email" id="adm-email" class="form-control" placeholder="admin@enterprise.corp" required autocomplete="username">
+              </div>
+
+              <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.45rem;">
+                  <label for="adm-passkey" style="margin-bottom: 0;">Master Security Passkey / Password</label>
+                  <span style="font-size: 0.72rem; color: #60a5fa; background: rgba(0, 113, 227, 0.15); padding: 0.1rem 0.4rem; border-radius: 4px;">🔑 Passkey Enabled</span>
+                </div>
+                <input type="password" id="adm-passkey" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+              </div>
+
+              <button type="submit" id="adm-login-btn" class="btn btn-primary btn-block" style="margin-top: 1.25rem;">
+                Authenticate Admin Console
+              </button>
+            </form>
+
+            <div style="margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--apple-glass-border);">
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Fast Quick-Fill Demo Admin:</div>
+              <div class="demo-identity-chips">
+                <button type="button" class="demo-chip" onclick="quickFillAdmin('admin@helpdesk.com', 'admin123')">
+                  🛡️ Master Administrator (admin@helpdesk.com)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-VIEW B: Create Enterprise Multi-Step Onboarding Wizard -->
+          <div id="admin-subview-create" style="display: none;">
+
+            <!-- Step Progress Indicator -->
+            <div class="wizard-steps">
+              <div class="wizard-step-node active" id="step-node-1">1</div>
+              <div class="wizard-step-node" id="step-node-2">2</div>
+              <div class="wizard-step-node" id="step-node-3">3</div>
+            </div>
+
+            <!-- STEP 1: Enterprise Details & Admin Account -->
+            <div id="wizard-step-1">
+              <div style="text-align: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem;">Register Organization</h3>
+                <p style="font-size: 0.8rem;">Enter your company profile and administrative authority credentials</p>
+              </div>
+
+              <form id="enterprise-step1-form">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                  <div class="form-group">
+                    <label for="ent-admin-name">Admin Full Name</label>
+                    <input type="text" id="ent-admin-name" class="form-control" placeholder="e.g. Sarah Connor" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="ent-admin-email">Admin Corporate Email</label>
+                    <input type="email" id="ent-admin-email" class="form-control" placeholder="admin@acme.corp" required>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="ent-company-name">Enterprise / Company Name</label>
+                  <input type="text" id="ent-company-name" class="form-control" placeholder="e.g. Acme Corporation Global" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                  <div class="form-group">
+                    <label for="ent-company-location">Headquarters / Location</label>
+                    <input type="text" id="ent-company-location" class="form-control" placeholder="e.g. San Francisco, CA" required>
+                  </div>
+                  <div class="form-group">
+                    <label for="ent-company-phone">Support Desk Phone</label>
+                    <input type="tel" id="ent-company-phone" class="form-control" placeholder="+1 (800) 555-0199">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="ent-company-details">Industry / Organizational Scope</label>
+                  <input type="text" id="ent-company-details" class="form-control" placeholder="e.g. Cloud Infrastructure & FinTech">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                  <div class="form-group">
+                    <label for="ent-password">Master Password</label>
+                    <input type="password" id="ent-password" class="form-control" placeholder="••••••••" required minlength="6">
+                  </div>
+                  <div class="form-group">
+                    <label for="ent-confirm-password">Confirm Password</label>
+                    <input type="password" id="ent-confirm-password" class="form-control" placeholder="••••••••" required minlength="6">
+                  </div>
+                </div>
+
+                <button type="submit" id="ent-step1-btn" class="btn btn-primary btn-block" style="margin-top: 1rem;">
+                  Continue to Email Verification →
+                </button>
+              </form>
+            </div>
+
+            <!-- STEP 2: Email Verification Code (Code / Link) -->
+            <div id="wizard-step-2" style="display: none;">
+              <div style="text-align: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem;">Verify Corporate Email</h3>
+                <p style="font-size: 0.8rem;">Enter the 6-digit security code dispatched to your corporate administrator email</p>
+              </div>
+
+              <!-- High-End Simulated Apple Mail Dispatch Preview -->
+              <div class="mail-mock-card">
+                <div class="mail-mock-header">
+                  <span>📬 <strong>Enterprise Mail Gate</strong> (noreply@helpdesk.corp)</span>
+                  <span style="color: var(--apple-green); font-weight: 600;">✓ Dispatched</span>
+                </div>
+                <div style="font-size: 0.8rem; color: #fff; margin-bottom: 0.35rem;">
+                  <strong>To:</strong> <span id="mail-preview-recipient" style="color: #60a5fa; font-family: monospace;">admin@acme.corp</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                  <strong>Subject:</strong> 🔐 Your Enterprise Activation Code for <span id="mail-preview-company">Acme Corp</span>
+                </div>
+                <div style="text-align: center;">
+                  <div style="font-size: 0.75rem; color: var(--text-secondary);">Your Security Verification Code is:</div>
+                  <div class="mail-code-badge" id="mail-preview-code">------</div>
+                </div>
+                <div style="text-align: center; margin-top: 0.5rem;">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="autoFillVerificationCode()" style="font-size: 0.75rem;">
+                    ⚡ Click to Auto-Fill Code
+                  </button>
+                </div>
+              </div>
+
+              <form id="enterprise-step2-form">
+                <div class="form-group" style="text-align: center;">
+                  <label for="ent-verify-code">Enter 6-Digit Verification Code</label>
+                  <input type="text" id="ent-verify-code" class="form-control" placeholder="123456" maxlength="6"
+                    style="font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; letter-spacing: 0.25em; text-align: center; font-weight: 700;" required>
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                  <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="goToWizardStep(1)">
+                    ← Back
+                  </button>
+                  <button type="submit" id="ent-step2-btn" class="btn btn-primary" style="flex: 2;">
+                    Verify & Activate →
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- STEP 3: Initial Team Provisioning (Employee ID & IT Technician ID) -->
+            <div id="wizard-step-3" style="display: none;">
+              <div style="text-align: center; margin-bottom: 1rem;">
+                <div class="ai-tag" style="margin-bottom: 0.4rem; display: inline-flex;">Enterprise Activated</div>
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.2rem;">Initial Team Provisioning</h3>
+                <p style="font-size: 0.8rem;">Create your foundational Employee ID and IT Technician ID now:</p>
+              </div>
+
+              <form id="enterprise-step3-form">
+                <!-- Initial Employee ID Box -->
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--apple-glass-border); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.85rem;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #30d158; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.35rem;">
+                    👤 Initial Employee ID (Ticket Submitter)
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <input type="text" id="onb-emp-name" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Employee Full Name" value="John Doe">
+                    <input type="email" id="onb-emp-email" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="employee@company.corp" value="john.doe@company.corp">
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+                    <input type="password" id="onb-emp-pass" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Password" value="employee123">
+                    <input type="text" id="onb-emp-dept" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Department" value="Finance">
+                  </div>
+                </div>
+
+                <!-- Initial IT Technician ID Box -->
+                <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid var(--apple-glass-border); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 0.85rem;">
+                  <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.35rem;">
+                    🛠️ Initial IT Technician ID (Support Engineer)
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <input type="text" id="onb-tech-name" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Technician Full Name" value="Alex Support">
+                    <input type="email" id="onb-tech-email" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="alex.tech@company.corp" value="alex.tech@company.corp">
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.5rem;">
+                    <input type="password" id="onb-tech-pass" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Password" value="staff123">
+                    <input type="text" id="onb-tech-dept" class="form-control" style="font-size: 0.8rem; padding: 0.5rem;" placeholder="Department" value="IT Tier-1">
+                  </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1rem;">
+                  <button type="submit" id="onb-finish-btn" class="btn btn-primary btn-block">
+                    🚀 Provision Team & Enter Dashboard
+                  </button>
+                  <button type="button" class="btn btn-secondary btn-block btn-sm" onclick="finishOnboardingAndLaunch()">
+                    Skip Initial Team & Enter Dashboard
+                  </button>
+                </div>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Multi-Cloud API Endpoint Configuration Link -->
+        <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.85rem;">
+          <a href="javascript:void(0)" onclick="openEndpointConfigModal()" style="font-size: 0.75rem; color: var(--text-tertiary); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;">
+            <span>🌐 Backend API Endpoint:</span>
+            <span id="current-endpoint-label" style="color: var(--apple-blue); font-family: monospace; font-weight: 500;">auto</span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- API Endpoint Config Modal -->
+  <div class="apple-modal-overlay" id="endpoint-config-modal">
+    <div class="apple-modal" style="max-width: 480px;">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.15rem;">🌐 Cloud Backend API Connection</h3>
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Configure live Render, Railway, or Localhost backend</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeEndpointConfigModal()">&times;</button>
+      </div>
+
+      <div style="padding: 1rem 0;">
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 1rem;">
+          If this frontend is hosted on <strong>Vercel</strong> or <strong>Netlify</strong>, enter your live Spring Boot backend URL from <strong>Render</strong> or <strong>Railway</strong>.
+        </p>
+
+        <div class="form-group">
+          <label for="custom-api-endpoint">Spring Boot API Base URL</label>
+          <input type="url" id="custom-api-endpoint" class="form-control" placeholder="https://helpdesk-backend-xxxx.onrender.com/api" style="font-family: monospace; font-size: 0.85rem;">
+          <span style="font-size: 0.75rem; color: var(--text-tertiary); display: block; margin-top: 0.35rem;">
+            Default local: <code>http://localhost:8080/api</code>
+          </span>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setEndpointPreset('http://localhost:8080/api')">💻 Localhost (8080)</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="setEndpointPreset('/api')">⚡ Relative (/api)</button>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.25rem;">
+        <button type="button" class="btn btn-secondary btn-sm" onclick="closeEndpointConfigModal()">Cancel</button>
+        <button type="button" class="btn btn-primary btn-sm" onclick="saveCustomEndpoint()">Save & Connect</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    // State Variables
+    let currentMainPortal = 'workforce';
+    let currentAdminSubView = 'signin';
+    let registeredEnterpriseData = null;
+
+    const authAlert = document.getElementById('auth-alert');
+
+    function hideAlert() {
+      if (authAlert) {
+        authAlert.style.display = 'none';
+        authAlert.textContent = '';
+      }
+    }
+
+    function showAlert(msg, isSuccess = false) {
+      if (!authAlert) return;
+      authAlert.style.display = 'block';
+      authAlert.textContent = msg;
+      authAlert.style.background = isSuccess ? 'rgba(48, 209, 88, 0.15)' : 'rgba(255, 69, 58, 0.15)';
+      authAlert.style.border = isSuccess ? '1px solid rgba(48, 209, 88, 0.35)' : '1px solid rgba(255, 69, 58, 0.35)';
+      authAlert.style.color = isSuccess ? '#30d158' : '#ff453a';
+    }
+
+    // Endpoint Config Helpers
+    function updateEndpointLabel() {
+      const label = document.getElementById('current-endpoint-label');
+      const input = document.getElementById('custom-api-endpoint');
+      const current = API.getBaseUrl();
+      if (label) label.textContent = current;
+      if (input) input.value = localStorage.getItem('HELP_DESK_API_URL') || current;
+    }
+
+    function openEndpointConfigModal() {
+      updateEndpointLabel();
+      document.getElementById('endpoint-config-modal').classList.add('active');
+    }
+
+    function closeEndpointConfigModal() {
+      document.getElementById('endpoint-config-modal').classList.remove('active');
+    }
+
+    function setEndpointPreset(url) {
+      document.getElementById('custom-api-endpoint').value = url;
+    }
+
+    function saveCustomEndpoint() {
+      const url = document.getElementById('custom-api-endpoint').value.trim();
+      API.setApiBaseUrl(url);
+    }
+
+    document.addEventListener('DOMContentLoaded', updateEndpointLabel);
+
+    // 1. Main Slider Switching: Workforce vs Admin
+    function switchMainPortal(portal) {
+      currentMainPortal = portal;
+      hideAlert();
+      const tabWorkforce = document.getElementById('tab-workforce');
+      const tabAdmin = document.getElementById('tab-admin');
+      const panelWorkforce = document.getElementById('panel-workforce');
+      const panelAdmin = document.getElementById('panel-admin');
+
+      if (portal === 'admin') {
+        tabWorkforce.classList.remove('active');
+        tabAdmin.classList.add('active');
+        panelWorkforce.style.display = 'none';
+        panelAdmin.style.display = 'block';
+      } else {
+        tabAdmin.classList.remove('active');
+        tabWorkforce.classList.add('active');
+        panelAdmin.style.display = 'none';
+        panelWorkforce.style.display = 'block';
+      }
+    }
+
+    // 2. Admin Sub-View Switching: Sign In vs Create Enterprise
+    function switchAdminSubView(subview) {
+      currentAdminSubView = subview;
+      hideAlert();
+      const btnSignin = document.getElementById('sub-btn-signin');
+      const btnCreate = document.getElementById('sub-btn-create');
+      const viewSignin = document.getElementById('admin-subview-signin');
+      const viewCreate = document.getElementById('admin-subview-create');
+
+      if (subview === 'create') {
+        btnSignin.classList.remove('active');
+        btnCreate.classList.add('active');
+        viewSignin.style.display = 'none';
+        viewCreate.style.display = 'block';
+        goToWizardStep(1);
+      } else {
+        btnCreate.classList.remove('active');
+        btnSignin.classList.add('active');
+        viewCreate.style.display = 'none';
+        viewSignin.style.display = 'block';
+      }
+    }
+
+    // Wizard Step Controller
+    function goToWizardStep(step) {
+      document.getElementById('wizard-step-1').style.display = step === 1 ? 'block' : 'none';
+      document.getElementById('wizard-step-2').style.display = step === 2 ? 'block' : 'none';
+      document.getElementById('wizard-step-3').style.display = step === 3 ? 'block' : 'none';
+
+      const node1 = document.getElementById('step-node-1');
+      const node2 = document.getElementById('step-node-2');
+      const node3 = document.getElementById('step-node-3');
+
+      node1.className = 'wizard-step-node' + (step === 1 ? ' active' : ' completed');
+      node2.className = 'wizard-step-node' + (step === 2 ? ' active' : (step > 2 ? ' completed' : ''));
+      node3.className = 'wizard-step-node' + (step === 3 ? ' active' : '');
+    }
+
+    // Quick Fill Helpers
+    function quickFillWorkforce(email, password) {
+      document.getElementById('wf-email').value = email;
+      document.getElementById('wf-password').value = password;
+    }
+
+    function quickFillAdmin(email, password) {
+      document.getElementById('adm-email').value = email;
+      document.getElementById('adm-passkey').value = password;
+    }
+
+    function autoFillVerificationCode() {
+      if (registeredEnterpriseData && registeredEnterpriseData.verificationCode) {
+        document.getElementById('ent-verify-code').value = registeredEnterpriseData.verificationCode;
+      } else {
+        document.getElementById('ent-verify-code').value = '123456';
+      }
+    }
+
+    // =========================================================================
+    // HANDLERS
+    // =========================================================================
+
+    // 1. Workforce Login Handler
+    document.getElementById('workforce-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      const email = document.getElementById('wf-email').value.trim();
+      const password = document.getElementById('wf-password').value;
+      const btn = document.getElementById('wf-login-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Authenticating Workforce...';
+
+      const res = await API.login(email, password);
+      btn.disabled = false;
+      btn.textContent = 'Sign In to Company Portal';
+
+      if (res && res.success && res.user) {
+        Auth.setUser(res.user);
+        Auth.redirectByRole(res.user.role);
+      } else {
+        showAlert(res.message || 'Invalid email or password. Please verify credentials with your IT Administrator.');
+      }
+    });
+
+    // 2. Admin Sign In with Passkey Handler
+    document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+      const email = document.getElementById('adm-email').value.trim();
+      const password = document.getElementById('adm-passkey').value;
+      const btn = document.getElementById('adm-login-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying Passkey...';
+
+      const res = await API.login(email, password);
+      btn.disabled = false;
+      btn.textContent = 'Authenticate Admin Console';
+
+      if (res && res.success && res.user) {
+        if (res.user.role !== 'ADMIN') {
+          showAlert('Access restricted. Only verified Enterprise Administrators can enter the Command Console.');
+          return;
+        }
+        Auth.setUser(res.user);
+        window.location.href = 'admin-dashboard.html';
+      } else {
+        showAlert(res.message || 'Invalid administrator email or master passkey.');
+      }
+    });
+
+    // 3. Create Enterprise - Step 1 Submit (Register Profile)
+    document.getElementById('enterprise-step1-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const adminName = document.getElementById('ent-admin-name').value.trim();
+      const adminEmail = document.getElementById('ent-admin-email').value.trim();
+      const companyName = document.getElementById('ent-company-name').value.trim();
+      const companyLocation = document.getElementById('ent-company-location').value.trim();
+      const companyPhone = document.getElementById('ent-company-phone').value.trim();
+      const companyDetails = document.getElementById('ent-company-details').value.trim();
+      const password = document.getElementById('ent-password').value;
+      const confirmPassword = document.getElementById('ent-confirm-password').value;
+      const btn = document.getElementById('ent-step1-btn');
+
+      if (password !== confirmPassword) {
+        showAlert('Passwords do not match. Please re-enter.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Registering Enterprise...';
+
+      const res = await API.registerEnterprise({
+        adminName,
+        adminEmail,
+        companyName,
+        companyLocation,
+        companyPhone,
+        companyDetails,
+        password,
+        confirmPassword
+      });
+
+      btn.disabled = false;
+      btn.textContent = 'Continue to Email Verification →';
+
+      if (res && res.success) {
+        registeredEnterpriseData = res;
+        document.getElementById('mail-preview-recipient').textContent = adminEmail;
+        document.getElementById('mail-preview-company').textContent = companyName;
+        document.getElementById('mail-preview-code').textContent = res.verificationCode || '839214';
+
+        // Pre-fill initial team email domain suggestions
+        const domain = adminEmail.split('@')[1] || 'company.corp';
+        document.getElementById('onb-emp-email').value = `employee@${domain}`;
+        document.getElementById('onb-tech-email').value = `technician@${domain}`;
+
+        showAlert('Verification security code dispatched to your corporate email.', true);
+        goToWizardStep(2);
+      } else {
+        showAlert(res.message || 'Failed to register enterprise. Ensure email is unique.');
+      }
+    });
+
+    // 4. Create Enterprise - Step 2 Submit (Verify Code)
+    document.getElementById('enterprise-step2-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const code = document.getElementById('ent-verify-code').value.trim();
+      const adminEmail = registeredEnterpriseData ? registeredEnterpriseData.adminEmail : document.getElementById('ent-admin-email').value.trim();
+      const btn = document.getElementById('ent-step2-btn');
+
+      btn.disabled = true;
+      btn.textContent = 'Verifying Code...';
+
+      const res = await API.verifyEnterprise(adminEmail, code);
+      btn.disabled = false;
+      btn.textContent = 'Verify & Activate →';
+
+      if (res && res.success) {
+        if (res.user) {
+          Auth.setUser(res.user);
+        }
+        showAlert('Enterprise workspace verified & activated successfully!', true);
+        goToWizardStep(3);
+      } else {
+        showAlert(res.message || 'Invalid verification code. Please check your email or use the code above.');
+      }
+    });
+
+    // 5. Create Enterprise - Step 3 Submit (Provision Initial Team)
+    document.getElementById('enterprise-step3-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideAlert();
+
+      const adminEmail = registeredEnterpriseData ? registeredEnterpriseData.adminEmail : (Auth.getUser() ? Auth.getUser().email : '');
+      const empName = document.getElementById('onb-emp-name').value.trim();
+      const empEmail = document.getElementById('onb-emp-email').value.trim();
+      const empPass = document.getElementById('onb-emp-pass').value;
+      const empDept = document.getElementById('onb-emp-dept').value.trim();
+
+      const techName = document.getElementById('onb-tech-name').value.trim();
+      const techEmail = document.getElementById('onb-tech-email').value.trim();
+      const techPass = document.getElementById('onb-tech-pass').value;
+      const techDept = document.getElementById('onb-tech-dept').value.trim();
+
+      const btn = document.getElementById('onb-finish-btn');
+      btn.disabled = true;
+      btn.textContent = 'Provisioning Team...';
+
+      await API.provisionInitialTeam({
+        adminEmail,
+        employeeName: empName,
+        employeeEmail: empEmail,
+        employeePassword: empPass,
+        employeeDepartment: empDept,
+        technicianName: techName,
+        technicianEmail: techEmail,
+        technicianPassword: techPass,
+        technicianDepartment: techDept
+      });
+
+      finishOnboardingAndLaunch();
+    });
+
+    function finishOnboardingAndLaunch() {
+      showAlert('Launching your Executive Command Center...', true);
+      setTimeout(() => {
+        window.location.href = 'admin-dashboard.html';
+      }, 700);
+    }
+  </script>
+</body>
+</html>

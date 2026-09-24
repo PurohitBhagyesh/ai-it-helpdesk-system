@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IT Technician Workspace | AI Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Apple Top Navigation -->
+  <nav class="navbar">
+    <a href="staff-dashboard.html" class="brand">
+      <div class="brand-icon" style="background: linear-gradient(135deg, #0071e3, #5ac8fa);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <span id="nav-company-name">IT Technician Console</span>
+    </a>
+    <div class="nav-actions">
+      <button onclick="openContactAdminModal()" class="btn btn-secondary btn-sm" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+        ✉️ Contact Admin
+      </button>
+      <div class="user-profile-capsule">
+        <div class="user-avatar-circle" id="navbar-user-avatar" style="background: var(--apple-blue);">T</div>
+        <span id="navbar-user-name" style="font-weight: 600; font-size: 0.85rem;">IT Technician</span>
+        <span style="color: var(--apple-blue); font-size: 0.75rem;" id="navbar-user-code">(TECH)</span>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn-secondary btn-sm">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Header -->
+    <div style="margin-bottom: 2rem;">
+      <div class="ai-tag" style="margin-bottom: 0.6rem; display: inline-flex;" id="staff-company-tag">Tier-1 & Tier-2 Support Operations</div>
+      <h2 style="font-size: 1.85rem; margin-bottom: 0.35rem;" id="staff-welcome-title">Welcome to Helpdesk Support Console</h2>
+      <p>Claim incoming AI-analyzed tickets, conduct encrypted troubleshooting sessions, update work status, or re-route workloads.</p>
+    </div>
+
+    <!-- Alert / Toast Banner -->
+    <div id="staff-alert" style="display: none; padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1.75rem;"></div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-widget">
+        <div class="stat-info">
+          <h4>Unassigned Triage</h4>
+          <div class="stat-value" style="color: #5ac8fa;" id="staff-open-count">0</div>
+        </div>
+        <div class="stat-icon-wrapper" style="color: #5ac8fa;">📥</div>
+      </div>
+      <div class="stat-widget">
+        <div class="stat-info">
+          <h4>My Active Incidents</h4>
+          <div class="stat-value" style="color: #ffd60a;" id="staff-assigned-count">0</div>
+        </div>
+        <div class="stat-icon-wrapper" style="color: #ffd60a;">🔧</div>
+      </div>
+      <div class="stat-widget">
+        <div class="stat-info">
+          <h4>Resolved Incidents</h4>
+          <div class="stat-value" style="color: #30d158;" id="staff-resolved-count">0</div>
+        </div>
+        <div class="stat-icon-wrapper" style="color: #30d158;">🎉</div>
+      </div>
+    </div>
+
+    <!-- Incoming Queue Table -->
+    <div class="glass-card" style="margin-bottom: 2.25rem;">
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--apple-glass-border); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.25rem;">Incoming Triage Queue</h3>
+          <p style="font-size: 0.85rem;">Tickets analyzed by AI awaiting technician acceptance</p>
+        </div>
+        <span class="ai-tag">Real-Time Dispatch</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="apple-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Incident Summary</th>
+              <th>AI Category</th>
+              <th>Priority</th>
+              <th>Reporter</th>
+              <th style="text-align: right;">Action / Assignment</th>
+            </tr>
+          </thead>
+          <tbody id="unassigned-tickets-tbody">
+            <!-- Populated by staff.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- My Assigned Active Queue Table -->
+    <div class="glass-card">
+      <div style="padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--apple-glass-border); display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 style="font-size: 1.15rem; margin-bottom: 0.25rem;">My Active Assigned Incidents</h3>
+          <p style="font-size: 0.85rem;">Tickets assigned to you for investigation and direct encrypted resolution</p>
+        </div>
+        <span class="badge badge-progress">Work In Progress</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="apple-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Incident Summary</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Employee</th>
+              <th style="text-align: right;">Technician Controls</th>
+            </tr>
+          </thead>
+          <tbody id="assigned-tickets-tbody">
+            <!-- Populated by staff.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- Cupertino Modal: Contact Admin Enquiry Form -->
+  <!-- ========================================================================= -->
+  <div class="apple-modal-overlay" id="contact-admin-modal">
+    <div class="apple-modal">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem;">Technician Escalation to Admin</h3>
+          <span style="font-size: 0.825rem; color: var(--text-muted);" id="contact-admin-target">Send enquiry directly to the Systems Administrator mailbox</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeContactAdminModal()">&times;</button>
+      </div>
+
+      <form id="contact-admin-form">
+        <div class="form-group">
+          <label>Technician Identity</label>
+          <input type="text" id="enquiry-sender-name" class="form-control" readonly style="opacity: 0.85;">
+        </div>
+
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+            <label style="margin-bottom: 0;">Technician ID Code</label>
+            <button type="button" class="btn btn-outline btn-sm" onclick="toggleEditTechId()" style="font-size: 0.7rem; padding: 0.15rem 0.5rem; min-height: auto;">
+              + Edit / Add ID Code
+            </button>
+          </div>
+          <input type="text" id="enquiry-tech-id" class="form-control" placeholder="e.g. TECH-2040" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enquiry-subject">Subject / Purpose</label>
+          <input type="text" id="enquiry-subject" class="form-control" placeholder="e.g. Infrastructure hardware request / Escalation" required>
+        </div>
+
+        <div class="form-group">
+          <label for="enquiry-message">Describe Your Issue / Message</label>
+          <textarea id="enquiry-message" class="form-control" rows="4" placeholder="Provide complete technical details..." required></textarea>
+        </div>
+
+        <div id="enquiry-feedback" style="display: none; padding: 0.75rem; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 1rem;"></div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeContactAdminModal()">Cancel</button>
+          <button type="submit" id="enquiry-submit-btn" class="btn btn-primary btn-sm">Dispatch to Admin</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- Cupertino Modal: Reject / Re-route Incident Modal -->
+  <!-- ========================================================================= -->
+  <div class="apple-modal-overlay" id="reject-ticket-modal">
+    <div class="apple-modal">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem;">Decline / Re-route Incident</h3>
+          <span style="font-size: 0.825rem; color: var(--text-muted);" id="reject-modal-ticket-label">Re-routing ticket</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeRejectModal()">&times;</button>
+      </div>
+
+      <form id="reject-ticket-form">
+        <input type="hidden" id="reject-modal-ticket-id">
+        <div class="form-group">
+          <label for="reject-modal-reason">Reason for Declining / Re-routing</label>
+          <select id="reject-modal-reason-select" class="form-control" onchange="handleRejectReasonChange()">
+            <option value="Hardware specialty required - Re-routing to Level 2 Technician">Hardware specialty required - Re-routing to Level 2 Technician</option>
+            <option value="Network Infrastructure access required">Network Infrastructure access required</option>
+            <option value="Security policy clearance required">Security policy clearance required</option>
+            <option value="Technician workload at maximum capacity">Technician workload at maximum capacity</option>
+            <option value="custom">Other (Specify below)...</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="reject-custom-group" style="display: none;">
+          <label for="reject-modal-custom-reason">Custom Rejection Reason</label>
+          <input type="text" id="reject-modal-custom-reason" class="form-control" placeholder="Provide specific reason...">
+        </div>
+
+        <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="closeRejectModal()">Cancel</button>
+          <button type="submit" id="reject-modal-submit-btn" class="btn btn-danger btn-sm">Confirm Re-route</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/staff.js"></script>
+</body>
+</html>
