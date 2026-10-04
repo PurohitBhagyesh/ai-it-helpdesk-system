@@ -58,8 +58,8 @@ The **AI-Based IT Support & Helpdesk System** is hardened with defense-in-depth 
 | **👑 Admin** | `admin@helpdesk.com` | `admin123` | Full system analytics, all tickets, system oversight |
 | **🛠️ IT Staff** | `alex.staff@helpdesk.com` | `staff123` | Ticket queue claim, status management, resolutions |
 | **🛠️ IT Staff** | `sarah.staff@helpdesk.com` | `staff123` | Network & hardware ticket management |
-| **👤 Employee** | `john.doe@company.com` | `user123` | Problem submission, AI preview, personal ticket tracking |
-| **👤 Employee** | `emily.davis@company.com` | `user123` | Problem submission, personal ticket tracking |
+| **👤 Employee** | `john.doe@company.com` | `employee123` | Problem submission, AI preview, personal ticket tracking |
+| **👤 Employee** | `emily.davis@company.com` | `employee123` | Problem submission, personal ticket tracking |
 
 ---
 
