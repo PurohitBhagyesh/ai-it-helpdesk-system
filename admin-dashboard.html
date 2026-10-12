@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Command Console | AI IT Helpdesk</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Cupertino Navigation -->
+  <nav class="navbar">
+    <a href="admin-dashboard.html" class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <span id="nav-company-name">Enterprise Intelligence</span>
+    </a>
+    <div class="nav-links">
+      <div class="user-badge">
+        <div class="user-avatar" id="navbar-user-avatar" style="background: linear-gradient(135deg, #ef4444, #f43f5e);">A</div>
+        <div style="display: flex; flex-direction: column;">
+          <span id="navbar-user-name" style="font-weight: 600; font-size: 0.9rem; line-height: 1.2;">Administrator</span>
+          <span style="color: var(--apple-danger); font-size: 0.72rem; font-weight: 500;" id="navbar-user-role">Admin Authority</span>
+        </div>
+      </div>
+      <button onclick="Auth.logout()" class="btn btn-outline btn-sm">
+        Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Apple Hero Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2rem;">
+      <div>
+        <div class="ai-tag" style="margin-bottom: 0.6rem; display: inline-flex;" id="admin-org-tag">Organization: Acme Global Technologies</div>
+        <h2 style="letter-spacing: -0.03em;" id="admin-welcome-heading">Executive Command Center</h2>
+        <p style="max-width: 650px;">Manage company-wide incident telemetry, govern employee and IT technician accounts, and monitor administrative escalations.</p>
+      </div>
+
+      <!-- Cupertino View Switcher -->
+      <div class="segmented-control" style="margin: 0; min-width: 480px;">
+        <button type="button" class="segment-btn active" id="view-analytics-btn" onclick="switchAdminView('analytics')">
+          📊 Incident Telemetry
+        </button>
+        <button type="button" class="segment-btn" id="view-users-btn" onclick="switchAdminView('users')">
+          👥 Team Settings & Directory
+        </button>
+        <button type="button" class="segment-btn" id="view-enquiries-btn" onclick="switchAdminView('enquiries')">
+          📬 Admin Mailbox <span id="enquiry-nav-badge" style="display: none; background: var(--apple-danger); color: #fff; padding: 0.1rem 0.4rem; border-radius: var(--radius-full); font-size: 0.7rem; margin-left: 0.35rem;">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert / Toast Banner -->
+    <div id="admin-alert" style="display: none; padding: 0.85rem 1.25rem; border-radius: var(--radius-sm); font-size: 0.875rem; margin-bottom: 1.75rem;"></div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 1: Incident Telemetry & Analytics -->
+    <!-- ========================================================================= -->
+    <div id="section-analytics">
+      <!-- Apple Stats KPI Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <h4>Total Incidents</h4>
+            <div class="stat-value" id="admin-total-tickets">0</div>
+          </div>
+          <div class="stat-icon" style="color: var(--apple-blue);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h4>Open / Triage</h4>
+            <div class="stat-value" style="color: #60a5fa;" id="admin-open-tickets">0</div>
+          </div>
+          <div class="stat-icon" style="color: #60a5fa;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h4>In Active Progress</h4>
+            <div class="stat-value" style="color: #fbbf24;" id="admin-progress-tickets">0</div>
+          </div>
+          <div class="stat-icon" style="color: #fbbf24;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h4>Resolved Total</h4>
+            <div class="stat-value" style="color: #30d158;" id="admin-resolved-tickets">0</div>
+          </div>
+          <div class="stat-icon" style="color: #30d158;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <h4>SLA Resolution Rate</h4>
+            <div class="stat-value" style="color: #a78bfa;" id="admin-resolution-rate">0%</div>
+          </div>
+          <div class="stat-icon" style="color: #a78bfa;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analytics Breakdown Grid -->
+      <div class="grid-equal-2col">
+        <!-- Category Breakdown Card -->
+        <div class="table-card" style="padding: 1.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 1.15rem;">Incidents by Category</h3>
+            <span class="ai-tag">NLP Classification</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Volume of tickets mapped across enterprise categories</p>
+          <div id="category-bars" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+        </div>
+
+        <!-- Priority Breakdown Card -->
+        <div class="table-card" style="padding: 1.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 1.15rem;">Incidents by Priority</h3>
+            <span class="ai-tag">Severity Weight</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem;">Distribution across urgency levels</p>
+          <div id="priority-bars" style="display: flex; flex-direction: column; gap: 1rem;"></div>
+        </div>
+      </div>
+
+      <!-- Master Incident Log Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Organization Incident Audit</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Real-time ledger of all submitted support tickets</span>
+          </div>
+          <span class="badge badge-open">Real-Time</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Incident Summary</th>
+                <th>AI Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Employee</th>
+                <th>Assignee</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="all-tickets-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 2: Team Settings & User Provisioning (Employee & IT Technician) -->
+    <!-- ========================================================================= -->
+    <div id="section-users" style="display: none;">
+      
+      <!-- Top Grid: Provision Form + Organization Info Card -->
+      <div class="grid-equal-2col" style="align-items: start; margin-bottom: 2rem;">
+        
+        <!-- Account Provisioning Card -->
+        <div class="table-card" style="padding: 1.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 1.15rem;">Create Team Account</h3>
+            <span class="badge badge-open" id="prov-role-badge">👤 Employee Tier</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Issue corporate credentials for Employees or IT Technicians under <strong id="prov-company-label" style="color: #fff;">Acme Global</strong>.
+          </p>
+
+          <form id="provision-user-form">
+            <!-- Role Selector Tabs -->
+            <div class="form-group" style="margin-bottom: 1.15rem;">
+              <label>Select Account Type to Create:</label>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.35rem;">
+                <button type="button" id="role-toggle-emp" class="btn btn-primary btn-sm" onclick="setProvisionRole('EMPLOYEE')">
+                  👤 EMPLOYEE (User)
+                </button>
+                <button type="button" id="role-toggle-tech" class="btn btn-secondary btn-sm" onclick="setProvisionRole('STAFF')">
+                  🛠️ IT TECHNICIAN (Support)
+                </button>
+              </div>
+              <input type="hidden" id="prov-role" value="EMPLOYEE">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="form-group">
+                <label for="prov-name" id="label-prov-name">Employee Full Name (Username)</label>
+                <input type="text" id="prov-name" class="form-control" placeholder="e.g. John Doe" required>
+              </div>
+              <div class="form-group">
+                <label for="prov-idcode" id="label-prov-idcode">Employee ID Code</label>
+                <input type="text" id="prov-idcode" class="form-control" placeholder="EMP-1050" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="form-group">
+                <label for="prov-email">Corporate Email Address</label>
+                <input type="email" id="prov-email" class="form-control" placeholder="john.doe@company.corp" required>
+              </div>
+              <div class="form-group">
+                <label for="prov-password">Assigned Password (Min 6 chars)</label>
+                <input type="password" id="prov-password" class="form-control" placeholder="••••••••" required minlength="6">
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="form-group">
+                <label for="prov-dept">Department / Field</label>
+                <input type="text" id="prov-dept" class="form-control" placeholder="e.g. Finance / Engineering" required>
+              </div>
+              <div class="form-group">
+                <label for="prov-joindate">Date of Joining</label>
+                <input type="date" id="prov-joindate" class="form-control" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+              <div class="form-group">
+                <label for="prov-designation" id="label-prov-designation">Designation / Role Title</label>
+                <input type="text" id="prov-designation" class="form-control" placeholder="e.g. Senior Financial Analyst">
+              </div>
+              <div class="form-group">
+                <label for="prov-phone">Phone / Extension</label>
+                <input type="tel" id="prov-phone" class="form-control" placeholder="+1 (800) 555-0144">
+              </div>
+            </div>
+
+            <!-- Technician-Specific Dynamic Fields -->
+            <div id="tech-fields-container" style="display: none; background: rgba(0, 113, 227, 0.08); border: 1px solid rgba(0, 113, 227, 0.25); border-radius: var(--radius-sm); padding: 0.85rem; margin-bottom: 1rem;">
+              <div style="font-size: 0.8rem; font-weight: 700; color: #60a5fa; margin-bottom: 0.5rem;">
+                🛠️ IT Technician Qualification Fields:
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="prov-experience">Years of Experience</label>
+                  <input type="text" id="prov-experience" class="form-control" placeholder="e.g. 5 Years Technical Support">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label for="prov-specialization">Specialization / Certifications</label>
+                  <input type="text" id="prov-specialization" class="form-control" placeholder="e.g. Cisco CCNA, Hardware Diagnostics">
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" id="prov-submit-btn" class="btn btn-primary btn-block" style="margin-top: 0.5rem;">
+              Create Corporate Account
+            </button>
+          </form>
+        </div>
+
+        <!-- Directory Summary Info Card -->
+        <div class="table-card" style="padding: 1.75rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 1.15rem;">Corporate Organization Roster</h3>
+            <span class="ai-tag">RBAC Security</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+            Accounts registered under your corporate organization with interactive management controls.
+          </p>
+
+          <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.875rem; color: var(--text-secondary);">
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--apple-glass-border);">
+              <span style="font-size: 1.1rem; color: var(--apple-blue);">🏢</span>
+              <div>
+                <strong style="color: #fff;">Registered Company</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">
+                  All accounts belong to <span id="info-company-name" style="color: #60a5fa; font-weight: 600;">Acme Global Technologies</span>.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--apple-glass-border);">
+              <span style="font-size: 1.1rem; color: var(--apple-green);">👆</span>
+              <div>
+                <strong style="color: #fff;">Interactive User Profiles</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">
+                  Click or touch any user row in the directory below to view all profile details, edit fields, or delete the account.
+                </p>
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 0.75rem; align-items: flex-start; padding: 0.85rem; background: rgba(255,255,255,0.03); border-radius: var(--radius-sm); border: 1px solid var(--apple-glass-border);">
+              <span style="font-size: 1.1rem; color: #fbbf24;">⚡</span>
+              <div>
+                <strong style="color: #fff;">3 Governed Roles</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.2rem; color: var(--text-muted);">
+                  <strong>ADMIN</strong> (Command Authority), <strong>EMPLOYEE</strong> (Incident Submitter), and <strong>IT TECHNICIAN</strong> (Support Engineer).
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Master User Directory Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Corporate User Directory</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Touch or click any row to inspect complete details, edit attributes, or revoke access</span>
+          </div>
+          <div class="badge badge-open" id="user-count-badge">0 Active Accounts</div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID Code</th>
+                <th>Identity & Contact</th>
+                <th>Assigned Email</th>
+                <th>Department / Field</th>
+                <th>Role Tier</th>
+                <th>Experience / Title</th>
+                <th style="text-align: right;">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="user-directory-tbody">
+              <!-- Populated by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- VIEW 3: Admin Enquiry Mailbox (Direct Contact Admin Inbox) -->
+    <!-- ========================================================================= -->
+    <div id="section-enquiries" style="display: none;">
+      <div class="table-card">
+        <div class="table-header">
+          <div>
+            <h3 style="font-size: 1.15rem;">Official Administrator Enquiry Mailbox</h3>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Direct inquiries, escalation notices, and messages sent by Employees and IT Technicians</span>
+          </div>
+          <div class="badge badge-open" id="enquiry-count-badge">0 Enquiries</div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Employee / Tech ID</th>
+                <th>Sender Identity</th>
+                <th>Sender Role</th>
+                <th>Subject</th>
+                <th>Message Content</th>
+                <th>Submitted</th>
+                <th>Status</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="enquiries-tbody">
+              <!-- Populated by admin.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- Cupertino Modal: Comprehensive User Profile, Edit & Delete Modal -->
+  <!-- ========================================================================= -->
+  <div class="apple-modal-overlay" id="user-profile-modal">
+    <div class="apple-modal" style="max-width: 620px;">
+      <div class="apple-modal-header">
+        <div>
+          <h3 style="font-size: 1.25rem;" id="profile-modal-title">Corporate User Profile</h3>
+          <span style="font-size: 0.825rem; color: var(--text-muted);" id="profile-modal-subtitle">View and update user details</span>
+        </div>
+        <button class="apple-modal-close" onclick="closeProfileModal()">&times;</button>
+      </div>
+
+      <form id="edit-user-form">
+        <input type="hidden" id="edit-user-id">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="edit-user-name">Full Name (Username)</label>
+            <input type="text" id="edit-user-name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-user-idcode">ID Code</label>
+            <input type="text" id="edit-user-idcode" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="edit-user-email">Corporate Email</label>
+            <input type="email" id="edit-user-email" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-user-role">Role Tier</label>
+            <select id="edit-user-role" class="form-control">
+              <option value="EMPLOYEE">👤 EMPLOYEE</option>
+              <option value="STAFF">🛠️ IT TECHNICIAN</option>
+              <option value="ADMIN">🛡️ ADMINISTRATOR</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="edit-user-dept">Department / Field</label>
+            <input type="text" id="edit-user-dept" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="edit-user-joindate">Date of Joining</label>
+            <input type="date" id="edit-user-joindate" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="edit-user-designation">Designation / Title</label>
+            <input type="text" id="edit-user-designation" class="form-control">
+          </div>
+          <div class="form-group">
+            <label for="edit-user-phone">Phone / Contact</label>
+            <input type="tel" id="edit-user-phone" class="form-control">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+          <div class="form-group">
+            <label for="edit-user-experience">Experience</label>
+            <input type="text" id="edit-user-experience" class="form-control" placeholder="e.g. 5 Years">
+          </div>
+          <div class="form-group">
+            <label for="edit-user-specialization">Specialization / Certifications</label>
+            <input type="text" id="edit-user-specialization" class="form-control" placeholder="e.g. Cisco CCNA">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="edit-user-password">Assign New Password (Leave blank to keep unchanged)</label>
+          <input type="password" id="edit-user-password" class="form-control" placeholder="••••••••" minlength="6">
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--apple-glass-border);">
+          <button type="button" class="btn btn-secondary btn-sm" style="color: var(--apple-danger); border-color: rgba(255, 69, 58, 0.3);" id="delete-user-btn" onclick="handleDeleteCurrentModalUser()">
+            🗑️ Delete Permanently
+          </button>
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="closeProfileModal()">Cancel</button>
+            <button type="submit" id="edit-user-submit-btn" class="btn btn-primary btn-sm">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
