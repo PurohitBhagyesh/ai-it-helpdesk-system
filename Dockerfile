@@ -1,27 +1,29 @@
-# ==========================================================
-# Multi-Stage Dockerfile for AI IT Support & Helpdesk System
-# ==========================================================
+# Multi-Stage Dockerfile for Spring Boot Enterprise Backend
+# Stage 1: Build JAR package
+FROM maven:3.9.6-eclipse-temurin-17-alpine AS builder
 
-# Stage 1: Build JAR with Maven Wrapper
-FROM eclipse-temurin:17-jdk-alpine AS builder
 WORKDIR /app
-COPY backend/pom.xml .
-COPY backend/.mvn .mvn
-COPY backend/mvnw .
-COPY backend/src src
 
-RUN chmod +x ./mvnw && ./mvnw clean package -DskipTests
+COPY backend/pom.xml ./pom.xml
+COPY backend/src ./src
 
-# Stage 2: Minimal Production JRE Runtime
+RUN mvn clean package -DskipTests
+
+# Stage 2: Runtime image
 FROM eclipse-temurin:17-jre-alpine
+
 WORKDIR /app
 
-# Create non-root user for enhanced security
+# Run container as non-root user
 RUN addgroup -S helpdesk && adduser -S helpdesk -G helpdesk
+
+COPY --from=builder /app/target/*.jar app.jar
+
 USER helpdesk
 
-COPY --from=builder /app/target/ai-it-helpdesk-system-1.0.0.jar app.jar
-
 EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:8080/api/tickets || exit 1
 
 ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-jar", "app.jar"]
